@@ -18,46 +18,46 @@
     <ClCompile Include="AssetBakerMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\xtensa\src\scene\sceneParser.cpp">
+    <ClCompile Include="..\src\scene\sceneParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\xtensa\src\scene\assetBaker.cpp">
+    <ClCompile Include="..\src\scene\assetBaker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\xtensa\src\scene\codeAssets.cpp">
+    <ClCompile Include="..\src\scene\codeAssets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\xtensa\src\scene\sceneBase.cpp">
+    <ClCompile Include="..\src\scene\sceneBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\xtensa\src\scene\entity.cpp">
+    <ClCompile Include="..\src\scene\entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\xtensa\src\scene\camera.cpp">
+    <ClCompile Include="..\src\scene\camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\xtensa\src\asset_types\model.cpp">
+    <ClCompile Include="..\src\asset_types\model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\xtensa\src\asset_types\material.cpp">
+    <ClCompile Include="..\src\asset_types\material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\xtensa\src\asset_types\gpuProgram.cpp">
+    <ClCompile Include="..\src\asset_types\gpuProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\xtensa\src\io\io.cpp">
+    <ClCompile Include="..\src\io\io.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\xtensa\src\io\serializeClasses.cpp">
+    <ClCompile Include="..\src\io\serializeClasses.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\xtensa\src\globals\render_util.cpp">
+    <ClCompile Include="..\src\globals\render_util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\xtensa\src\app\cvar.cpp">
+    <ClCompile Include="..\src\app\cvar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\xtensa\src\asset_types\image.cpp">
+    <ClCompile Include="..\src\asset_types\image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

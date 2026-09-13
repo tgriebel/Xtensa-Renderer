@@ -73,23 +73,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\submodules\GfxCore;..\submodules;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\submodules\GfxCore;..\..\submodules;$(IncludePath)</IncludePath>
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\submodules\GfxCore;..\submodules;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\submodules\GfxCore;..\..\submodules;$(IncludePath)</IncludePath>
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\submodules\GfxCore;..\submodules;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\submodules\GfxCore;..\..\submodules;$(IncludePath)</IncludePath>
     <LocalDebuggerWorkingDirectory>$(SolutionDir)xtensa\</LocalDebuggerWorkingDirectory>
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\submodules\GfxCore;..\submodules;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\submodules\GfxCore;..\..\submodules;$(IncludePath)</IncludePath>
     <LocalDebuggerWorkingDirectory>$(SolutionDir)xtensa\</LocalDebuggerWorkingDirectory>
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
@@ -98,7 +98,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;BAKER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\external\vulkan\Include;..\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\external\vulkan\Include;..\..\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -113,7 +113,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;BAKER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\external\vulkan\Include;..\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\external\vulkan\Include;..\..\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -128,7 +128,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;BAKER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\external\vulkan\Include;..\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\external\vulkan\Include;..\..\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -143,7 +143,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;BAKER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\external\vulkan\Include;..\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\external\vulkan\Include;..\..\external\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -154,29 +154,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\xtensa\src\asset_types\image.cpp" />
-    <ClCompile Include="..\xtensa\src\render_core\gpuImage.cpp" />
-    <ClCompile Include="..\xtensa\src\render_core\renderResource.cpp" />
+    <ClCompile Include="..\src\asset_types\image.cpp" />
+    <ClCompile Include="..\src\render_core\gpuImage.cpp" />
+    <ClCompile Include="..\src\render_core\renderResource.cpp" />
     <ClCompile Include="AssetBakerMain.cpp" />
-    <ClCompile Include="..\xtensa\src\scene\sceneParser.cpp" />
-    <ClCompile Include="..\xtensa\src\scene\assetBaker.cpp" />
-    <ClCompile Include="..\xtensa\src\scene\codeAssets.cpp" />
-    <ClCompile Include="..\xtensa\src\scene\sceneBase.cpp" />
-    <ClCompile Include="..\xtensa\src\scene\entity.cpp" />
-    <ClCompile Include="..\xtensa\src\scene\camera.cpp" />
-    <ClCompile Include="..\xtensa\src\asset_types\model.cpp" />
-    <ClCompile Include="..\xtensa\src\asset_types\material.cpp" />
-    <ClCompile Include="..\xtensa\src\asset_types\gpuProgram.cpp" />
-    <ClCompile Include="..\xtensa\src\io\io.cpp" />
-    <ClCompile Include="..\xtensa\src\io\serializeClasses.cpp" />
-    <ClCompile Include="..\xtensa\src\globals\render_util.cpp" />
-    <ClCompile Include="..\xtensa\src\app\cvar.cpp" />
+    <ClCompile Include="..\src\scene\sceneParser.cpp" />
+    <ClCompile Include="..\src\scene\assetBaker.cpp" />
+    <ClCompile Include="..\src\scene\codeAssets.cpp" />
+    <ClCompile Include="..\src\scene\sceneBase.cpp" />
+    <ClCompile Include="..\src\scene\entity.cpp" />
+    <ClCompile Include="..\src\scene\camera.cpp" />
+    <ClCompile Include="..\src\asset_types\model.cpp" />
+    <ClCompile Include="..\src\asset_types\material.cpp" />
+    <ClCompile Include="..\src\asset_types\gpuProgram.cpp" />
+    <ClCompile Include="..\src\io\io.cpp" />
+    <ClCompile Include="..\src\io\serializeClasses.cpp" />
+    <ClCompile Include="..\src\globals\render_util.cpp" />
+    <ClCompile Include="..\src\app\cvar.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\submodules\GfxCore\GfxCore.vcxproj">
+    <ProjectReference Include="..\..\submodules\GfxCore\GfxCore.vcxproj">
       <Project>{3de9a00c-b04b-43ab-943d-1973c47dece3}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\submodules\SysCore\SysCore.vcxproj">
+    <ProjectReference Include="..\..\submodules\SysCore\SysCore.vcxproj">
       <Project>{01728a43-da97-4bc6-8edf-f17cb75e7967}</Project>
     </ProjectReference>
   </ItemGroup>

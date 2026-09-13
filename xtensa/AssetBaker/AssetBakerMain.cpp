@@ -10,16 +10,16 @@
 #include <iostream>
 #include <string>
 
-#include "../xtensa/src/scene/assetManager.h"
-#include "../xtensa/src/scene/sceneBase.h"
-#include "../xtensa/src/scene/assetBaker.h"
-#include "../xtensa/src/scene/codeAssets.h"
-#include "../xtensa/src/app/cvar.h"
-#include "../xtensa/src/asset_types/model.h"
-#include "../xtensa/src/asset_types/material.h"
-#include "../xtensa/src/asset_types/image.h"
-#include "../xtensa/src/asset_types/gpuProgram.h"
-#include "../xtensa/src/scene/sceneParser.h"
+#include "../src/scene/assetManager.h"
+#include "../src/scene/sceneBase.h"
+#include "../src/scene/assetBaker.h"
+#include "../src/scene/codeAssets.h"
+#include "../src/app/cvar.h"
+#include "../src/asset_types/model.h"
+#include "../src/asset_types/material.h"
+#include "../src/asset_types/image.h"
+#include "../src/asset_types/gpuProgram.h"
+#include "../src/scene/sceneParser.h"
 
 // Globals expected by shared translation units (asset libraries, scene parser, etc.)
 AssetManager	g_assets;

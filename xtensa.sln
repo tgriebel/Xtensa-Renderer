@@ -9,7 +9,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GfxCore", "submodules\GfxCo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SysCore", "submodules\SysCore\SysCore.vcxproj", "{01728A43-DA97-4BC6-8EDF-F17CB75E7967}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetBaker", "AssetBaker\AssetBaker.vcxproj", "{11A9154E-560C-4CEB-AE50-0A0B661612BB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetBaker", "xtensa\AssetBaker\AssetBaker.vcxproj", "{11A9154E-560C-4CEB-AE50-0A0B661612BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
