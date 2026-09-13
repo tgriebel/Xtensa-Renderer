@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "renderer", "xtensa\xtensa.vcxproj", "{8596C8E2-5174-4549-90DD-A8A7250C1CBC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GfxCore", "external\GfxCore\GfxCore.vcxproj", "{3DE9A00C-B04B-43AB-943D-1973C47DECE3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GfxCore", "submodules\GfxCore\GfxCore.vcxproj", "{3DE9A00C-B04B-43AB-943D-1973C47DECE3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SysCore", "external\SysCore\SysCore.vcxproj", "{01728A43-DA97-4BC6-8EDF-F17CB75E7967}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SysCore", "submodules\SysCore\SysCore.vcxproj", "{01728A43-DA97-4BC6-8EDF-F17CB75E7967}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetBaker", "AssetBaker\AssetBaker.vcxproj", "{11A9154E-560C-4CEB-AE50-0A0B661612BB}"
 EndProject

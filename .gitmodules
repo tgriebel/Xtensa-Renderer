@@ -1,6 +1,6 @@
-[submodule "external/SysCore"]
-	path = external/SysCore
+[submodule "submodules/SysCore"]
+	path = submodules/SysCore
 	url = https://github.com/tgriebel/SysCore.git
-[submodule "external/GfxCore"]
-	path = external/GfxCore
+[submodule "submodules/GfxCore"]
+	path = submodules/GfxCore
 	url = https://github.com/tgriebel/GfxCore.git

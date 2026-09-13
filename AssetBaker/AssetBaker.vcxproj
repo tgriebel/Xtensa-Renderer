@@ -73,23 +73,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\external\GfxCore;..\external;$(IncludePath)</IncludePath>
+    <IncludePath>..\submodules\GfxCore;..\submodules;$(IncludePath)</IncludePath>
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\external\GfxCore;..\external;$(IncludePath)</IncludePath>
+    <IncludePath>..\submodules\GfxCore;..\submodules;$(IncludePath)</IncludePath>
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\external\GfxCore;..\external;$(IncludePath)</IncludePath>
+    <IncludePath>..\submodules\GfxCore;..\submodules;$(IncludePath)</IncludePath>
     <LocalDebuggerWorkingDirectory>$(SolutionDir)xtensa\</LocalDebuggerWorkingDirectory>
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\external\GfxCore;..\external;$(IncludePath)</IncludePath>
+    <IncludePath>..\submodules\GfxCore;..\submodules;$(IncludePath)</IncludePath>
     <LocalDebuggerWorkingDirectory>$(SolutionDir)xtensa\</LocalDebuggerWorkingDirectory>
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
@@ -173,10 +173,10 @@
     <ClCompile Include="..\xtensa\src\app\cvar.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\external\GfxCore\GfxCore.vcxproj">
+    <ProjectReference Include="..\submodules\GfxCore\GfxCore.vcxproj">
       <Project>{3de9a00c-b04b-43ab-943d-1973c47dece3}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\external\SysCore\SysCore.vcxproj">
+    <ProjectReference Include="..\submodules\SysCore\SysCore.vcxproj">
       <Project>{01728a43-da97-4bc6-8edf-f17cb75e7967}</Project>
     </ProjectReference>
   </ItemGroup>

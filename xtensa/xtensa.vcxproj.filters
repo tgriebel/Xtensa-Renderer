@@ -719,6 +719,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <Natvis Include="..\external\GfxCore\GfxCore\math\vector.natvis" />
+    <Natvis Include="..\submodules\GfxCore\GfxCore\math\vector.natvis" />
   </ItemGroup>
 </Project>

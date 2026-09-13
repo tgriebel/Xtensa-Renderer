@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="&#xD;&#xA;         " ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -76,7 +76,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\external\GfxCore;..\external;$(IncludePath)</IncludePath>
+    <IncludePath>..\submodules\GfxCore;..\submodules;$(IncludePath)</IncludePath>
     <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
@@ -86,7 +86,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\external\GfxCore;..\external;..\..\..\nesEmu\wintendo\wintendoCore\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\submodules\GfxCore;..\submodules;..\..\..\nesEmu\wintendo\wintendoCore\include;$(IncludePath)</IncludePath>
     <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
@@ -179,7 +179,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Natvis Include="..\external\GfxCore\GfxCore\math\vector.natvis" />
+    <Natvis Include="..\submodules\GfxCore\GfxCore\math\vector.natvis" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\external\imgui\backends\imgui_impl_glfw.h" />
@@ -465,10 +465,10 @@
     <ClCompile Include="src\app\appMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\external\GfxCore\GfxCore.vcxproj">
+    <ProjectReference Include="..\submodules\GfxCore\GfxCore.vcxproj">
       <Project>{3de9a00c-b04b-43ab-943d-1973c47dece3}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\external\SysCore\SysCore.vcxproj">
+    <ProjectReference Include="..\submodules\SysCore\SysCore.vcxproj">
       <Project>{01728a43-da97-4bc6-8edf-f17cb75e7967}</Project>
     </ProjectReference>
   </ItemGroup>
