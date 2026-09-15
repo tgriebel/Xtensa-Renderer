@@ -1241,6 +1241,8 @@ static bool vk_IsExtAvailable( const VkExtensionProperties* exts, uint32_t count
 
 void DeviceContext::Create( Window& window )
 {
+	LOG_SCOPE_SYSTEM( Vulkan );
+
 	// These are declared up here to prevent dangling pointers in Vulkan structs
 	const char* requiredExtensions[ 16 ] = {};
 	const char* enabledExtensions[ 64 ] = {};
@@ -1262,7 +1264,7 @@ void DeviceContext::Create( Window& window )
 		s_enableValidationLayers = ( validationLayersRequested && !m_profilerAttached && vk_CheckValidationLayerSupport() );
 
 		if ( validationLayersRequested && !s_enableValidationLayers ) {
-			std::cout << "Validation layers requested but unavailable." << std::endl;
+			LogMsg( logSeverity_t::Warning, "Validation layers requested but unavailable." );
 		}
 
 		VkApplicationInfo appInfo{ };
@@ -1283,9 +1285,9 @@ void DeviceContext::Create( Window& window )
 		instanceExtPropCount = instanceExtPropCount < COUNTARRAY( extensionProperties ) ? instanceExtPropCount : COUNTARRAY( extensionProperties );
 		vkEnumerateInstanceExtensionProperties( nullptr, &instanceExtPropCount, extensionProperties );
 
-		std::cout << "Available extensions:\n";
+		LogMsg( logSeverity_t::Verbose, "Available extensions:" );
 		for ( uint32_t i = 0; i < instanceExtPropCount; ++i ) {
-			std::cout << '\t' << extensionProperties[ i ].extensionName << '\n';
+			LogMsg( logSeverity_t::Verbose, "\t%s", extensionProperties[ i ].extensionName );
 		}
 
 		VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
@@ -1554,7 +1556,7 @@ void DeviceContext::Create( Window& window )
 
 		if ( m_debugMarkersEnabled )
 		{
-			std::cout << "Enabling debug markers." << std::endl;
+			LogMsg( "Enabling debug markers." );
 
 			fnDebugMarkerSetObjectTag = (PFN_vkDebugMarkerSetObjectTagEXT)vkGetDeviceProcAddr( device, "vkDebugMarkerSetObjectTagEXT" );
 			fnDebugMarkerSetObjectName = (PFN_vkDebugMarkerSetObjectNameEXT)vkGetDeviceProcAddr( device, "vkDebugMarkerSetObjectNameEXT" );
@@ -1570,7 +1572,7 @@ void DeviceContext::Create( Window& window )
 			debugMarkersEnabled = debugMarkersEnabled && ( fnCmdDebugMarkerInsert != VK_NULL_HANDLE );
 		}
 		else {
-			std::cout << "Debug markers \"" << VK_EXT_DEBUG_MARKER_EXTENSION_NAME << "\" disabled." << std::endl;
+			LogMsg( "Debug markers \"%s\" disabled.", VK_EXT_DEBUG_MARKER_EXTENSION_NAME );
 		}
 	}
 

@@ -15,6 +15,7 @@
 #include "../../shaders/gpuShared.h"
 
 #include "swapChain.h"
+#include "log.h"
 
 extern Scene* g_scene;
 
@@ -335,7 +336,7 @@ void RenderUploader::UploadTextures( CommandList* cmdList )
 			}
 			else
 			{
-				std::cout << "GPU Image already exists!" << std::endl;
+				LogMsg( "Vulkan", logSeverity_t::Warning, "GPU Image already exists!" );
 				continue;
 			}
 		}

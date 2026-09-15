@@ -13,6 +13,7 @@
 #include "../asset_types/material.h"
 
 #include "../io/io.h"
+#include "../render_core/log.h"
 
 //#define JSMN_PARENT_LINKS
 #include <SysCore/jsmn.h>
@@ -781,7 +782,7 @@ void ParseObject( parseState_t& st, const objectTuple_t* objectMap, const uint32
 		if( found == false )
 		{
 			const std::string s = ParseCurrentToken( st );
-			std::cout << "No matching parse function for '" << s << "'" << std::endl;
+			LogMsg( "Scene", logSeverity_t::Warning, "No matching parse function for '%s'", s.c_str() );
 			st.tx += 1; // skip the key
 			st.tx += CountTokens( st, st.tx ); // skip the value (handles nested objects/arrays)
 			++itemsFound;
@@ -823,7 +824,7 @@ void ParseArray( parseState_t& st, const objectTuple_t* objectMap )
 			}
 			else
 			{
-				std::cout << "ParseArray: skipping unparseable object element in '" << arrayString << "'" << std::endl;
+				LogMsg( "Scene", logSeverity_t::Warning, "ParseArray: skipping unparseable object element in '%s'", arrayString.c_str() );
 				st.tx += CountTokens( st, st.tx );
 			}
 		}
@@ -843,6 +844,8 @@ static void CleanupParseState( parseState_t& st )
 
 void ParseJson( const std::string& fileName, Scene** scene, AssetManager* assets, sceneInitializerCallback_t* sceneInitializer )
 {
+	LOG_SCOPE_SYSTEM( Scene );
+
 	assert( assets != nullptr );
 	assert( scene != nullptr );
 
@@ -860,13 +863,13 @@ void ParseJson( const std::string& fileName, Scene** scene, AssetManager* assets
 	jsmn_init( st.p );
 	st.r = jsmn_parse( st.p, st.file->data(), static_cast<uint32_t>( st.file->size() ), st.tokens, maxTokens );
 	if ( st.r < 0 ) {
-		std::cout << "Failed to parse JSON: " << fileName << " (error: " << st.r << ")" << std::endl;
+		LogMsg( logSeverity_t::Error, "Failed to parse JSON: %s (error: %d)", fileName.c_str(), st.r );
 		CleanupParseState( st );
 		return;
 	}
 
 	if ( st.r < 1 || st.tokens[ 0 ].type != JSMN_OBJECT ) {
-		std::cout << "Object expected: " << fileName << std::endl;
+		LogMsg( logSeverity_t::Error, "Object expected: %s", fileName.c_str() );
 		CleanupParseState( st );
 		return;
 	}

@@ -13,6 +13,7 @@
 #include "../render_resources/imageSampler.h"
 #include "../render_state/rhi.h"
 #include "../render_state/deviceContext.h"
+#include "../render_core/log.h"
 #include "bindings.h"
 
 union descriptorInfo_t
@@ -122,6 +123,8 @@ static DescriptorWritesBuilder writeBuilder;
 
 static void AppendDescriptorWrites( const ShaderBindParms& parms, const uint32_t currentBuffer, std::vector<VkWriteDescriptorSet>& descSetWrites )
 {
+	LOG_SCOPE_SYSTEM( Vulkan );
+
 	const ShaderBindSet* set = parms.GetSet();
 
 	const uint32_t count = set->Count();
@@ -149,7 +152,7 @@ static void AppendDescriptorWrites( const ShaderBindParms& parms, const uint32_t
 
 		static bool print = false;
 		if( print ) {
-			std::cout << parms.AsString() << std::endl;
+			LogMsg( logSeverity_t::Verbose, "%s", parms.AsString().c_str() );
 		}
 
 		VkWriteDescriptorSet writeInfo = {};
@@ -231,7 +234,7 @@ static void AppendDescriptorWrites( const ShaderBindParms& parms, const uint32_t
 
 				if( image->gpuImage == nullptr )
 				{
-					std::cout << parms.AsString() << std::endl;
+					LogMsg( logSeverity_t::Error, "%s", parms.AsString().c_str() );
 					FATAL_ERROR( Shader Binding );
 				}
 

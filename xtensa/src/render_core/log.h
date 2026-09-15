@@ -40,6 +40,5 @@ void SetLogFilePath( const char* path );
 void LogMsgV( const char* system, logSeverity_t severity, const char* fmt, va_list args );
 
 void LogMsg( const char* system, logSeverity_t severity, const char* fmt, ... );
-void LogMsg( const char* system, const char* fmt, ... );		// severity defaults to Info
 void LogMsg( logSeverity_t severity, const char* fmt, ... );	// system comes from the active LOG_SCOPE_SYSTEM
 void LogMsg( const char* fmt, ... );							// system from LOG_SCOPE_SYSTEM, severity defaults to Info

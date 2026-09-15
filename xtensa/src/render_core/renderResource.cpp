@@ -3,6 +3,7 @@
 #include "../render_core/gpuImage.h"
 #include <algorithm>
 #include "../app/window.h"
+#include "log.h"
 
 extern Window g_window;
 
@@ -75,7 +76,7 @@ void RenderResource::Cleanup( const resourceLifeTime_t lifetime )
 		{
 			GpuImage* gpuImage = reinterpret_cast<GpuImage*>( resourceList[ i ] );
 			assert( gpuImage != nullptr );
-			std::cout << "Destroying GPU Image: " << gpuImage->GetDebugName() << std::endl;
+			LogMsg( "Vulkan", logSeverity_t::Info, "Destroying GPU Image: %s", gpuImage->GetDebugName() );
 		}
 		resourceList[ i ]->Destroy();
 	}

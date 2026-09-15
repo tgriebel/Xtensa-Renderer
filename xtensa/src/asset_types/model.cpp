@@ -28,7 +28,7 @@ bool ModelLoader::Load( Asset<Model>& modelAsset )
 		return true;
 	}
 
-	LogMsg( "Asset", "Loading raw model: %s", fileName.c_str() );
+	LogMsg( "Asset", logSeverity_t::Info, "Loading raw model: %s", fileName.c_str() );
 
 	if ( m_modelExt == "obj" ) {
 		return LoadRawModelModelObj( *assets, fileName, m_modelPath, m_texturePath, model );

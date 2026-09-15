@@ -77,7 +77,7 @@ static void ProcessRecord( const logRecord_t& rec, std::ofstream& file )
 
 	const bool isVulkan = SysCore::HasPrefix( rec.system, "Vulkan" );
 
-	outputStream << ( isVulkan ? ">>[" : "[" ) << rec.system << "][";
+	outputStream << ( isVulkan ? "[" : "[" ) << rec.system << "][";
 	outputStream << SeverityName( rec.severity ) << "] " << rec.message << "\n";
 
 	if ( file.is_open() )
@@ -174,15 +174,6 @@ void LogMsg( const char* system, logSeverity_t severity, const char* fmt, ... )
 	va_list args;
 	va_start( args, fmt );
 	LogMsgV( system, severity, fmt, args );
-	va_end( args );
-}
-
-
-void LogMsg( const char* system, const char* fmt, ... )
-{
-	va_list args;
-	va_start( args, fmt );
-	LogMsgV( system, logSeverity_t::Info, fmt, args );
 	va_end( args );
 }
 

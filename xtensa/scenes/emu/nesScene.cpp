@@ -132,7 +132,7 @@ void NesScene::Init()
 
 	Tomtendo::LoadDllInterface( &tomtendo, hinstLib );
 
-	LogMsg( "Scene", "NES screen height: %u", tomtendo.ScreenHeight() );
+	LogMsg( "Scene", logSeverity_t::Info, "NES screen height: %u", tomtendo.ScreenHeight() );
 
 	nesCfg = tomtendo.DefaultConfig();
 

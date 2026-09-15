@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include <string>
-#include <iostream>
 #include <filesystem>
 #include <chrono>
 
@@ -10,6 +9,7 @@
 #include <SysCore/systemUtils.h>
 
 #include "../asset_types/assetLib.h"
+#include "../render_core/log.h"
 
 class Model;
 class Material;
@@ -105,6 +105,8 @@ static bool StoreBaked( Asset<T>& asset, bakedAssetInfo_t& info, const std::stri
 template<class T>
 bool LoadBaked( Asset<T>& asset, bakedAssetInfo_t& info, const sourceFile_t& source, const std::string& dir, const std::string& ext )
 {
+	LOG_SCOPE_SYSTEM( Asset );
+
 	if( AreBakedAssetsEnabled() == false ) {
 		return false;
 	}
@@ -126,7 +128,7 @@ bool LoadBaked( Asset<T>& asset, bakedAssetInfo_t& info, const sourceFile_t& sou
 
 		if( IsBakedAssetFresh( source, info ) == false )
 		{
-			std::cout << "Baked file out-of-date: " << info.name << " source is newer.\n";
+			LogMsg( "Baked file out-of-date: %s source is newer.", info.name.c_str() );
 			return false;
 		}
 
@@ -148,13 +150,13 @@ bool LoadBaked( Asset<T>& asset, bakedAssetInfo_t& info, const sourceFile_t& sou
 
 		if( currentHash != dataHash )
 		{
-			std::cout << "Baked hash mismatch: " << currentHash << " != " << dataHash << "\n";
+			LogMsg( logSeverity_t::Warning, "Baked hash mismatch: %llu != %llu", static_cast<unsigned long long>( currentHash ), static_cast<unsigned long long>( dataHash ) );
 			return false;
 		}
 
 		if( info.sizeBytes != byteCount )
 		{
-			std::cout << "Baked byte size mismatch: " << info.sizeBytes << " != " << byteCount << "\n";
+			LogMsg( logSeverity_t::Warning, "Baked byte size mismatch: %u != %u", info.sizeBytes, byteCount );
 			return false;
 		}
 
@@ -164,7 +166,7 @@ bool LoadBaked( Asset<T>& asset, bakedAssetInfo_t& info, const sourceFile_t& sou
 	}
 	else
 	{
-		std::cout << "Baked file not found: " << bakedPath << " for asset " << asset.GetName() << "\n";
+		LogMsg( "Baked file not found: %s for asset %s", bakedPath.c_str(), asset.GetName().c_str() );
 	}
 	return false;
 }

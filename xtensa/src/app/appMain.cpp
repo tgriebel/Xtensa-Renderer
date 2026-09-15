@@ -13,6 +13,7 @@
 #include "../scene/assetBaker.h"
 #include "../scene/codeAssets.h"
 #include "cvar.h"
+#include "../render_core/log.h"
 
 #include "../../scenes/chess/chessScene.h"
 #include "../../scenes/emu/nesScene.h"
@@ -352,7 +353,7 @@ int main( int argc, char* argv[] )
 	}
 	catch (const std::exception& e)
 	{
-		std::cerr << e.what() << std::endl;
+		LogMsg( "App", logSeverity_t::Error, "%s", e.what() );
 		renderThread.join();
 		return EXIT_FAILURE;
 	}

@@ -15,6 +15,7 @@
 #include "../scene/assetManager.h"
 
 #include "../asset_types/image.h"
+#include "../render_core/log.h"
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "../../external/tiny_obj_loader.h"
@@ -298,9 +299,11 @@ static Material TranslateObjMaterial( AssetManager& assets, const tinyobj::mater
 
 bool LoadMaterialObj( AssetManager& assets, const std::string& fileName, const std::string& materialPath, const std::string& texturePath, Material& material )
 {
+	LOG_SCOPE_SYSTEM( Asset );
+
 	std::ifstream matStream( materialPath + fileName );
 	if ( matStream.fail() == true ) {
-		std::cout << "LoadMaterialFile: failed to open " << materialPath + fileName << "\n";
+		LogMsg( logSeverity_t::Error, "LoadMaterialFile: failed to open %s", ( materialPath + fileName ).c_str() );
 		return false;
 	}
 
@@ -310,7 +313,7 @@ bool LoadMaterialObj( AssetManager& assets, const std::string& fileName, const s
 
 	tinyobj::LoadMtl( &matMap, &materials, &matStream, nullptr, &warn );
 	if ( warn.empty() == false ) {
-		std::cout << "LoadMaterialFile warning: " << warn << "\n";
+		LogMsg( logSeverity_t::Warning, "LoadMaterialFile warning: %s", warn.c_str() );
 	}
 
 	// TODO: Load all materials. There's currently just a one-to-one relationship since adding to the asset lib only adds a single material

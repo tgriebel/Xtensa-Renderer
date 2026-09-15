@@ -1,12 +1,13 @@
 #include "sceneBase.h"
 
 #include <gfxcore/primitives/ray.h>
+#include "../render_core/log.h"
 
 void Scene::CreateEntityBounds( const hdl_t modelHdl, Entity& entity )
 {
 	const AssetLib<Model>& modelLib = *g_assets.GetLib<Model>();
 	if( modelLib.Exists( modelHdl ) == false ) {
-		std::cout << "Invalid model handle" << std::endl;
+		LogMsg( "Scene", logSeverity_t::Error, "Invalid model handle" );
 	}
 
 	const Model& model = modelLib.Find( modelHdl )->Get();

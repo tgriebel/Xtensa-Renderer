@@ -1,5 +1,6 @@
 #include "TaskSchedule.h"
 #include "../render_core/renderResource.h"
+#include "../render_core/log.h"
 
 
 uint32_t TaskSchedule::TaskCount() const
@@ -113,13 +114,14 @@ void TaskSchedule::IssueNext( CommandList& context )
 
 void TaskSchedule::AsString() const
 {
-	std::cout << "Schedule\n";
+	LOG_SCOPE_SYSTEM( Render );
+
+	LogMsg( "Schedule" );
 
 	GpuTask* t = tasks;
 	while ( t != nullptr )
 	{
-		std::cout << "+ <" << t->AsString() << ">\n";
+		LogMsg( "+ <%s>", t->AsString().c_str() );
 		t = t->GetChild();
 	}
-	std::cout << std::flush;
 }

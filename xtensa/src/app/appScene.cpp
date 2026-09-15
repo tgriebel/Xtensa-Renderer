@@ -342,13 +342,15 @@ void DrawSceneDebugMenu()
 		ImGui::SameLine();
 		if ( ImGui::Button( "Dump VMA Stats" ) )
 		{
+			LOG_SCOPE_SYSTEM( VMA );
+
 			VmaTotalStatistics stats;
 			vmaCalculateStatistics( AllocatorMemory::GetVmaAllocator(), &stats );
 
 			VkPhysicalDeviceMemoryProperties memProps;
 			vkGetPhysicalDeviceMemoryProperties( context.physicalDevice, &memProps );
 
-			LogMsg( "VMA", logSeverity_t::Info, "=== VMA Memory Statistics ===" );
+			LogMsg( logSeverity_t::Info, "=== VMA Memory Statistics ===" );
 			for ( uint32_t i = 0; i < memProps.memoryHeapCount; ++i )
 			{
 				const VmaStatistics& heap = stats.memoryHeap[ i ].statistics;
@@ -378,19 +380,19 @@ void DrawSceneDebugMenu()
 					memTypeFlags += "\n";
 				}
 
-				LogMsg( "VMA", logSeverity_t::Info, "  Heap %u (%s) - %llu MB capacity:",
+				LogMsg( logSeverity_t::Info, "  Heap %u (%s) - %llu MB capacity:",
 					i, heapType.c_str(), ( unsigned long long )( memProps.memoryHeaps[ i ].size / ( 1024 * 1024 ) ) );
-				LogMsg( "VMA", logSeverity_t::Info, "    %llu MB used / %llu MB allocated (%u allocations, %u blocks)",
+				LogMsg( logSeverity_t::Info, "    %llu MB used / %llu MB allocated (%u allocations, %u blocks)",
 					( unsigned long long )( heap.allocationBytes / ( 1024 * 1024 ) ), ( unsigned long long )( heap.blockBytes / ( 1024 * 1024 ) ),
 					heap.allocationCount, heap.blockCount );
-				LogMsg( "VMA", logSeverity_t::Info, "%s", memTypeFlags.c_str() );
+				LogMsg( logSeverity_t::Info, "%s", memTypeFlags.c_str() );
 			}
 
 			const VmaStatistics& total = stats.total.statistics;
-			LogMsg( "VMA", logSeverity_t::Info, "  Total: %llu MB used / %llu MB allocated (%u allocations, %u blocks)",
+			LogMsg( logSeverity_t::Info, "  Total: %llu MB used / %llu MB allocated (%u allocations, %u blocks)",
 				( unsigned long long )( total.allocationBytes / ( 1024 * 1024 ) ), ( unsigned long long )( total.blockBytes / ( 1024 * 1024 ) ),
 				total.allocationCount, total.blockCount );
-			LogMsg( "VMA", logSeverity_t::Info, "=============================" );
+			LogMsg( logSeverity_t::Info, "=============================" );
 		}
 
 		ImGui::Checkbox( "Is Textured", &g_imguiControls.isTextured );

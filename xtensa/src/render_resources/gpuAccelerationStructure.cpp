@@ -2,6 +2,7 @@
 #include "../render_state/cmdContext.h"
 #include "../render_state/deviceContext.h"
 #include "../render_core/renderUploader.h"
+#include "../render_core/log.h"
 
 #include <SysCore/common.h>
 using namespace SysCore;
@@ -110,7 +111,7 @@ void GpuAccelerationStructure::BuildPendingGeometry( CommandList* cmdList )
 		return;
 	}
 
-	std::cout << "Building RT BLAS (" << newCount << " new, " << m_blasEntries.size() << " existing)" << std::endl;
+	LogMsg( "Vulkan", logSeverity_t::Info, "Building RT BLAS (%u new, %zu existing)", newCount, m_blasEntries.size() );
 
 	// TODO: query from device properties
 	// VkPhysicalDeviceAccelerationStructurePropertiesKHR::minAccelerationStructureScratchOffsetAlignment

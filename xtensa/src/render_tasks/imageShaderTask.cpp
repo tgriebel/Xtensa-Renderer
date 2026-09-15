@@ -350,8 +350,6 @@ void ImageShaderTask::FrameBegin()
 		m_passes[ passIndex ]->parms->Bind( BINDING_NAME( imageProcess ),		&m_buffer[ passIndex ] );
 	}
 
-	// std::cout << m_pass->parms->AsString() << std::endl;
-
 	GpuTask::OnFrameBegin();
 }
 

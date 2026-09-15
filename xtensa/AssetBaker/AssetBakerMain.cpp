@@ -7,7 +7,6 @@
 //       AssetBaker.exe <scene.json>
 //
 
-#include <iostream>
 #include <string>
 
 #include "../src/scene/assetManager.h"
@@ -20,6 +19,7 @@
 #include "../src/asset_types/image.h"
 #include "../src/asset_types/gpuProgram.h"
 #include "../src/scene/sceneParser.h"
+#include "../src/render_core/log.h"
 
 // Globals expected by shared translation units (asset libraries, scene parser, etc.)
 AssetManager	g_assets;
@@ -39,9 +39,11 @@ static void InitSceneType( const std::string type, Scene** scene )
 
 int main( int argc, char* argv[] )
 {
+	LOG_SCOPE_SYSTEM( AssetBaker );
+
 	if ( argc < 2 )
 	{
-		std::cerr << "Usage: AssetBaker <scene.json>\n";
+		LogMsg( logSeverity_t::Error, "Usage: AssetBaker <scene.json>" );
 		return 1;
 	}
 
@@ -61,6 +63,6 @@ int main( int argc, char* argv[] )
 
 	BakeAssets();
 
-	std::cout << "AssetBaker: baked scene '" << sceneFile << "'\n";
+	LogMsg( "Baked scene '%s'", sceneFile.c_str() );
 	return 0;
 }

@@ -70,3 +70,425 @@
 [Asset][Info] Loading raw model: models/knight/knight.obj
 [Asset][Info] Loading raw model: models/diamond/diamond.obj
 [Asset][Info] Loading raw model: models/rook/rook.obj
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000000151531.mdl.bin
+[Asset][Info] Loading raw model: models/cube/cube.obj
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000000342599.mdl.bin
+[Asset][Info] Loading raw model: models/rook/rook.obj
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000965064153.mdl.bin
+[Asset][Info] Loading raw model: models/diamond/diamond.obj
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000000439224.mdl.bin
+[Asset][Info] Loading raw model: models/pawn/pawn.obj
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000580188819.mdl.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000472176099.mdl.bin
+[Asset][Info] Loading raw model: models/bishop/bishop.obj
+[Asset][Info] Loading raw model: models/knight/knight.obj
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000000222281.mdl.bin
+[Asset][Info] Loading raw model: models/king/king.obj
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000005036028.mdl.bin
+[Asset][Info] Loading raw model: models/plane/plane.obj
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000000575423.mdl.bin
+[Asset][Info] Loading raw model: models/axis/axis.obj
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000013083722.mdl.bin
+[Asset][Info] Loading raw model: models/queen/queen.obj
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000803693759.mdl.bin
+[Asset][Info] Loading raw model: models/chess_board/chess_board.obj
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000619464131.mdl.bin
+[Asset][Info] Loading raw model: models/sphere/sphere.obj
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000750319870.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000501411810.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\.\code_assets\0000000866872168.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\.\code_assets\0000000492487057.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\.\code_assets\0000000895898184.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000695549021.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000555374306.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000238951616.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000118041074.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000761380796.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000728695272.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000010761428.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000529992737.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000718289987.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000840507766.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000727973875.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000926228466.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000938131077.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000788623447.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000657252608.img.bin
+[Baked file not found: %s for asset %s][Info] .\baked\.\assets\0000000926228466.img.bin
+[Scene][Error] Invalid model handle
+[Vulkan][Verbose] Available extensions:
+[Vulkan][Verbose] 	VK_KHR_device_group_creation
+[Vulkan][Verbose] 	VK_KHR_external_fence_capabilities
+[Vulkan][Verbose] 	VK_KHR_external_memory_capabilities
+[Vulkan][Verbose] 	VK_KHR_external_semaphore_capabilities
+[Vulkan][Verbose] 	VK_KHR_get_physical_device_properties2
+[Vulkan][Verbose] 	VK_KHR_get_surface_capabilities2
+[Vulkan][Verbose] 	VK_KHR_surface
+[Vulkan][Verbose] 	VK_KHR_surface_maintenance1
+[Vulkan][Verbose] 	VK_KHR_surface_protected_capabilities
+[Vulkan][Verbose] 	VK_KHR_win32_surface
+[Vulkan][Verbose] 	VK_EXT_debug_report
+[Vulkan][Verbose] 	VK_EXT_debug_utils
+[Vulkan][Verbose] 	VK_EXT_surface_maintenance1
+[Vulkan][Verbose] 	VK_EXT_swapchain_colorspace
+[Vulkan][Verbose] 	VK_NV_external_memory_capabilities
+[Vulkan][Verbose] 	VK_KHR_portability_enumeration
+[Vulkan][Verbose] 	VK_LUNARG_direct_driver_loading
+[Debug markers "%s" disabled.][Info] VK_EXT_debug_marker
+[Vulkan][Info] Building RT BLAS (22 new, 0 existing)
+[Render][Info] Schedule
+[+ <%s>][Info] RenderTask: Shadow View
+[+ <%s>][Info] RenderTask: Shadow View
+[+ <%s>][Info] RenderTask: Shadow View
+[+ <%s>][Info] RenderTask: Shadow View
+[+ <%s>][Info] RenderTask: Shadow View
+[+ <%s>][Info] RenderTask: Shadow View
+[+ <%s>][Info] RenderTask: Main View
+[+ <%s>][Info] ResolveImageTask: 2 resolve(s) [FB_gBufferLayer -> FB_gBufferLayerResolvedImage0] [FB_viewDepth -> FB_depthStencilResolvedImage]
+[+ <%s>][Info] ImageProcessTask: SSAO
+[+ <%s>][Info] ImageProcessTask: SSAO Bilateral Blur
+[+ <%s>][Info] DoF
+[+ <%s>][Info] TransitionImageTask: FB_rtOutput
+[+ <%s>][Info] RayTracingTask: PrimaryRayTrace
+[+ <%s>][Info] RenderTask: Main View
+[+ <%s>][Info] ResolveImageTask: 1 resolve(s) [FB_mainColor -> FB_mainColorResolvedImage]
+[+ <%s>][Info] ImageReadbackTask: ScreenshotReadback
+[+ <%s>][Info] CopyImageTask: FB_currentLuminance -> FB_previousLuminance
+[+ <%s>][Info] ImageProcessTask: LuminanceDownsample
+[+ <%s>][Info] ImageProcessTask: BloomDownsample
+[+ <%s>][Info] ImageProcessTask: BloomUpsample
+[+ <%s>][Info] ImageProcessTask: MainColorDownsample
+[+ <%s>][Info] ImageProcessTask: Separable Gaussian
+[+ <%s>][Info] Post-Process
+[+ <%s>][Info] TransitionImageTask: _backbuffer
+[+ <%s>][Info] RenderTask: 2D
+[+ <%s>][Info] ImguiTask
+[+ <%s>][Info] RenderTask: 2D
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000151531.mdl.bin for asset cube
+[Asset][Info] Loading raw model: models/cube/cube.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000965064153.mdl.bin for asset diamond
+[Asset][Info] Loading raw model: models/diamond/diamond.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000439224.mdl.bin for asset pawn
+[Asset][Info] Loading raw model: models/pawn/pawn.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000342599.mdl.bin for asset rook
+[Asset][Info] Loading raw model: models/rook/rook.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000580188819.mdl.bin for asset knight
+[Asset][Info] Loading raw model: models/knight/knight.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000222281.mdl.bin for asset king
+[Asset][Info] Loading raw model: models/king/king.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000472176099.mdl.bin for asset bishop
+[Asset][Info] Loading raw model: models/bishop/bishop.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000005036028.mdl.bin for asset plane
+[Asset][Info] Loading raw model: models/plane/plane.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000013083722.mdl.bin for asset queen
+[Asset][Info] Loading raw model: models/queen/queen.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000575423.mdl.bin for asset axis
+[Asset][Info] Loading raw model: models/axis/axis.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000619464131.mdl.bin for asset models/sphere/sphere.obj
+[Asset][Info] Loading raw model: models/sphere/sphere.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000803693759.mdl.bin for asset models/chess_board/chess_board.obj
+[Asset][Info] Loading raw model: models/chess_board/chess_board.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000238951616.img.bin for asset textures/sapeli.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000750319870.img.bin for asset textures/checker.png
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000555374306.img.bin for asset textures/white.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000695549021.img.bin for asset code_assets/brdf_lut.img
+[Asset][Info] Baked file not found: .\baked\.\assets\.\code_assets\0000000895898184.img.bin for asset chapel_specIbl.img
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000501411810.img.bin for asset textures/black.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\.\code_assets\0000000866872168.img.bin for asset chapel_diffuseIbl.img
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000118041074.img.bin for asset models/chess_board/mahony.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000761380796.img.bin for asset models/chess_board/sapeli_normal.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\.\code_assets\0000000492487057.img.bin for asset chapel_env.img
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000728695272.img.bin for asset models/chess_board/marble.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000010761428.img.bin for asset models/chess_board/gray.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000529992737.img.bin for asset models/chess_board/Marble09_nrm.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000718289987.img.bin for asset models/chess_board/Marble09_disp.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000840507766.img.bin for asset models/chess_materials/Louro_Freijo_diffuse.png
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000727973875.img.bin for asset models/chess_materials/Louro_Freijo_normal.png
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000926228466.img.bin for asset Louro_Freijo_Specular.png
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000938131077.img.bin for asset models/chess_materials/NORUS-Diffuse.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000657252608.img.bin for asset NORUS-Bump.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000926228466.img.bin for asset Louro_Freijo_Specular.png
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000788623447.img.bin for asset models/chess_materials/NORUS-Normal.jpg
+[Scene][Error] Invalid model handle
+[Vulkan][Verbose] Available extensions:
+[Vulkan][Verbose] 	VK_KHR_device_group_creation
+[Vulkan][Verbose] 	VK_KHR_external_fence_capabilities
+[Vulkan][Verbose] 	VK_KHR_external_memory_capabilities
+[Vulkan][Verbose] 	VK_KHR_external_semaphore_capabilities
+[Vulkan][Verbose] 	VK_KHR_get_physical_device_properties2
+[Vulkan][Verbose] 	VK_KHR_get_surface_capabilities2
+[Vulkan][Verbose] 	VK_KHR_surface
+[Vulkan][Verbose] 	VK_KHR_surface_maintenance1
+[Vulkan][Verbose] 	VK_KHR_surface_protected_capabilities
+[Vulkan][Verbose] 	VK_KHR_win32_surface
+[Vulkan][Verbose] 	VK_EXT_debug_report
+[Vulkan][Verbose] 	VK_EXT_debug_utils
+[Vulkan][Verbose] 	VK_EXT_surface_maintenance1
+[Vulkan][Verbose] 	VK_EXT_swapchain_colorspace
+[Vulkan][Verbose] 	VK_NV_external_memory_capabilities
+[Vulkan][Verbose] 	VK_KHR_portability_enumeration
+[Vulkan][Verbose] 	VK_LUNARG_direct_driver_loading
+[Vulkan][Info] Debug markers "VK_EXT_debug_marker" disabled.
+[Vulkan][Info] Building RT BLAS (22 new, 0 existing)
+[Render][Info] Schedule
+[Render][Info] + <RenderTask: Shadow View>
+[Render][Info] + <RenderTask: Shadow View>
+[Render][Info] + <RenderTask: Shadow View>
+[Render][Info] + <RenderTask: Shadow View>
+[Render][Info] + <RenderTask: Shadow View>
+[Render][Info] + <RenderTask: Shadow View>
+[Render][Info] + <RenderTask: Main View>
+[Render][Info] + <ResolveImageTask: 2 resolve(s) [FB_gBufferLayer -> FB_gBufferLayerResolvedImage0] [FB_viewDepth -> FB_depthStencilResolvedImage]>
+[Render][Info] + <ImageProcessTask: SSAO>
+[Render][Info] + <ImageProcessTask: SSAO Bilateral Blur>
+[Render][Info] + <DoF>
+[Render][Info] + <TransitionImageTask: FB_rtOutput>
+[Render][Info] + <RayTracingTask: PrimaryRayTrace>
+[Render][Info] + <RenderTask: Main View>
+[Render][Info] + <ResolveImageTask: 1 resolve(s) [FB_mainColor -> FB_mainColorResolvedImage]>
+[Render][Info] + <ImageReadbackTask: ScreenshotReadback>
+[Render][Info] + <CopyImageTask: FB_currentLuminance -> FB_previousLuminance>
+[Render][Info] + <ImageProcessTask: LuminanceDownsample>
+[Render][Info] + <ImageProcessTask: BloomDownsample>
+[Render][Info] + <ImageProcessTask: BloomUpsample>
+[Render][Info] + <ImageProcessTask: MainColorDownsample>
+[Render][Info] + <ImageProcessTask: Separable Gaussian>
+[Render][Info] + <Post-Process>
+[Render][Info] + <TransitionImageTask: _backbuffer>
+[Render][Info] + <RenderTask: 2D>
+[Render][Info] + <ImguiTask>
+[Render][Info] + <RenderTask: 2D>
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000472176099.mdl.bin for asset bishop
+[Asset][Info] Loading raw model: models/bishop/bishop.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000965064153.mdl.bin for asset diamond
+[Asset][Info] Loading raw model: models/diamond/diamond.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000342599.mdl.bin for asset rook
+[Asset][Info] Loading raw model: models/rook/rook.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000439224.mdl.bin for asset pawn
+[Asset][Info] Loading raw model: models/pawn/pawn.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000151531.mdl.bin for asset cube
+[Asset][Info] Loading raw model: models/cube/cube.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000580188819.mdl.bin for asset knight
+[Asset][Info] Loading raw model: models/knight/knight.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000222281.mdl.bin for asset king
+[Asset][Info] Loading raw model: models/king/king.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000013083722.mdl.bin for asset queen
+[Asset][Info] Loading raw model: models/queen/queen.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000575423.mdl.bin for asset axis
+[Asset][Info] Loading raw model: models/axis/axis.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000005036028.mdl.bin for asset plane
+[Asset][Info] Loading raw model: models/plane/plane.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000619464131.mdl.bin for asset models/sphere/sphere.obj
+[Asset][Info] Loading raw model: models/sphere/sphere.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000803693759.mdl.bin for asset models/chess_board/chess_board.obj
+[Asset][Info] Loading raw model: models/chess_board/chess_board.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000238951616.img.bin for asset textures/sapeli.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000750319870.img.bin for asset textures/checker.png
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000695549021.img.bin for asset code_assets/brdf_lut.img
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000555374306.img.bin for asset textures/white.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000501411810.img.bin for asset textures/black.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\.\code_assets\0000000492487057.img.bin for asset chapel_env.img
+[Asset][Info] Baked file not found: .\baked\.\assets\.\code_assets\0000000866872168.img.bin for asset chapel_diffuseIbl.img
+[Asset][Info] Baked file not found: .\baked\.\assets\.\code_assets\0000000895898184.img.bin for asset chapel_specIbl.img
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000761380796.img.bin for asset models/chess_board/sapeli_normal.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000118041074.img.bin for asset models/chess_board/mahony.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000010761428.img.bin for asset models/chess_board/gray.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000728695272.img.bin for asset models/chess_board/marble.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000529992737.img.bin for asset models/chess_board/Marble09_nrm.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000718289987.img.bin for asset models/chess_board/Marble09_disp.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000840507766.img.bin for asset models/chess_materials/Louro_Freijo_diffuse.png
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000727973875.img.bin for asset models/chess_materials/Louro_Freijo_normal.png
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000926228466.img.bin for asset Louro_Freijo_Specular.png
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000788623447.img.bin for asset models/chess_materials/NORUS-Normal.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000657252608.img.bin for asset NORUS-Bump.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000926228466.img.bin for asset Louro_Freijo_Specular.png
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000938131077.img.bin for asset models/chess_materials/NORUS-Diffuse.jpg
+[Scene][Error] Invalid model handle
+[Vulkan][Verbose] Available extensions:
+[Vulkan][Verbose] 	VK_KHR_device_group_creation
+[Vulkan][Verbose] 	VK_KHR_external_fence_capabilities
+[Vulkan][Verbose] 	VK_KHR_external_memory_capabilities
+[Vulkan][Verbose] 	VK_KHR_external_semaphore_capabilities
+[Vulkan][Verbose] 	VK_KHR_get_physical_device_properties2
+[Vulkan][Verbose] 	VK_KHR_get_surface_capabilities2
+[Vulkan][Verbose] 	VK_KHR_surface
+[Vulkan][Verbose] 	VK_KHR_surface_maintenance1
+[Vulkan][Verbose] 	VK_KHR_surface_protected_capabilities
+[Vulkan][Verbose] 	VK_KHR_win32_surface
+[Vulkan][Verbose] 	VK_EXT_debug_report
+[Vulkan][Verbose] 	VK_EXT_debug_utils
+[Vulkan][Verbose] 	VK_EXT_surface_maintenance1
+[Vulkan][Verbose] 	VK_EXT_swapchain_colorspace
+[Vulkan][Verbose] 	VK_NV_external_memory_capabilities
+[Vulkan][Verbose] 	VK_KHR_portability_enumeration
+[Vulkan][Verbose] 	VK_LUNARG_direct_driver_loading
+[Vulkan][Info] Debug markers "VK_EXT_debug_marker" disabled.
+[Vulkan][Info] Building RT BLAS (22 new, 0 existing)
+[Render][Info] Schedule
+[Render][Info] + <RenderTask: Shadow View>
+[Render][Info] + <RenderTask: Shadow View>
+[Render][Info] + <RenderTask: Shadow View>
+[Render][Info] + <RenderTask: Shadow View>
+[Render][Info] + <RenderTask: Shadow View>
+[Render][Info] + <RenderTask: Shadow View>
+[Render][Info] + <RenderTask: Main View>
+[Render][Info] + <ResolveImageTask: 2 resolve(s) [FB_gBufferLayer -> FB_gBufferLayerResolvedImage0] [FB_viewDepth -> FB_depthStencilResolvedImage]>
+[Render][Info] + <ImageProcessTask: SSAO>
+[Render][Info] + <ImageProcessTask: SSAO Bilateral Blur>
+[Render][Info] + <DoF>
+[Render][Info] + <TransitionImageTask: FB_rtOutput>
+[Render][Info] + <RayTracingTask: PrimaryRayTrace>
+[Render][Info] + <RenderTask: Main View>
+[Render][Info] + <ResolveImageTask: 1 resolve(s) [FB_mainColor -> FB_mainColorResolvedImage]>
+[Render][Info] + <ImageReadbackTask: ScreenshotReadback>
+[Render][Info] + <CopyImageTask: FB_currentLuminance -> FB_previousLuminance>
+[Render][Info] + <ImageProcessTask: LuminanceDownsample>
+[Render][Info] + <ImageProcessTask: BloomDownsample>
+[Render][Info] + <ImageProcessTask: BloomUpsample>
+[Render][Info] + <ImageProcessTask: MainColorDownsample>
+[Render][Info] + <ImageProcessTask: Separable Gaussian>
+[Render][Info] + <Post-Process>
+[Render][Info] + <TransitionImageTask: _backbuffer>
+[Render][Info] + <RenderTask: 2D>
+[Render][Info] + <ImguiTask>
+[Render][Info] + <RenderTask: 2D>
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000965064153.mdl.bin for asset diamond
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000151531.mdl.bin for asset cube
+[Asset][Info] Loading raw model: models/cube/cube.obj
+[Asset][Info] Loading raw model: models/diamond/diamond.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000342599.mdl.bin for asset rook
+[Asset][Info] Loading raw model: models/rook/rook.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000439224.mdl.bin for asset pawn
+[Asset][Info] Loading raw model: models/pawn/pawn.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000580188819.mdl.bin for asset knight
+[Asset][Info] Loading raw model: models/knight/knight.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000472176099.mdl.bin for asset bishop
+[Asset][Info] Loading raw model: models/bishop/bishop.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000005036028.mdl.bin for asset plane
+[Asset][Info] Loading raw model: models/plane/plane.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000222281.mdl.bin for asset king
+[Asset][Info] Loading raw model: models/king/king.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000575423.mdl.bin for asset axis
+[Asset][Info] Loading raw model: models/axis/axis.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000619464131.mdl.bin for asset models/sphere/sphere.obj
+[Asset][Info] Loading raw model: models/sphere/sphere.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000013083722.mdl.bin for asset queen
+[Asset][Info] Loading raw model: models/queen/queen.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000803693759.mdl.bin for asset models/chess_board/chess_board.obj
+[Asset][Info] Loading raw model: models/chess_board/chess_board.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000695549021.img.bin for asset code_assets/brdf_lut.img
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000750319870.img.bin for asset textures/checker.png
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000238951616.img.bin for asset textures/sapeli.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000555374306.img.bin for asset textures/white.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000501411810.img.bin for asset textures/black.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\.\code_assets\0000000895898184.img.bin for asset chapel_specIbl.img
+[Asset][Info] Baked file not found: .\baked\.\assets\.\code_assets\0000000866872168.img.bin for asset chapel_diffuseIbl.img
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000761380796.img.bin for asset models/chess_board/sapeli_normal.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\.\code_assets\0000000492487057.img.bin for asset chapel_env.img
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000118041074.img.bin for asset models/chess_board/mahony.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000529992737.img.bin for asset models/chess_board/Marble09_nrm.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000840507766.img.bin for asset models/chess_materials/Louro_Freijo_diffuse.png
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000926228466.img.bin for asset Louro_Freijo_Specular.png
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000728695272.img.bin for asset models/chess_board/marble.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000010761428.img.bin for asset models/chess_board/gray.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000727973875.img.bin for asset models/chess_materials/Louro_Freijo_normal.png
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000718289987.img.bin for asset models/chess_board/Marble09_disp.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000788623447.img.bin for asset models/chess_materials/NORUS-Normal.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000938131077.img.bin for asset models/chess_materials/NORUS-Diffuse.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000657252608.img.bin for asset NORUS-Bump.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000926228466.img.bin for asset Louro_Freijo_Specular.png
+[Scene][Error] Invalid model handle
+[Vulkan][Verbose] Available extensions:
+[Vulkan][Verbose] 	VK_KHR_device_group_creation
+[Vulkan][Verbose] 	VK_KHR_external_fence_capabilities
+[Vulkan][Verbose] 	VK_KHR_external_memory_capabilities
+[Vulkan][Verbose] 	VK_KHR_external_semaphore_capabilities
+[Vulkan][Verbose] 	VK_KHR_get_physical_device_properties2
+[Vulkan][Verbose] 	VK_KHR_get_surface_capabilities2
+[Vulkan][Verbose] 	VK_KHR_surface
+[Vulkan][Verbose] 	VK_KHR_surface_maintenance1
+[Vulkan][Verbose] 	VK_KHR_surface_protected_capabilities
+[Vulkan][Verbose] 	VK_KHR_win32_surface
+[Vulkan][Verbose] 	VK_EXT_debug_report
+[Vulkan][Verbose] 	VK_EXT_debug_utils
+[Vulkan][Verbose] 	VK_EXT_surface_maintenance1
+[Vulkan][Verbose] 	VK_EXT_swapchain_colorspace
+[Vulkan][Verbose] 	VK_NV_external_memory_capabilities
+[Vulkan][Verbose] 	VK_KHR_portability_enumeration
+[Vulkan][Verbose] 	VK_LUNARG_direct_driver_loading
+[Vulkan][Info] Debug markers "VK_EXT_debug_marker" disabled.
+[Vulkan][Info] Building RT BLAS (22 new, 0 existing)
+[Render][Info] Schedule
+[Render][Info] + <RenderTask: Shadow View>
+[Render][Info] + <RenderTask: Shadow View>
+[Render][Info] + <RenderTask: Shadow View>
+[Render][Info] + <RenderTask: Shadow View>
+[Render][Info] + <RenderTask: Shadow View>
+[Render][Info] + <RenderTask: Shadow View>
+[Render][Info] + <RenderTask: Main View>
+[Render][Info] + <ResolveImageTask: 2 resolve(s) [FB_gBufferLayer -> FB_gBufferLayerResolvedImage0] [FB_viewDepth -> FB_depthStencilResolvedImage]>
+[Render][Info] + <ImageProcessTask: SSAO>
+[Render][Info] + <ImageProcessTask: SSAO Bilateral Blur>
+[Render][Info] + <DoF>
+[Render][Info] + <TransitionImageTask: FB_rtOutput>
+[Render][Info] + <RayTracingTask: PrimaryRayTrace>
+[Render][Info] + <RenderTask: Main View>
+[Render][Info] + <ResolveImageTask: 1 resolve(s) [FB_mainColor -> FB_mainColorResolvedImage]>
+[Render][Info] + <ImageReadbackTask: ScreenshotReadback>
+[Render][Info] + <CopyImageTask: FB_currentLuminance -> FB_previousLuminance>
+[Render][Info] + <ImageProcessTask: LuminanceDownsample>
+[Render][Info] + <ImageProcessTask: BloomDownsample>
+[Render][Info] + <ImageProcessTask: BloomUpsample>
+[Render][Info] + <ImageProcessTask: MainColorDownsample>
+[Render][Info] + <ImageProcessTask: Separable Gaussian>
+[Render][Info] + <Post-Process>
+[Render][Info] + <TransitionImageTask: _backbuffer>
+[Render][Info] + <RenderTask: 2D>
+[Render][Info] + <ImguiTask>
+[Render][Info] + <RenderTask: 2D>
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000472176099.mdl.bin for asset bishop
+[Asset][Info] Loading raw model: models/bishop/bishop.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000965064153.mdl.bin for asset diamond
+[Asset][Info] Loading raw model: models/diamond/diamond.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000005036028.mdl.bin for asset plane
+[Asset][Info] Loading raw model: models/plane/plane.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000151531.mdl.bin for asset cube
+[Asset][Info] Loading raw model: models/cube/cube.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000439224.mdl.bin for asset pawn
+[Asset][Info] Loading raw model: models/pawn/pawn.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000342599.mdl.bin for asset rook
+[Asset][Info] Loading raw model: models/rook/rook.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000222281.mdl.bin for asset king
+[Asset][Info] Loading raw model: models/king/king.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000013083722.mdl.bin for asset queen
+[Asset][Info] Loading raw model: models/queen/queen.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000580188819.mdl.bin for asset knight
+[Asset][Info] Loading raw model: models/knight/knight.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000000575423.mdl.bin for asset axis
+[Asset][Info] Loading raw model: models/axis/axis.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000619464131.mdl.bin for asset models/sphere/sphere.obj
+[Asset][Info] Loading raw model: models/sphere/sphere.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000803693759.mdl.bin for asset models/chess_board/chess_board.obj
+[Asset][Info] Loading raw model: models/chess_board/chess_board.obj
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000238951616.img.bin for asset textures/sapeli.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000555374306.img.bin for asset textures/white.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000695549021.img.bin for asset code_assets/brdf_lut.img
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000501411810.img.bin for asset textures/black.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\.\code_assets\0000000895898184.img.bin for asset chapel_specIbl.img
+[Asset][Info] Baked file not found: .\baked\.\assets\.\code_assets\0000000492487057.img.bin for asset chapel_env.img
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000750319870.img.bin for asset textures/checker.png
+[Asset][Info] Baked file not found: .\baked\.\assets\.\code_assets\0000000866872168.img.bin for asset chapel_diffuseIbl.img
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000118041074.img.bin for asset models/chess_board/mahony.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000761380796.img.bin for asset models/chess_board/sapeli_normal.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000010761428.img.bin for asset models/chess_board/gray.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000728695272.img.bin for asset models/chess_board/marble.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000529992737.img.bin for asset models/chess_board/Marble09_nrm.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000718289987.img.bin for asset models/chess_board/Marble09_disp.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000840507766.img.bin for asset models/chess_materials/Louro_Freijo_diffuse.png
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000926228466.img.bin for asset Louro_Freijo_Specular.png
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000727973875.img.bin for asset models/chess_materials/Louro_Freijo_normal.png
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000926228466.img.bin for asset Louro_Freijo_Specular.png
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000938131077.img.bin for asset models/chess_materials/NORUS-Diffuse.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000657252608.img.bin for asset NORUS-Bump.jpg
+[Asset][Info] Baked file not found: .\baked\.\assets\0000000788623447.img.bin for asset models/chess_materials/NORUS-Normal.jpg
+[Scene][Error] Invalid model handle
