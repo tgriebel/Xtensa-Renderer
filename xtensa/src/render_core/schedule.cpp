@@ -997,6 +997,7 @@ void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderCont
 			info.context = renderContext;
 			info.resources = resources;
 			info.outputImage = resources->tempColorImage;
+			info.viewId = viewContext->renderViews[ 0 ]->GetViewBufferUploadId();
 			info.resourceImages[ 0 ] = resources->mainColorResolvedImage;
 			info.resourceImages[ 1 ] = resources->depthStencilResolvedImage;
 			info.resourceImages[ 2 ] = resources->dofBokeh;

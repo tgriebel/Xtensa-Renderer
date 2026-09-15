@@ -142,9 +142,14 @@ psOutput_t PSMain( vsToPsInterpolators input )
 	finalColor = ApplyTonemap( luminanceTexture, finalColor );
 
 	sceneColor.rgb = LinearToSrgb( finalColor );
+    
+    const float3 selectedOutlineColor = float3( 0.0f, 1.0f, 0.0f );
+    const float3 selectedFillColor = float3( 1.0f, 0.0f, 0.0f );
 
-    output.outColor.rgb = lerp( sceneColor.rgb, float3( 0.0f, 1.0f, 0.0f ), stencilCoverage );
+    output.outColor.rgb = lerp( sceneColor.rgb, selectedOutlineColor, stencilCoverage );
     output.outColor.a = 1.0f;
+    
+    output.outColor.r += length( output.outColor.rgb * selectedFillColor * depthTexture.Load( int3( pixelLocation, 0 ) ).g );
 
     return output;
 }
