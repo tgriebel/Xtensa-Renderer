@@ -157,6 +157,7 @@
     <ClCompile Include="..\src\asset_types\image.cpp" />
     <ClCompile Include="..\src\render_core\gpuImage.cpp" />
     <ClCompile Include="..\src\render_core\renderResource.cpp" />
+    <ClCompile Include="..\src\render_core\log.cpp" />
     <ClCompile Include="AssetBakerMain.cpp" />
     <ClCompile Include="..\src\scene\sceneParser.cpp" />
     <ClCompile Include="..\src\scene\assetBaker.cpp" />

@@ -1,0 +1,72 @@
+[Asset] [Info] Loading raw model: models/pawn/pawn.obj
+[Asset] [Info] Loading raw model: models/king/king.obj
+[Asset] [Info] Loading raw model: models/chess_board/chess_board.obj
+[Asset] [Info] Loading raw model: models/rook/rook.obj
+[Asset] [Info] Loading raw model: models/plane/plane.obj
+[Asset] [Info] Loading raw model: models/knight/knight.obj
+[Asset] [Info] Loading raw model: models/queen/queen.obj
+[Asset] [Info] Loading raw model: models/cube/cube.obj
+[Asset] [Info] Loading raw model: models/bishop/bishop.obj
+[Asset] [Info] Loading raw model: models/sphere/sphere.obj
+[Asset] [Info] Loading raw model: models/axis/axis.obj
+[Asset] [Info] Loading raw model: models/diamond/diamond.obj
+[Asset] [Info] Loading raw model: models/diamond/diamond.obj
+[Asset] [Info] Loading raw model: models/bishop/bishop.obj
+[Asset] [Info] Loading raw model: models/sphere/sphere.obj
+[Asset] [Info] Loading raw model: models/rook/rook.obj
+[Asset] [Info] Loading raw model: models/knight/knight.obj
+[Asset] [Info] Loading raw model: models/cube/cube.obj
+[Asset] [Info] Loading raw model: models/king/king.obj
+[Asset] [Info] Loading raw model: models/plane/plane.obj
+[Asset] [Info] Loading raw model: models/chess_board/chess_board.obj
+[Asset] [Info] Loading raw model: models/queen/queen.obj
+[Asset] [Info] Loading raw model: models/pawn/pawn.obj
+[Asset] [Info] Loading raw model: models/axis/axis.obj
+[Asset] [Info] Loading raw model: models/rook/rook.obj
+[Asset] [Info] Loading raw model: models/sphere/sphere.obj
+[Asset] [Info] Loading raw model: models/diamond/diamond.obj
+[Asset] [Info] Loading raw model: models/queen/queen.obj
+[Asset] [Info] Loading raw model: models/king/king.obj
+[Asset] [Info] Loading raw model: models/pawn/pawn.obj
+[Asset] [Info] Loading raw model: models/bishop/bishop.obj
+[Asset] [Info] Loading raw model: models/knight/knight.obj
+[Asset] [Info] Loading raw model: models/plane/plane.obj
+[Asset] [Info] Loading raw model: models/axis/axis.obj
+[Asset] [Info] Loading raw model: models/cube/cube.obj
+[Asset] [Info] Loading raw model: models/chess_board/chess_board.obj
+[Asset][Info]Loading raw model: models/diamond/diamond.obj
+[Asset][Info]Loading raw model: models/pawn/pawn.obj
+[Asset][Info]Loading raw model: models/king/king.obj
+[Asset][Info]Loading raw model: models/rook/rook.obj
+[Asset][Info]Loading raw model: models/cube/cube.obj
+[Asset][Info]Loading raw model: models/bishop/bishop.obj
+[Asset][Info]Loading raw model: models/plane/plane.obj
+[Asset][Info]Loading raw model: models/axis/axis.obj
+[Asset][Info]Loading raw model: models/chess_board/chess_board.obj
+[Asset][Info]Loading raw model: models/queen/queen.obj
+[Asset][Info]Loading raw model: models/sphere/sphere.obj
+[Asset][Info]Loading raw model: models/knight/knight.obj
+[Asset][Info]Loading raw model: models/cube/cube.obj
+[Asset][Info]Loading raw model: models/diamond/diamond.obj
+[Asset][Info]Loading raw model: models/knight/knight.obj
+[Asset][Info]Loading raw model: models/rook/rook.obj
+[Asset][Info]Loading raw model: models/pawn/pawn.obj
+[Asset][Info]Loading raw model: models/king/king.obj
+[Asset][Info]Loading raw model: models/bishop/bishop.obj
+[Asset][Info]Loading raw model: models/chess_board/chess_board.obj
+[Asset][Info]Loading raw model: models/axis/axis.obj
+[Asset][Info]Loading raw model: models/sphere/sphere.obj
+[Asset][Info]Loading raw model: models/queen/queen.obj
+[Asset][Info]Loading raw model: models/plane/plane.obj
+[Asset][Info] Loading raw model: models/cube/cube.obj
+[Asset][Info] Loading raw model: models/king/king.obj
+[Asset][Info] Loading raw model: models/sphere/sphere.obj
+[Asset][Info] Loading raw model: models/bishop/bishop.obj
+[Asset][Info] Loading raw model: models/chess_board/chess_board.obj
+[Asset][Info] Loading raw model: models/queen/queen.obj
+[Asset][Info] Loading raw model: models/plane/plane.obj
+[Asset][Info] Loading raw model: models/pawn/pawn.obj
+[Asset][Info] Loading raw model: models/axis/axis.obj
+[Asset][Info] Loading raw model: models/knight/knight.obj
+[Asset][Info] Loading raw model: models/diamond/diamond.obj
+[Asset][Info] Loading raw model: models/rook/rook.obj

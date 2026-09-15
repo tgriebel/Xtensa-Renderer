@@ -1,8 +1,7 @@
 #pragma once
 
-#include <SysCore/log.h>
+#include <cstdarg>
 #include <cstdint>
-#include <string>
 
 
 enum class logSeverity_t : uint8_t
@@ -13,13 +12,34 @@ enum class logSeverity_t : uint8_t
 	Error,
 };
 
+constexpr uint32_t LogMessageMaxLength = 256;
+
+
 struct logRecord_t
 {
 	const char*		system;
 	logSeverity_t	severity;
-	std::string		message;
+	char			message[ LogMessageMaxLength ];
 };
 
-extern SysCore::Logger<logRecord_t> g_log;
+// Opens a channel, within in a scope, for a given system.
+class LogScopeSystem
+{
+public:
+	explicit LogScopeSystem( const char* system );
+	~LogScopeSystem();
+
+	LogScopeSystem( const LogScopeSystem& ) = delete;
+	LogScopeSystem& operator=( const LogScopeSystem& ) = delete;
+};
+
+#define LOG_SCOPE_SYSTEM( sys ) LogScopeSystem logScopeSystem_##sys( #sys )
+
+void SetLogFilePath( const char* path );
+
+void LogMsgV( const char* system, logSeverity_t severity, const char* fmt, va_list args );
 
 void LogMsg( const char* system, logSeverity_t severity, const char* fmt, ... );
+void LogMsg( const char* system, const char* fmt, ... );		// severity defaults to Info
+void LogMsg( logSeverity_t severity, const char* fmt, ... );	// system comes from the active LOG_SCOPE_SYSTEM
+void LogMsg( const char* fmt, ... );							// system from LOG_SCOPE_SYSTEM, severity defaults to Info

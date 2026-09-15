@@ -5,6 +5,7 @@
 #include "../scene/assetManager.h"
 #include "../scene/assetBaker.h"
 #include "../io/serializeClasses.h"
+#include "../render_core/log.h"
 
 bool ModelLoader::Load( Asset<Model>& modelAsset )
 {
@@ -27,7 +28,7 @@ bool ModelLoader::Load( Asset<Model>& modelAsset )
 		return true;
 	}
 
-	std::cout << "Loading raw model:" << fileName << std::endl;
+	LogMsg( "Asset", "Loading raw model: %s", fileName.c_str() );
 
 	if ( m_modelExt == "obj" ) {
 		return LoadRawModelModelObj( *assets, fileName, m_modelPath, m_texturePath, model );

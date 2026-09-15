@@ -12,6 +12,7 @@
 #include "imguiInterface.h"
 #endif
 
+#include "../render_core/log.h"
 #include "../render_core/debugMenu.h"
 #include "../render_core/gpuTimerPool.h"
 #include "../render_core/schedule.h"
@@ -325,6 +326,8 @@ void UpdateScene( Scene* scene )
 
 void DrawSceneDebugMenu()
 {
+	LogScopeSystem( "VMA" );
+
 #if defined( USE_IMGUI )
 	if ( ImGui::BeginTabItem( "Debug" ) )
 	{
@@ -345,7 +348,7 @@ void DrawSceneDebugMenu()
 			VkPhysicalDeviceMemoryProperties memProps;
 			vkGetPhysicalDeviceMemoryProperties( context.physicalDevice, &memProps );
 
-			std::cout << "=== VMA Memory Statistics ===" << std::endl;
+			LogMsg( "VMA", logSeverity_t::Info, "=== VMA Memory Statistics ===" );
 			for ( uint32_t i = 0; i < memProps.memoryHeapCount; ++i )
 			{
 				const VmaStatistics& heap = stats.memoryHeap[ i ].statistics;
@@ -375,22 +378,19 @@ void DrawSceneDebugMenu()
 					memTypeFlags += "\n";
 				}
 
-				std::cout << "  Heap " << i << " (" << heapType << ") - "
-						  << ( memProps.memoryHeaps[ i ].size / ( 1024 * 1024 ) ) << " MB capacity:" << std::endl;
-				std::cout << "    " << ( heap.allocationBytes / ( 1024 * 1024 ) ) << " MB used / "
-						  << ( heap.blockBytes / ( 1024 * 1024 ) ) << " MB allocated ("
-						  << heap.allocationCount << " allocations, "
-						  << heap.blockCount << " blocks)" << std::endl;
-				std::cout << memTypeFlags;
+				LogMsg( "VMA", logSeverity_t::Info, "  Heap %u (%s) - %llu MB capacity:",
+					i, heapType.c_str(), ( unsigned long long )( memProps.memoryHeaps[ i ].size / ( 1024 * 1024 ) ) );
+				LogMsg( "VMA", logSeverity_t::Info, "    %llu MB used / %llu MB allocated (%u allocations, %u blocks)",
+					( unsigned long long )( heap.allocationBytes / ( 1024 * 1024 ) ), ( unsigned long long )( heap.blockBytes / ( 1024 * 1024 ) ),
+					heap.allocationCount, heap.blockCount );
+				LogMsg( "VMA", logSeverity_t::Info, "%s", memTypeFlags.c_str() );
 			}
 
 			const VmaStatistics& total = stats.total.statistics;
-			std::cout << "  Total: "
-					  << ( total.allocationBytes / ( 1024 * 1024 ) ) << " MB used / "
-					  << ( total.blockBytes / ( 1024 * 1024 ) ) << " MB allocated ("
-					  << total.allocationCount << " allocations, "
-					  << total.blockCount << " blocks)" << std::endl;
-			std::cout << "=============================" << std::endl;
+			LogMsg( "VMA", logSeverity_t::Info, "  Total: %llu MB used / %llu MB allocated (%u allocations, %u blocks)",
+				( unsigned long long )( total.allocationBytes / ( 1024 * 1024 ) ), ( unsigned long long )( total.blockBytes / ( 1024 * 1024 ) ),
+				total.allocationCount, total.blockCount );
+			LogMsg( "VMA", logSeverity_t::Info, "=============================" );
 		}
 
 		ImGui::Checkbox( "Is Textured", &g_imguiControls.isTextured );

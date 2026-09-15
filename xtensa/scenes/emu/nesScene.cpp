@@ -1,6 +1,7 @@
 #include "nesScene.h"
 #include "../../src/app/window.h"
 #include "../../src/globals/assetDefs.h"
+#include "../../src/render_core/log.h"
 
 #include <windows.h> 
 #include <stdio.h>
@@ -131,7 +132,7 @@ void NesScene::Init()
 
 	Tomtendo::LoadDllInterface( &tomtendo, hinstLib );
 
-	std::cout << tomtendo.ScreenHeight() << std::endl;
+	LogMsg( "Scene", "NES screen height: %u", tomtendo.ScreenHeight() );
 
 	nesCfg = tomtendo.DefaultConfig();
 
