@@ -54,8 +54,6 @@
 #include <SysCore/array.h>
 #include <SysCore/timer.h>
 
-#include "../asset_types/material.h"
-#include "../scene/camera.h"
 #include "../render_core/log.h"
 
 const uint32_t	DescriptorPoolMaxUniformBuffers	= 1024;

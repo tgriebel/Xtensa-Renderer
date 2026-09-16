@@ -6,6 +6,7 @@
 #include "../scene/assetManager.h"
 #include "../asset_types/gpuProgram.h"
 #include "../asset_types/image.h"
+#include "../asset_types/material.h"
 #include "../asset_types/model.h"
 #include "../asset_types/assetLib.h"
 

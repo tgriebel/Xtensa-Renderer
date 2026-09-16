@@ -2,6 +2,7 @@
 #include <syscore/systemUtils.h>
 #include <syscore/serializer.h>
 #include <gfxcore/io/serializeClasses.h>
+#include "material.h"
 #include "../scene/assetManager.h"
 #include "../scene/assetBaker.h"
 #include "../io/serializeClasses.h"

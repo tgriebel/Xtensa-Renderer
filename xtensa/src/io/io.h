@@ -10,6 +10,7 @@
 
 class Image;
 class Model;
+class Material;
 class AssetManager;
 
 template<class T>

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../globals/common.h"
+#include "../scene/camera.h"
 #include "../render_binding/pipeline.h"
 #include "../render_binding/shaderBinding.h"
 #include "../render_resources/imageArray.h"
