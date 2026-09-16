@@ -52,7 +52,7 @@ void RenderTask::RenderViewSurfaces( GfxCmdList* cmdContext, const uint32_t mult
 	// For now the pass state is the same for the entire view region
 	const DrawPass* pass = m_renderView->passes[ multiViewIndex ][ m_beginPass ];
 	if ( pass == nullptr ) {
-		throw std::runtime_error( "Missing pass state!" );
+		THROW_ERROR( "Missing pass state!" );
 	}
 
 	const FrameBuffer* fb = pass->GetFrameBuffer();

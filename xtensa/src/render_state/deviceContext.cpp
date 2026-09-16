@@ -180,7 +180,7 @@ uint32_t vk_FindMemoryType( uint32_t typeFilter, VkMemoryPropertyFlags propertie
 		}
 	}
 
-	throw std::runtime_error( "Failed to find suitable memory type!" );
+	THROW_ERROR( "Failed to find suitable memory type!" );
 }
 
 
@@ -398,7 +398,7 @@ void vk_GenerateMipmaps( VkCommandBuffer cmdBuffer, Image* image )
 
 	if ( !( formatProperties.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT ) )
 	{
-		throw std::runtime_error( "texture outputImage format does not support linear blitting!" );
+		THROW_ERROR( "texture outputImage format does not support linear blitting!" );
 	}
 
 	VkImageAspectFlags aspectMask = vk_GetColorAspectFlags( image->info.fmt );
@@ -1365,7 +1365,7 @@ void DeviceContext::Create( Window& window )
 		vkEnumeratePhysicalDevices( instance, &deviceCount, nullptr );
 
 		if ( deviceCount == 0 ) {
-			throw std::runtime_error( "Failed to find GPUs with Vulkan support!" );
+			THROW_ERROR( "Failed to find GPUs with Vulkan support!" );
 		}
 
 		VkPhysicalDevice devices[ 16 ];
@@ -1387,7 +1387,7 @@ void DeviceContext::Create( Window& window )
 		}
 
 		if ( physicalDevice == VK_NULL_HANDLE ) {
-			throw std::runtime_error( "Failed to find a suitable GPU!" );
+			THROW_ERROR( "Failed to find a suitable GPU!" );
 		}
 		vk_SetObjectName( (uint64_t)physicalDevice, VK_OBJECT_TYPE_DEVICE, "VulkanPhysicalDevice" );
 	}

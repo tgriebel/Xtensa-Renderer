@@ -207,7 +207,7 @@ void GpuBuffer::Create( const char* name, const swapBuffering_t swapBuffering, c
 				&allocation, &allocInfo );
 
 			if ( result != VK_SUCCESS ) {
-				throw std::runtime_error( "Buffer '" + std::string( name ) + "' [" + std::to_string( bufferId ) + "] could not allocate "
+				THROW_ERROR( "Buffer '" + std::string( name ) + "' [" + std::to_string( bufferId ) + "] could not allocate "
 					+ std::to_string( bufferSize ) + " bytes (alignment: " + std::to_string( alignment ) + ")" );
 			}
 
@@ -271,7 +271,7 @@ void GpuBuffer::Flush()
 void GpuBuffer::Destroy()
 {
 	if ( context.device == VK_NULL_HANDLE ) {
-		throw std::runtime_error( "GPU Buffer: Destroy: No device context!" );
+		THROW_ERROR( "GPU Buffer: Destroy: No device context!" );
 	}
 	for ( uint32_t bufferId = 0; bufferId < m_bufferCount; ++bufferId )
 	{

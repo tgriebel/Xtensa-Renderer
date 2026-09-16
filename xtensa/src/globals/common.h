@@ -56,6 +56,7 @@
 
 #include "../asset_types/material.h"
 #include "../scene/camera.h"
+#include "../render_core/log.h"
 
 const uint32_t	DescriptorPoolMaxUniformBuffers	= 1024;
 const uint32_t	DescriptorPoolMaxStorageBuffers	= 1024;
@@ -107,7 +108,14 @@ const std::string BakedMaterialExtension = ".mtl.bin";
 
 uint32_t Hash( const uint8_t* bytes, const uint32_t sizeBytes );
 
-#define FATAL_ERROR( MESSAGE ) throw std::runtime_error( "Fatal Error: " # MESSAGE );
+#define THROW_ERROR( MESSAGE ) \
+	do { \
+		const std::string throwErrorMsg_( MESSAGE ); \
+		LogMsg( logSeverity_t::Error, "%s", throwErrorMsg_.c_str() ); \
+		throw std::runtime_error( throwErrorMsg_ ); \
+	} while( false ) // do-while(0) is a common idiom to ensure the macro behaves like a single statement
+
+#define FATAL_ERROR( MESSAGE ) THROW_ERROR( "Fatal Error: " #MESSAGE )
 
 typedef void ( *debugMenuFuncPtr )( );
 

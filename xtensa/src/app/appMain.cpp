@@ -111,7 +111,7 @@ void ParseConfig( const std::string& fileName )
 	file.open( fileName );
 
 	if ( !file.is_open() ) {
-		throw std::runtime_error( "Failed to open config file!" );
+		THROW_ERROR( "Failed to open config file!" );
 	}
 
 	while ( file.good() )

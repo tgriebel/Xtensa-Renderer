@@ -61,7 +61,7 @@ void GpuFence::Create( const char* name )
 	fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 	
 	if ( vkCreateFence( context.device, &fenceInfo, nullptr, &fence ) != VK_SUCCESS ) {
-		throw std::runtime_error( "Failed to create fence!" );
+		THROW_ERROR( "Failed to create fence!" );
 	}
 	vk_SetObjectName( (uint64_t)fence, VK_OBJECT_TYPE_FENCE, vk_BuildObjectName( "Fence", name ).c_str() );
 #endif

@@ -331,7 +331,7 @@ bool LoadRawModelModelObj( AssetManager& assets, const std::string& fileName, co
 	std::string warn, err;
 
 	if( !tinyobj::LoadObj( &attrib, &shapes, &materials, &warn, &err, ( modelPath + fileName ).c_str(), modelPath.c_str() ) ) {
-		throw std::runtime_error( warn + err );
+		THROW_ERROR( warn + err );
 	}
 
 	// Add Materials

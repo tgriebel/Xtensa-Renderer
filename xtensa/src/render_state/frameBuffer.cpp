@@ -240,13 +240,13 @@ void FrameBuffer::Create( const frameBufferCreateInfo_t& createInfo )
 	assert( createInfo.context != nullptr );
 
 	if ( createInfo.context == nullptr ) {
-		throw std::runtime_error( "Framebuffer missing render context." );
+		THROW_ERROR( "Framebuffer missing render context." );
 	}
 
 	m_createInfo = createInfo;
 
 	if ( m_bufferCount > 0 ) {
-		throw std::runtime_error( "Framebuffer already initialized." );
+		THROW_ERROR( "Framebuffer already initialized." );
 	}
 
 	renderPassTransition_t perms[ PassPermCount ];
@@ -283,16 +283,16 @@ void FrameBuffer::Create( const frameBufferCreateInfo_t& createInfo )
 	// Validation
 	{
 		if( firstValidIx == MaxAttachmentCount ) {
-			throw std::runtime_error( "No images provided." );
+			THROW_ERROR( "No images provided." );
 		}
 
 		if ( ( createInfo.color0 == nullptr ) &&
 			( ( createInfo.color1 != nullptr ) || ( createInfo.color2 != nullptr ) ) ) {
-			throw std::runtime_error( "Color attachment 0 has to be used if 1 and 2 are." );
+			THROW_ERROR( "Color attachment 0 has to be used if 1 and 2 are." );
 		}
 
 		if ( ( createInfo.color2 != nullptr ) && ( createInfo.color1 != nullptr ) ) {
-			throw std::runtime_error( "Color attachment 1 has to be used if 2 is." );
+			THROW_ERROR( "Color attachment 1 has to be used if 2 is." );
 		}
 
 		for ( uint32_t imageIx = firstValidIx + 1; imageIx < MaxAttachmentCount; ++imageIx )
@@ -304,7 +304,7 @@ void FrameBuffer::Create( const frameBufferCreateInfo_t& createInfo )
 				images[ firstValidIx ]->info.height != images[ imageIx ]->info.height || 
 				images[ firstValidIx ]->info.layers != images[ imageIx ]->info.layers )
 			{
-				throw std::runtime_error( "Framebuffer images must have the same dimensions." );
+				THROW_ERROR( "Framebuffer images must have the same dimensions." );
 			}
 		}
 	}

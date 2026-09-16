@@ -119,7 +119,7 @@ void GpuImage::Create( const char* name, const imageInfo_t& info, const gpuImage
 				&allocation, &allocInfo );
 
 			if ( result != VK_SUCCESS ) {
-				throw std::runtime_error( "Image '" + std::string( name ) + "' [" + std::to_string( i ) + "] could not allocate "
+				THROW_ERROR( "Image '" + std::string( name ) + "' [" + std::to_string( i ) + "] could not allocate "
 					+ std::to_string( imageInfo.extent.width ) + "x" + std::to_string( imageInfo.extent.height )
 					+ " (format: " + std::to_string( imageInfo.format ) + ")" );
 			}
@@ -214,7 +214,7 @@ void GpuImage::CreateAliased( const char* name, const imageInfo_t& info, const g
 
 	if ( result != VK_SUCCESS )
 	{
-		throw std::runtime_error( std::string( "AliasableImage '" ) + name + "' failed — "
+		THROW_ERROR( std::string( "AliasableImage '" ) + name + "' failed — "
 			+ "heap may be too small for " + std::to_string( info.width ) + "x" + std::to_string( info.height )
 			+ " (format " + std::to_string( static_cast<int>( info.fmt ) ) + ")" );
 	}

@@ -26,7 +26,7 @@ void Serialize( Serializer* serializer, Vector<D, T, S>& v )
 	uint32_t length = D;
 	s->Next( length );
 	if ( length != D ) {
-		throw std::runtime_error( "Wrong vector length." );
+		THROW_ERROR( "Wrong vector length." );
 	}
 	for ( size_t i = 0; i < D; ++i ) {
 		s->Next( v[ i ] );
@@ -97,7 +97,7 @@ void Color::Serialize( Serializer* s )
 	uint32_t version = Version;
 	s->Next( version );
 	if ( version != Version ) {
-		throw std::runtime_error( "Wrong version number." );
+		THROW_ERROR( "Wrong version number." );
 	}
 	SerializeStruct( s, rgba );
 }
@@ -108,7 +108,7 @@ void AABB::Serialize( Serializer* s )
 	uint32_t version = Version;
 	s->Next( version );
 	if ( version != Version ) {
-		throw std::runtime_error( "Wrong version number." );
+		THROW_ERROR( "Wrong version number." );
 	}
 	min.Serialize( s );
 	max.Serialize( s );
@@ -163,7 +163,7 @@ void Material::Serialize( Serializer* s )
 	uint32_t version = Version;
 	s->Next( version );
 	if ( version != Version ) {
-		throw std::runtime_error( "Wrong version number." );
+		THROW_ERROR( "Wrong version number." );
 	}
 	SerializeStruct( s, usage );
 	SerializeStruct( s, p );
@@ -219,7 +219,7 @@ void Model::Serialize( Serializer* s )
 	uint32_t version = Version;
 	s->Next( version );
 	if ( version != Version ) {
-		throw std::runtime_error( "Wrong version number." );
+		THROW_ERROR( "Wrong version number." );
 	}
 	bounds.Serialize( s );
 

@@ -122,7 +122,7 @@ extern DeviceContext context;
 	VkResult res = (f);																					\
 	if (res != VK_SUCCESS)																				\
 	{																									\
-		throw std::runtime_error( #f );																	\
+		THROW_ERROR( #f );																				\
 		assert(res == VK_SUCCESS);																		\
 	}																									\
 }
