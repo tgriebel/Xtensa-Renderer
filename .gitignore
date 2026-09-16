@@ -39,3 +39,4 @@ x64/Debug/SysCore.lib
 
 !external/**/*.lib
 !xtensa/scenes/chess/libs/*.lib
+xtensa/log.txt
