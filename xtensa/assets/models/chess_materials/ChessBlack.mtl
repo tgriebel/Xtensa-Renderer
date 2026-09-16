@@ -14,4 +14,4 @@ Pr 0.6
 Pm 0.0
 map_Kd models/chess_materials/NORUS-Diffuse.jpg
 map_Bump models/chess_materials/NORUS-Normal.jpg
-map_Pr NORUS-Bump.jpg
+map_Pr models/chess_materials/NORUS-Bump.jpg

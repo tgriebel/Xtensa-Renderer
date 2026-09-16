@@ -14,4 +14,4 @@ Pr 0.4
 Pm 0.0
 map_Kd models/chess_materials/Louro_Freijo_diffuse.png
 map_Bump models/chess_materials/Louro_Freijo_normal.png
-map_Pr Louro_Freijo_Specular.png
+map_Pr models/chess_materials/Louro_Freijo_Specular.png
