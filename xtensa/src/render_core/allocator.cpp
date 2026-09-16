@@ -1,4 +1,4 @@
-#include <iostream>
+#include "log.h"
 
 // Verbose debug prints
 #if 0
@@ -7,7 +7,7 @@
     do { \
         char _vmaBuf[ 512 ]; \
         snprintf( _vmaBuf, sizeof( _vmaBuf ), (format), __VA_ARGS__ ); \
-        std::cout << "[VMA] " << _vmaBuf << "\n"; \
+        LogMsg( "VMA", logSeverity_t::Verbose, "%s", _vmaBuf ); \
     } while( false )
 #endif
 
