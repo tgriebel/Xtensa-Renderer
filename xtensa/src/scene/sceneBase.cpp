@@ -1,6 +1,7 @@
 #include "sceneBase.h"
 
 #include <gfxcore/primitives/ray.h>
+#include "entity.h"
 #include "../render_core/log.h"
 
 void Scene::CreateEntityBounds( const hdl_t modelHdl, Entity& entity )

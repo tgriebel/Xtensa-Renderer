@@ -4,6 +4,9 @@
 #include "../render_core/renderResource.h"
 #include "gpuBuffer.h"
 
+#define SHADER_STRUCTS_CPP
+#include "../../shaders/gpuShared.h"
+
 class CommandList;
 class GeometryContext;
 

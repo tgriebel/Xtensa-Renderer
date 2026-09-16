@@ -12,8 +12,9 @@
 #include "../asset_types/gpuProgram.h"
 #include "../asset_types/model.h"
 #include "../asset_types/assetLib.h"
-#include "entity.h"
 #include "assetManager.h"
+
+class Entity;
 
 
 enum lightType_t : uint32_t

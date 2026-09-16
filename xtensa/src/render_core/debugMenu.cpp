@@ -3,6 +3,7 @@
 #include "debugMenu.h"
 #include "../globals/assetDefs.h"
 #include "../scene/sceneBase.h"
+#include "../scene/entity.h"
 #include <sstream>
 
 renderDebugData_t g_renderDebugData;

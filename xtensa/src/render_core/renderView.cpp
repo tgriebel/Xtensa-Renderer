@@ -1,6 +1,7 @@
 #include "../render_core/renderer.h"
 #include "renderview.h"
 #include "../render_binding/bindings.h"
+#include "../scene/entity.h"
 
 #if defined( USE_IMGUI )
 #include "../../../external/imgui/imgui.h"

@@ -1,5 +1,8 @@
 #include "vertexInput.h"
 
+#define SHADER_STRUCTS_CPP
+#include "../../shaders/gpuShared.h"
+
 VertexDescription GetVertexAttributeDescriptions()
 {
 	uint32_t attribId = 0;

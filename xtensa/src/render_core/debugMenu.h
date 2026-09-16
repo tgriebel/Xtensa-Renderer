@@ -1,7 +1,16 @@
 #pragma once
 
+#include <cinttypes>
+#include <string>
+
+#define SHADER_STRUCTS_CPP
+#include "../../shaders/gpuShared.h"
+
 class Scene;
 class Model;
+class Material;
+class Image;
+class GpuProgram;
 
 template<class AssetType>
 class Asset;

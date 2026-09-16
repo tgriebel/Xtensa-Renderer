@@ -5,6 +5,7 @@
 #include "../render_core/GpuSync.h"
 #include "../render_state/frameBuffer.h"
 #include "../render_resources/imageView.h"
+#include "../asset_types/material.h"
 
 class CommandList;
 class GfxCmdList;

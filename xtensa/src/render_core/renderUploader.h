@@ -6,9 +6,13 @@
 #include "../render_state/cmdContext.h"
 #include "../render_core/GpuSync.h"
 
+#define SHADER_STRUCTS_CPP
+#include "../../shaders/gpuShared.h"
+
 class RenderContext;
 class ResourceContext;
 class Model;
+class Material;
 class RenderUploader;
 class GpuAccelerationStructure;
 
