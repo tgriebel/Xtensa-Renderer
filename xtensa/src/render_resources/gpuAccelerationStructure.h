@@ -29,25 +29,35 @@ private:
 		GpuBuffer					storage;	// Per-BLAS; independent so entries survive incremental additions
 		GpuBufferView				scratchView;
 		VkAccelerationStructureKHR	handle = VK_NULL_HANDLE;
+		uint32_t					vertexOffset = 0;	// Static geometry data, shared by every instance referencing this BLAS
+		uint32_t					firstIndex = 0;
 	};
 
-	struct instanceData_t
+
+	struct blasSurfaceInfo_t
 	{
-		uint32_t	instanceIndex;
-		mat4x4f		transform;
+		uint32_t	vertexOffset;
+		uint32_t	firstIndex;
+	};
+
+	struct rtSurfInstance_t			// RT analogue to `drawSurfInstance_t`
+	{
+		uint32_t	surfId;			// Index to BLAS surface
+		uint32_t	materialId;
+		mat4x4f		modelMatrix;
 	};
 
 	// Pending geometry accumulated by AddGeometry(), consumed by BuildPendingGeometry()
 	std::vector<VkAccelerationStructureGeometryKHR>			m_geometry;
 	std::vector<VkAccelerationStructureBuildRangeInfoKHR>	m_rangeInfo;
-	std::vector<gpuRtSurface_t>								m_pendingSurfaceInfos;	// Parallel to m_geometry
+	std::vector<blasSurfaceInfo_t>							m_pendingSurfaceInfos;	// Parallel to m_geometry
 
-	std::vector<instanceData_t>		m_pendingInstances;
+	// Per-instance, rebuilt fresh every frame by CommitRayTraceInstances() -> UpdateSurfaceInstance()
+	std::vector<rtSurfInstance_t>		m_pendingInstances;
 
 	std::vector<blasEntry_t>		m_blasEntries;
-	std::vector<gpuRtSurface_t>		m_cpuSurfaceInfos;	// CPU mirror, one entry per blasEntry; uploaded to m_rtSurfaceInfoBuf
 	GpuBuffer						m_blasScratch;		// Shared scratch for the current build batch only
-	GpuBuffer						m_rtSurfaceInfoBuf;	// Per-BLAS vertex/index offsets for closest-hit attribute fetch
+	GpuBuffer						m_rtSurfaceInfoBuf;	// One gpuRtSurface_t per TLAS instance. Rebuilt every frame
 
 	GpuBuffer						m_tlasInstanceBuf;	// GPU instance buffer
 	GpuBuffer						m_tlasStorage;
@@ -65,7 +75,7 @@ public:
 	void						Create( const char* name, resourceLifeTime_t lifetime );
 	void						AddGeometry( CommandList* cmdList, const rtSurfaceInfo_t& surfaceInfo );
 	void						BuildPendingGeometry( CommandList* cmdList );
-	void						UpdateSurfaceInstance( uint32_t surfaceUploadId, const mat4x4f& transform );
+	void						UpdateSurfaceInstance( uint32_t surfaceUploadId, uint32_t materialId, const mat4x4f& transform );
 	void						Update( CommandList* cmdList );
 	void						Destroy() override;
 

@@ -55,10 +55,10 @@ void GpuAccelerationStructure::AddGeometry( CommandList* cmdList, const rtSurfac
 
 	m_rangeInfo.push_back( rangeInfo );
 
-	gpuRtSurface_t surfInfoEntry{};
-	surfInfoEntry.vertexOffset = surfaceInfo.surface->vertexOffset;
-	surfInfoEntry.firstIndex   = surfaceInfo.surface->firstIndex;
-	m_pendingSurfaceInfos.push_back( surfInfoEntry );
+	blasSurfaceInfo_t geomInfo{};
+	geomInfo.vertexOffset = surfaceInfo.surface->vertexOffset;
+	geomInfo.firstIndex   = surfaceInfo.surface->firstIndex;
+	m_pendingSurfaceInfos.push_back( geomInfo );
 }
 
 
@@ -76,7 +76,6 @@ void GpuAccelerationStructure::Cleanup()
 		}
 	}
 	m_blasEntries.clear();
-	m_cpuSurfaceInfos.clear();
 	m_pendingInstances.clear();
 
 	if ( m_blasScratch.GetMaxSize() > 0 ) {
@@ -178,13 +177,8 @@ void GpuAccelerationStructure::BuildPendingGeometry( CommandList* cmdList )
 		buildInfos[ i ].scratchData.deviceAddress = entry.scratchView.GetDeviceAddress();
 		pRangeInfos[ i ] = &m_rangeInfo[ i ];
 
-		const uint32_t instanceIndex = static_cast<uint32_t>( m_blasEntries.size() ) - 1;
-
-		instanceData_t instanceData{};
-		instanceData.instanceIndex = instanceIndex;
-		instanceData.transform = mat4x4f( 1.0f );
-
-		m_pendingInstances.push_back( std::move( instanceData ) );
+		entry.vertexOffset = m_pendingSurfaceInfos[ i ].vertexOffset;
+		entry.firstIndex   = m_pendingSurfaceInfos[ i ].firstIndex;
 	}
 
 	// 3: Barrier: vertex/index data was written by vkCmdCopyBuffer
@@ -214,30 +208,16 @@ void GpuAccelerationStructure::BuildPendingGeometry( CommandList* cmdList )
 			VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR,
 			0, 1, &blasBarrier, 0, nullptr, 0, nullptr );
 	}
-	// Commit pending surface infos and upload the full array to the GPU buffer.
-	// Recreate the buffer if the element count changed (incremental BLAS adds).
-	for ( const gpuRtSurface_t& si : m_pendingSurfaceInfos ) {
-		m_cpuSurfaceInfos.push_back( si );
-	}
 	m_pendingSurfaceInfos.clear();
-
-	if ( m_rtSurfaceInfoBuf.GetMaxSize() > 0 ) {
-		m_rtSurfaceInfoBuf.Destroy();
-	}
-	const uint32_t surfCount = static_cast<uint32_t>( m_cpuSurfaceInfos.size() );
-	m_rtSurfaceInfoBuf.Create( m_name, swapBuffering_t::SINGLE_FRAME, m_lifetime,
-		surfCount, sizeof( gpuRtSurface_t ), bufferType_t::STORAGE );
-	m_rtSurfaceInfoBuf.CopyData( m_cpuSurfaceInfos.data(), surfCount * sizeof( gpuRtSurface_t ) );
-
 	m_geometry.clear();
 	m_rangeInfo.clear();
 }
 
 
-void GpuAccelerationStructure::UpdateSurfaceInstance( uint32_t surfaceUploadId, const mat4x4f& transform )
+void GpuAccelerationStructure::UpdateSurfaceInstance( uint32_t surfaceUploadId, uint32_t materialId, const mat4x4f& transform )
 {
 	if ( surfaceUploadId < static_cast<uint32_t>( m_blasEntries.size() ) ) {
-		m_pendingInstances.push_back( { surfaceUploadId, transform } );
+		m_pendingInstances.push_back( { surfaceUploadId, materialId, transform } );
 	}
 }
 
@@ -252,28 +232,46 @@ void GpuAccelerationStructure::Update( CommandList* cmdList )
 
 	const bool fullRebuild = ( m_tlas == VK_NULL_HANDLE ) || ( count != m_tlasInstanceCount );
 
-	// Build instance array
 	std::vector<VkAccelerationStructureInstanceKHR> vkInstances( count );
+	std::vector<gpuRtSurface_t> surfaceInfos( count );
 	for ( uint32_t i = 0; i < count; ++i )
 	{
-		const instanceData_t& src = m_pendingInstances[ i ];
-		assert( src.instanceIndex < static_cast<uint32_t>( m_blasEntries.size() ) );
+		const rtSurfInstance_t& src = m_pendingInstances[ i ];
+		assert( src.surfId < static_cast<uint32_t>( m_blasEntries.size() ) );
+		const blasEntry_t& blas = m_blasEntries[ src.surfId ];
 
 		VkAccelerationStructureInstanceKHR& inst = vkInstances[ i ];
 		inst = {};
 
 		for ( int32_t row = 0; row < 3; ++row ) {
 			for ( int32_t col = 0; col < 4; ++col ) {
-				inst.transform.matrix[ row ][ col ] = src.transform[ row ][ col ];
+				inst.transform.matrix[ row ][ col ] = src.modelMatrix[ row ][ col ];
 			}
 		}
 
-		inst.instanceCustomIndex = src.instanceIndex;
+		inst.instanceCustomIndex = i;
 		inst.mask = 0xFF;
 		inst.instanceShaderBindingTableRecordOffset = 0;
 		inst.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;
-		inst.accelerationStructureReference = GetBlasDeviceAddress( src.instanceIndex );
+		inst.accelerationStructureReference = GetBlasDeviceAddress( src.surfId );
+
+		surfaceInfos[ i ].vertexOffset = blas.vertexOffset;
+		surfaceInfos[ i ].firstIndex   = blas.firstIndex;
+		surfaceInfos[ i ].materialId   = src.materialId;
+		surfaceInfos[ i ].pad0         = 0;
 	}
+
+	// Rebuilt every frame
+	if ( fullRebuild )
+	{
+		if ( m_rtSurfaceInfoBuf.GetMaxSize() > 0 ) {
+			m_rtSurfaceInfoBuf.Destroy();
+		}
+		m_rtSurfaceInfoBuf.Create( m_name, swapBuffering_t::SINGLE_FRAME, m_lifetime,
+			count, sizeof( gpuRtSurface_t ), bufferType_t::STORAGE );
+	}
+	m_rtSurfaceInfoBuf.SetPos( 0 );
+	m_rtSurfaceInfoBuf.CopyData( surfaceInfos.data(), count * sizeof( gpuRtSurface_t ) );
 
 	// Query sizes
 	VkAccelerationStructureGeometryInstancesDataKHR instancesData{};
@@ -408,7 +406,7 @@ void GpuAccelerationStructure::Destroy()
 void GpuAccelerationStructure::Create( const char*, resourceLifeTime_t ) {}
 void GpuAccelerationStructure::AddGeometry( CommandList*, const rtSurfaceInfo_t& ) {}
 void GpuAccelerationStructure::BuildPendingGeometry( CommandList* ) {}
-void GpuAccelerationStructure::UpdateSurfaceInstance( uint32_t, const mat4x4f& ) {}
+void GpuAccelerationStructure::UpdateSurfaceInstance( uint32_t, uint32_t, const mat4x4f& ) {}
 void GpuAccelerationStructure::Update( CommandList* ) {}
 void GpuAccelerationStructure::Destroy() {}
 

@@ -203,8 +203,13 @@ void Renderer::CommitRayTraceInstances( const Scene* scene )
 		uploader.QueueModelUpload( *modelAsset );
 
 		const mat4x4f modelMatrix = ent.GetMatrix();
-		for ( uint32_t i = 0; i < model.surfCount; ++i ) {
-			as->UpdateSurfaceInstance( model.uploadId + i, modelMatrix );
+		for ( uint32_t i = 0; i < model.surfCount; ++i )
+		{
+			const hdl_t materialHdl = ent.materialHdl.IsValid() ? ent.materialHdl : model.surfs[ i ].materialHdl;
+			Asset<Material>* materialAsset = MaterialLib().Find( materialHdl );
+			uploader.QueueMaterialUpload( *materialAsset );
+
+			as->UpdateSurfaceInstance( model.uploadId + i, materialAsset->Get().uploadId, modelMatrix );
 		}
 	}
 #endif
