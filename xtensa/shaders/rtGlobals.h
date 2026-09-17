@@ -33,6 +33,23 @@ struct rtBaseConstants_t
 
 #define RT_ACCELERATION_STRUCTURE( S, N, NAME )		BIND_SET( S, N ) RaytracingAccelerationStructure NAME;
 #define RT_OUTPUT( S, N, NAME )						BIND_SET( S, N ) RWTexture2D<float4> NAME;
-#define RT_VERTEX_BUFFER( S, N, NAME )				BIND_SET( S, N ) StructuredBuffer<rtVertex_t> NAME;
+#define RT_VERTEX_BUFFER( S, N, NAME )				BIND_SET( S, N ) ByteAddressBuffer NAME;
 #define RT_INDEX_BUFFER( S, N, NAME )				BIND_SET( S, N ) StructuredBuffer<uint> NAME;
 #define RT_SURFACE_INFO( S, N, NAME )				BIND_SET( S, N ) StructuredBuffer<gpuRtSurface_t> NAME;
+
+
+// ByteAddressBuffer allows for better control over padding and alignment so the vertices can be shared between RT and rasterization pipelines
+rtVertex_t LoadRtVertex( ByteAddressBuffer buf, uint index )
+{
+	static const uint VertexStride = 84;
+	const uint base = index * VertexStride;
+
+	rtVertex_t v;
+	v.position = asfloat( buf.Load4( base + 0 ) );
+	v.color = asfloat( buf.Load4( base + 16 ) );
+	v.normal = asfloat( buf.Load3( base + 32 ) );
+	v.tangent = asfloat( buf.Load3( base + 44 ) );
+	v.bitangent = asfloat( buf.Load3( base + 56 ) );
+	v.uv = asfloat( buf.Load4( base + 68 ) );
+	return v;
+}

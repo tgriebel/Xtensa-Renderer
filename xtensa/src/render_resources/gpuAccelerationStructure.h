@@ -42,7 +42,6 @@ private:
 	std::vector<VkAccelerationStructureBuildRangeInfoKHR>	m_rangeInfo;
 	std::vector<gpuRtSurface_t>								m_pendingSurfaceInfos;	// Parallel to m_geometry
 
-	// Per-frame TLAS instance list, populated by UpdateSurfaceInstance(), consumed by Update()
 	std::vector<instanceData_t>		m_pendingInstances;
 
 	std::vector<blasEntry_t>		m_blasEntries;

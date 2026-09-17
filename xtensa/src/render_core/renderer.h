@@ -119,6 +119,7 @@ private:
 
 	// Draw Frame
 	void								CommitModel( RenderView& view, const Entity& ent );
+	void								CommitRayTraceInstances( const Scene* scene );
 	void								WaitForEndFrame();
 	void								SubmitFrame();
 

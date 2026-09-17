@@ -86,6 +86,9 @@ void Renderer::Commit( const Scene* scene )
 			drawGroupOffset += view.drawGroup[ passIx ].InstanceCount();
 		}
 	}
+
+	CommitRayTraceInstances( scene );
+
 	CommitViews( scene );
 }
 
@@ -130,14 +133,6 @@ void Renderer::CommitModel( RenderView& view, const Entity& ent )
 
 		surf.uploadId = ( model.uploadId + i );
 
-#ifdef USE_VULKAN_RTX
-		if ( renderContext.config.rayTracingEnabled  )
-		{
-			GpuAccelerationStructure* as = uploader.GetAccelerationStructure();
-			as->UpdateSurfaceInstance( surf.uploadId, instance.modelMatrix );
-		}
-#endif
-
 		surf.stencilBit = ent.outline ? OutlineStencilBit : 0;
 		surf.objectOffset = 0;
 		surf.flags = renderFlags;	
@@ -181,6 +176,38 @@ void Renderer::CommitModel( RenderView& view, const Entity& ent )
 			view.drawGroup[ passIx ].Add( surf, instance );
 		}
 	}
+}
+
+
+// The world needs to be separate from individual views because in-view rays can trace offscreen
+void Renderer::CommitRayTraceInstances( const Scene* scene )
+{
+#ifdef USE_VULKAN_RTX
+	if ( renderContext.config.rayTracingEnabled == false ) {
+		return;
+	}
+
+	GpuAccelerationStructure* as = uploader.GetAccelerationStructure();
+
+	const uint32_t entCount = static_cast<uint32_t>( scene->entities.size() );
+	for ( uint32_t entIx = 0; entIx < entCount; ++entIx )
+	{
+		const Entity& ent = *scene->entities[ entIx ];
+		if ( ent.HasFlag( ENT_FLAG_NO_DRAW ) ) {
+			continue;
+		}
+
+		Asset<Model>* modelAsset = ModelLib().Find( ent.modelHdl );
+		Model& model = modelAsset->Get();
+
+		uploader.QueueModelUpload( *modelAsset );
+
+		const mat4x4f modelMatrix = ent.GetMatrix();
+		for ( uint32_t i = 0; i < model.surfCount; ++i ) {
+			as->UpdateSurfaceInstance( model.uploadId + i, modelMatrix );
+		}
+	}
+#endif
 }
 
 

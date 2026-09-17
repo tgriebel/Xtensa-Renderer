@@ -267,14 +267,13 @@ struct vsInput_t
 
 struct rtVertex_t
 {
-	float4	position;	// offset  0, 12 bytes
-	float4	color;		// offset 12, 16 bytes
-	float3	normal;		// offset 28, 12 bytes
-	float3	tangent;	// offset 40, 12 bytes
-	float3	bitangent;	// offset 52, 12 bytes
-	float2	uv0;		// offset 64,  8 bytes
-	float2	uv1;		// offset 72,  8 bytes
-	// stride: 80 bytes
+	float4	position;	// offset  0, 16 bytes
+	float4	color;		// offset 16, 16 bytes
+	float3	normal;		// offset 32, 12 bytes
+	float3	tangent;	// offset 44, 12 bytes
+	float3	bitangent;	// offset 56, 12 bytes
+	float4	uv;			// offset 68, 16 bytes
+	// stride: 84 bytes
 };
 
 

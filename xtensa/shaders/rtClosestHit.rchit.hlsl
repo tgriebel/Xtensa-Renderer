@@ -13,12 +13,12 @@ RT_PUSH_CONSTANTS
 // Interpolate a float3 attribute across a triangle using barycentric weights.
 float3 BaryLerp3( float3 a, float3 b, float3 c, float b0, float b1, float b2 )
 {
-    return a * b0 + b * b1 + c * b2;
+    return ( a * b0 + b * b1 + c * b2 );
 }
 
 float2 BaryLerp2( float2 a, float2 b, float2 c, float b0, float b1, float b2 )
 {
-    return a * b0 + b * b1 + c * b2;
+    return ( a * b0 + b * b1 + c * b2 );
 }
 
 
@@ -37,30 +37,27 @@ void closesthit_main( inout hitPayload_t payload, in BuiltInTriangleIntersection
     const uint i2 = idxBuffer[ triBase + 2 ];
 
     // Fetch the three vertices (raw index + vertexOffset = absolute VB position)
-    const rtVertex_t v0 = vtxBuffer[ surf.vertexOffset + i0 ];
-    const rtVertex_t v1 = vtxBuffer[ surf.vertexOffset + i1 ];
-    const rtVertex_t v2 = vtxBuffer[ surf.vertexOffset + i2 ];
+    const rtVertex_t v0 = LoadRtVertex( vtxBuffer, surf.vertexOffset + i0 );
+    const rtVertex_t v1 = LoadRtVertex( vtxBuffer, surf.vertexOffset + i1 );
+    const rtVertex_t v2 = LoadRtVertex( vtxBuffer, surf.vertexOffset + i2 );
 
-    // Reconstruct barycentric weights.
-    // attribs.barycentrics = (b1, b2); b0 = 1 - b1 - b2.
+    // Barycentric weights (b0 + b1 + b2 = 1.0)
     const float b1 = attribs.barycentrics.x;
     const float b2 = attribs.barycentrics.y;
     const float b0 = 1.0f - b1 - b2;
 
     // Interpolate geometric attributes
     const float3 localNormal = normalize( BaryLerp3( v0.normal, v1.normal, v2.normal, b0, b1, b2 ) );
-    const float2 uv          = BaryLerp2( v0.uv0,    v1.uv0,    v2.uv0,    b0, b1, b2 );
+    const float2 uv = BaryLerp2( v0.uv.xy, v1.uv.xy, v2.uv.xy, b0, b1, b2 );
 
     // Transform normal to world space.
-    // mul(n, WorldToObject) = (ObjectToWorld^-1)^T * n, which is the correct normal transform
-    // for meshes with non-uniform scaling.
-    const float3 worldNormal = normalize( mul( localNormal, (float3x3)WorldToObject3x4() ) );
+    const float3 N = normalize( mul( localNormal, (float3x3)WorldToObject3x4() ) );
 
     // Simple diffuse + ambient shading with a fixed directional light
-    const float3 lightDir = normalize( float3( 1.0f, 2.0f, 1.0f ) );
-    const float  NdotL    = saturate( dot( worldNormal, lightDir ) );
+    const float3 L = normalize( float3( 1.0f, 2.0f, 1.0f ) );
+    const float NoL = saturate( dot( N, L ) );
 
-    const float3 diffuse = float3( 0.8f, 0.8f, 0.8f ) * NdotL;
+    const float3 diffuse = float3( 0.8f, 0.8f, 0.8f ) * NoL;
     const float3 ambient = float3( 0.03f, 0.03f, 0.03f );
 
     payload.color = float4( diffuse + ambient, 1.0f );
