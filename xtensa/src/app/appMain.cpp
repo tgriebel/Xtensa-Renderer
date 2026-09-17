@@ -125,6 +125,46 @@ void ParseConfig( const std::string& fileName )
 }
 
 
+// `LocalConfig.ini` overrides `DefaultConfig.ini`.
+// Command line arguments override both config files.
+void LoadConfigs( const int argc, char* argv[] )
+{
+	bool hasCmdLineConfig = false;
+	for( int32_t i = 1; i < argc; ++i )
+	{
+		if( HasSuffix( argv[ i ], ".ini" ) )
+		{
+			hasCmdLineConfig = true;
+			break;
+		}
+	}
+
+	if( hasCmdLineConfig == false )
+	{
+		ParseConfig( "DefaultConfig.ini" );
+
+		const std::string localConfigFile = "LocalConfig.ini";
+		if ( SysCore::FileExists( localConfigFile ) == false ) {
+			SysCore::CloneFile( "DefaultConfig.ini", localConfigFile );
+		}
+		ParseConfig( localConfigFile );
+	}
+
+	for( int32_t i = 1; i < argc; ++i )
+	{
+		if( HasSuffix( argv[ i ], ".ini" ) )
+		{
+			std::string fileName = argv[ i ];
+			ParseConfig( fileName );
+		}
+		else
+		{
+			CVar::ParseCommand( argv[ i ] );
+		}
+	}
+}
+
+
 void InitSceneType( const std::string type, Scene** scene )
 {
 	if ( type == "chess" ) {
@@ -166,24 +206,7 @@ int main( int argc, char* argv[] )
 
 	CreateCodeAssets(); // TODO: Check render dependencies, may need to move into render init?
 
-	const std::string localConfigFile = "LocalConfig.ini";
-	if ( SysCore::FileExists( localConfigFile ) == false ) {
-		SysCore::CloneFile( "DefaultConfig.ini", localConfigFile );
-	}
-	ParseConfig( localConfigFile );
-
-	for( int32_t i = 1; i < argc; ++i )
-	{
-		if( HasSuffix( argv[ i ], ".ini" ) )
-		{
-			std::string fileName = argv[ i ];
-			ParseConfig( fileName );
-		}
-		else
-		{
-			CVar::ParseCommand( argv[ i ] );
-		}
-	}
+	LoadConfigs( argc, argv );
 
 	if ( c_bakeAssets.GetBool() || c_loadBakedAssets.GetBool() == false ) {
 		ToggleBakedLoading( false );
