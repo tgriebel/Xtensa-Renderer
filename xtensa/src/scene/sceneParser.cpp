@@ -967,6 +967,12 @@ void ParseJson( const std::string& fileName, Scene** scene, AssetManager* assets
 }
 
 
+std::string SceneJsonPath( const std::string& sceneName )
+{
+	return sceneName + "/" + sceneName + ".json";
+}
+
+
 void LoadScene( std::string fileName, Scene** scene, AssetManager* assets, sceneInitializerCallback_t* sceneInitializer )
 {
 	{

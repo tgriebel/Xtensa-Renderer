@@ -28,7 +28,7 @@ Window								g_window;
 using namespace SysCore;
 
 
-static const char* sceneFile = "chess/chess.json";
+static const char* sceneFile = "chess";
 
 #if defined( USE_IMGUI )
 imguiControls_t g_imguiControls;
@@ -190,9 +190,9 @@ int main( int argc, char* argv[] )
 	}
 
 	if( c_scene.IsValid() ) {
-		LoadScene( c_scene.GetString(), &g_scene, &g_assets, InitSceneType );
+		LoadScene( SceneJsonPath( c_scene.GetString() ), &g_scene, &g_assets, InitSceneType );
 	} else {
-		LoadScene( sceneFile, &g_scene, &g_assets, InitSceneType );
+		LoadScene( SceneJsonPath( sceneFile ), &g_scene, &g_assets, InitSceneType );
 	}
 
 	renderConfig_t config {};
