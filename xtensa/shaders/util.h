@@ -275,6 +275,17 @@ float3 VectorDebugColor( const float3 vector )
 }
 
 
+// Used to get around texture derivative requirement
+float4 SampleTex2DAuto( Texture2D tex, SamplerState samp, float2 uv )
+{
+#ifdef USE_RT
+	return tex.SampleLevel( samp, uv, 0 );
+#else
+	return tex.Sample( samp, uv );
+#endif
+}
+
+
 float4 SampleTexture( const Texture2D textures[], SamplerState sampler, const gpuMaterial_t material, const int materialTextureSlot, const float2 uv[ 2 ] )
 {
 	const int textureUploadId = material.textureId[ materialTextureSlot ];
@@ -284,7 +295,7 @@ float4 SampleTexture( const Texture2D textures[], SamplerState sampler, const gp
 	{
 		const float2 transformedUv = mul( material.uvTransform[ materialTextureSlot ], uv[ channel ] ) + material.uvOffset[ materialTextureSlot ];
 
-		return textures[ textureUploadId ].Sample( sampler, transformedUv );
+		return SampleTex2DAuto( textures[ textureUploadId ], sampler, transformedUv );
 
 	}
 	return float4( 1.0f, 1.0f, 1.0f, 1.0f );
@@ -300,7 +311,7 @@ float4 SampleTextureSrgb( const Texture2D textures[], SamplerState sampler, cons
 	{
 		const float2 transformedUv = mul( material.uvTransform[ materialTextureSlot ], uv[ channel ] ) + material.uvOffset[ materialTextureSlot ];
 
-		return SrgbToLinear( textures[ textureUploadId ].Sample( sampler, transformedUv.xy ) );
+		return SrgbToLinear( SampleTex2DAuto( textures[ textureUploadId ], sampler, transformedUv.xy ) );
 	}
 	return float4( 1.0f, 1.0f, 1.0f, 1.0f );
 }
@@ -315,7 +326,7 @@ float3 SampleTextureNormal( const Texture2D textures[], SamplerState sampler, co
 	{
 		const float2 transformedUv = mul( material.uvTransform[ materialTextureSlot ], uv[ channel ] ) + material.uvOffset[ materialTextureSlot ];
 
-		return DecodeNormal( textures[ textureUploadId ].Sample( sampler, transformedUv ).xyz );
+		return DecodeNormal( SampleTex2DAuto( textures[ textureUploadId ], sampler, transformedUv ).xyz );
 	}
 	return float3( 0.0f, 0.0f, 1.0f );
 }

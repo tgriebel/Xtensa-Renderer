@@ -310,46 +310,6 @@ brdfSample_t EvaluateAnisoBrdf( const surfaceInput_t surfaceInput, lightingInput
 }
 
 
-float3 ApplyShadow( const uint shadowViewId, float3 worldPosition, const float3 Lo )
-{
-	float shadowing = 1.0f; // Assumes spot-light, should be 0.0f for normal lights
-
-	if ( shadowViewId != 0xFF )
-	{
-		const gpuView_t shadowView = views[shadowViewId];
-
-		const uint shadowMapTexId = shadowViewId;
-
-		Texture2D shadowMap = localTextures[ shadowMapTexId ];
-
-		const float shadowBias = 0.001f;
-
-        // Light Space Position
-		float4 lsPosition = mul( mul( shadowView.projMat, shadowView.viewMat ), float4( worldPosition.xyz, 1.0f ) );
-		lsPosition.xyz /= lsPosition.w;
-
-		lsPosition.z -= shadowBias;
-
-		const float2 ndc = 0.5f * lsPosition.xy + 0.5f;
-
-		const float spotRadius = 0.3f;
-		const bool withinSpotlight = ( length(ndc.xy - float2( 0.5f, 0.5f ) ) < spotRadius ); // Similar to an SDF. Distance from center below a threshold
-
-		if ( withinSpotlight )
-		{
-            const float shadowMapSample = shadowMap.SampleCmpLevelZero( depthShadowSampler, ndc.xy, lsPosition.z );
-
-			shadowing = shadowMapSample * globals.shadowParms.w;
-		}
-		else
-		{
-			shadowing = 0.0f;
-		}
-	}
-    return ( shadowing * Lo );
-}
-
-
 void ApplyClearcoatBrdf( const surfaceInput_t surfaceInput, lightingInput_t lightingInput, inout brdfSample_t brdf )
 {
     const float NoH = saturate( dot( surfaceInput.ccNormal, lightingInput.H ) );

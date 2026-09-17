@@ -8,6 +8,8 @@ RT_INDEX_BUFFER( 1, 3, idxBuffer )
 RT_SURFACE_INFO( 1, 4, surfaceInfos )
 RT_PUSH_CONSTANTS
 
+#include "lighting.h"
+
 
 // Interpolate a float3 attribute across a triangle using barycentric weights.
 float3 BaryLerp3( float3 a, float3 b, float3 c, float b0, float b1, float b2 )
@@ -21,8 +23,30 @@ float2 BaryLerp2( float2 a, float2 b, float2 c, float b0, float b1, float b2 )
 }
 
 
+// Reconstructs surface sample at the intersection location
+sampleAttributes_t BuildSampleAttributes( const rtVertex_t v0, const rtVertex_t v1, const rtVertex_t v2, const float b0, const float b1, const float b2 )
+{
+    const float3 localNormal    = normalize( BaryLerp3( v0.normal,    v1.normal,    v2.normal,    b0, b1, b2 ) );
+    const float3 localTangent   = normalize( BaryLerp3( v0.tangent,   v1.tangent,   v2.tangent,   b0, b1, b2 ) );
+    const float3 localBitangent = normalize( BaryLerp3( v0.bitangent, v1.bitangent, v2.bitangent, b0, b1, b2 ) );
+
+    sampleAttributes_t surfaceSample;
+
+    surfaceSample.N = normalize( mul( localNormal, (float3x3)WorldToObject3x4() ) );
+    surfaceSample.T = normalize( mul( localTangent, (float3x3)ObjectToWorld3x4() ) );
+    surfaceSample.B = normalize( mul( localBitangent, (float3x3)ObjectToWorld3x4() ) );
+
+    surfaceSample.uv0 = BaryLerp2( v0.uv.xy, v1.uv.xy, v2.uv.xy, b0, b1, b2 );
+    surfaceSample.uv1 = BaryLerp2( v0.uv.zw, v1.uv.zw, v2.uv.zw, b0, b1, b2 );
+
+    surfaceSample.worldPosition = WorldRayOrigin() + WorldRayDirection() * RayTCurrent();
+
+    return surfaceSample;
+}
+
+
 [shader( "closesthit" )]
-void closesthit_main( inout hitPayload_t payload, in BuiltInTriangleIntersectionAttributes attribs )
+void closesthit_main( inout hitPayload_t payload, in BuiltInTriangleIntersectionAttributes hitAttribs )
 {
     // InstanceID() returns instanceCustomIndex, which we set to the BLAS index.
     // This maps directly to the surface info entry for this geometry.
@@ -41,23 +65,24 @@ void closesthit_main( inout hitPayload_t payload, in BuiltInTriangleIntersection
     const rtVertex_t v2 = LoadRtVertex( vtxBuffer, surf.vertexOffset + i2 );
 
     // Barycentric weights (b0 + b1 + b2 = 1.0)
-    const float b1 = attribs.barycentrics.x;
-    const float b2 = attribs.barycentrics.y;
+    const float b1 = hitAttribs.barycentrics.x;
+    const float b2 = hitAttribs.barycentrics.y;
     const float b0 = 1.0f - b1 - b2;
 
-    // Interpolate geometric attributes
-    const float3 localNormal = normalize( BaryLerp3( v0.normal, v1.normal, v2.normal, b0, b1, b2 ) );
-    const float2 uv = BaryLerp2( v0.uv.xy, v1.uv.xy, v2.uv.xy, b0, b1, b2 );
+    const sampleAttributes_t surfaceSample = BuildSampleAttributes( v0, v1, v2, b0, b1, b2 );
 
-    // Transform normal to world space.
-    const float3 N = normalize( mul( localNormal, (float3x3)WorldToObject3x4() ) );
+    // Gather surface data
+    const gpuView_t view = views[ rtConstants.viewId ];
+    const gpuMaterial_t material = materials[ surf.materialId ];
+    const surfaceInput_t surfaceInput = CalculateSurfaceInput( globals, view, material, surfaceSample );
 
-    // Simple diffuse + ambient shading with a fixed directional light
+    // Still a single fixed directional light + flat ambient for now -- no
+    // multi-light loop or shadows yet, see the earlier lighting-refactor plan.
     const float3 L = normalize( float3( 1.0f, 2.0f, 1.0f ) );
-    const float NoL = saturate( dot( N, L ) );
+    const float NoL = saturate( dot( surfaceInput.N, L ) );
 
-    const float3 diffuse = float3( 0.8f, 0.8f, 0.8f ) * NoL;
-    const float3 ambient = float3( 0.03f, 0.03f, 0.03f );
+    const float3 diffuse = surfaceInput.albedo * NoL;
+    const float3 ambient = surfaceInput.albedo * 0.03f;
 
-    payload.color = float4( diffuse + ambient, 1.0f );
+    payload.color = float4( diffuse + ambient + surfaceInput.emissive, 1.0f );
 }
