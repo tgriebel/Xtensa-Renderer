@@ -6,151 +6,6 @@ PS_LAYOUT_STANDARD( Texture2D ) // Must come before lighting.h
 
 #include "lighting.h"
 
-// Evaluate BRDF functions evaluate a particular BRDF at a surface sample
-// Apply* functions modify some BRDF
-// Clearcoat attenuates the base BRDF, Sheen simply adds on top
-
-brdfSample_t EvaluateBaseBrdf( const surfaceInput_t surfaceInput, lightingInput_t lightingInput )
-{
-	const float perceptualRoughness = surfaceInput.roughness;
-	const float metallic = surfaceInput.metallic;
-	const float3 F0 = surfaceInput.F0;
-
-	const float Dc = D_GGX( lightingInput.NoH, perceptualRoughness );
-	const float Gc = G_Smith( surfaceInput.NoV, lightingInput.NoL, perceptualRoughness);
-	const float3 Fc = F_Schlick( lightingInput.HoV, F0 );
-
-	const float3 kS = Fc;
-	float3 kD = float3( 1.0f, 1.0f, 1.0f ) - kS;
-	kD *= 1.0f - metallic;
-
-	float3 numerator = Dc * Gc * Fc;
-	float denominator = 4.0f * surfaceInput.NoV * lightingInput.NoL + 0.00001f;
-	
-    brdfSample_t brdf;
-	
-    brdf.Fr = numerator / denominator;
-    brdf.Fd = ( kD * surfaceInput.albedo ) / PI;
-    brdf.F = Fc;
-
-	return brdf;
-}
-
-// FIXME: temp BS
-brdfSample_t EvaluateAnisoBrdf( const surfaceInput_t surfaceInput, lightingInput_t lightingInput )
-{
-    const float perceptualRoughness = surfaceInput.roughness;
-    const float metallic = surfaceInput.metallic;
-    const float3 F0 = surfaceInput.F0;
-    
-    float sinRot, cosRot;
-    sincos( surfaceInput.anisoRotation, sinRot, cosRot );
-    const float3 T = cosRot * surfaceInput.T + sinRot * surfaceInput.B;
-    const float3 B = -sinRot * surfaceInput.T + cosRot * surfaceInput.B;
-    
-    // Roughness split along tangent (at) and bitangent (ab)
-    const float2 anisoR = AnisoRoughness( perceptualRoughness, surfaceInput.aniso );
-    const float at = anisoR.x;
-    const float ab = anisoR.y;
-    
-    // Project V and L onto the anisotropic tangent frame
-    const float ToV = dot( T, surfaceInput.V );
-    const float BoV = dot( B, surfaceInput.V );
-    const float ToL = dot( T, lightingInput.L );
-    const float BoL = dot( B, lightingInput.L );
-
-    const float Dc = D_GGX_Aniso( lightingInput.NoH, lightingInput.H, T, B, at, ab );
-    const float Gc = V_SmithGGXCorrelated_Aniso( at, ab, ToV, BoV, ToL, BoL, surfaceInput.NoV, lightingInput.NoL );
-    const float3 Fc = F_Schlick( lightingInput.HoV, F0 );
-
-    float3 kD = ( float3( 1.0f, 1.0f, 1.0f ) - Fc ) * ( 1.0f - metallic );
-
-    brdfSample_t brdf;
-    brdf.Fr = Dc * Gc * Fc;
-    brdf.Fd = ( kD * surfaceInput.albedo ) / PI;
-    brdf.F = Fc;
-
-    return brdf;
-}
-
-
-float3 ApplyShadow( const uint shadowViewId, float3 worldPosition, const float3 Lo )
-{
-	float shadowing = 1.0f; // Assumes spot-light, should be 0.0f for normal lights
-	
-	if ( shadowViewId != 0xFF )
-	{
-		const gpuView_t shadowView = views[shadowViewId];
-		
-		const uint shadowMapTexId = shadowViewId;
-		
-		Texture2D shadowMap = localTextures[ shadowMapTexId ];
-
-		const float shadowBias = 0.001f;
-	
-        // Light Space Position
-		float4 lsPosition = mul( mul( shadowView.projMat, shadowView.viewMat ), float4( worldPosition.xyz, 1.0f ) );
-		lsPosition.xyz /= lsPosition.w;
-
-		lsPosition.z -= shadowBias;
-		
-		const float2 ndc = 0.5f * lsPosition.xy + 0.5f;
-
-		const float spotRadius = 0.3f;
-		const bool withinSpotlight = ( length(ndc.xy - float2( 0.5f, 0.5f ) ) < spotRadius ); // Similar to an SDF. Distance from center below a threshold
-		
-		if ( withinSpotlight )
-		{
-            const float shadowMapSample = shadowMap.SampleCmpLevelZero( depthShadowSampler, ndc.xy, lsPosition.z );
-
-			shadowing = shadowMapSample * globals.shadowParms.w;
-		}
-		else
-		{
-			shadowing = 0.0f;
-		}
-	}
-    return ( shadowing * Lo );
-}
-
-
-void ApplyClearcoatBrdf( const surfaceInput_t surfaceInput, lightingInput_t lightingInput, inout brdfSample_t brdf )
-{
-    const float NoH = saturate( dot( surfaceInput.ccNormal, lightingInput.H ) );
-    const float NoL = saturate( dot( surfaceInput.ccNormal, lightingInput.L ) );
-
-	const float F0 = 0.04f;
-	
-    const float Dc = D_GGX( NoH, surfaceInput.ccRoughness );
-    const float Vc = V_Kelemen( lightingInput.LoH );
-    const float Fc = surfaceInput.ccStrength * F_Schlick( lightingInput.LoH, F0 ).x;
-	
-    float clearcoat = ( Dc * Vc ) * Fc;
-
-	// Energy loss from base: attenuate by Fresnel of clearcoat
-    const float attenuation = ( 1.0f - Fc );
-	
-    brdf.Fd *= attenuation;
-    brdf.Fr *= attenuation * attenuation;
-}
-
-
-void ApplySheenBrdf( const surfaceInput_t surfaceInput, lightingInput_t lightingInput, inout brdfSample_t brdf )
-{
-    const float Dc = D_Charlie( lightingInput.NoH, surfaceInput.sheenRoughness );
-    const float Vc = V_Neubelt( surfaceInput.NoV, lightingInput.NoL );
-
-    const float3 sheenLobe = surfaceInput.sheenColor * Dc * Vc;
-    
-    const float sheenMax = max( surfaceInput.sheenColor.r, max( surfaceInput.sheenColor.g, surfaceInput.sheenColor.b ) );
-    const float sheenScaling = 1.0f - sheenMax * 0.157f; // TODO: replace magic number with another BRDF LUT
-
-    // Need to attenuate base energy
-    brdf.Fd *= sheenScaling;
-    brdf.Fr *= sheenScaling;
-    brdf.Fr += sheenLobe;
-}
-
 
 float3 EvaluateDiffuseAmbient( TextureCube diffuseIBL, const surfaceInput_t surfaceInput )
 {
@@ -229,13 +84,12 @@ psOutput_t PSMain( vsToPsInterpolators input )
 
 	const gpuView_t view = views[ viewlId ];
 	const gpuMaterial_t material = materials[ materialId ];
-    const gpuSurface_t surface = surfaces[ input.objectId ];
 
     const uint diffuseIBL = surfaces[ input.objectId ].diffuseIblCubeId;
     const uint specularIBL = surfaces[ input.objectId ].envCubeId;
     const uint brdfLutId = globals.brdfLutId;
-	
-    const surfaceInput_t surfaceInput = CalculateSurfaceInput( globals, view, surface, material, input );
+
+    const surfaceInput_t surfaceInput = CalculateSurfaceInput( globals, view, material, input );
 	
     float3 Lo = float3( 0.0f, 0.0f, 0.0f );
 

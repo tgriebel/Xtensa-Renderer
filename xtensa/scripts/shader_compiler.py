@@ -188,8 +188,8 @@ def build_command( record: ShaderRecord ) -> list[ str ]:
     ]
 
     if is_rt:
-        # lib_ profiles export all [shader("...")] annotated functions — no single entry point
         cmd += [ "-fspv-extension=SPV_KHR_ray_tracing" ]
+        cmd += [ "-fspv-extension=SPV_EXT_descriptor_indexing" ]
     else:
         cmd += [ "-E", ENTRY[ record.ext ] ]
 

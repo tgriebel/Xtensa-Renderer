@@ -3,6 +3,7 @@
 
 #include "globals.h"
 #include "util.h"
+#include "brdf.h"
 
 // Three structs here used to represent data respective of the lighting equation
 // surfaceInput_t: Data from the current surface/pixel sample (one per shader invocation)
@@ -64,6 +65,19 @@ struct brdfSample_t
 };
 
 
+// Generalized structure representing a sample from a given surface
+// Can correspond 1:1 with pixel shader interpolators, a ray-intersection payload, or compute shader computation
+struct sampleAttributes_t
+{
+	float3	worldPosition;
+	float3	T;	// world-space tangent
+	float3	B;	// world-space bitangent
+	float3	N;	// world-space geometric normal ( pre-normal-map ), == vsToPsInterpolators.TBN2
+	float2	uv0;
+	float2	uv1;
+};
+
+
 const float2 PoissonDisk[ 16 ] =
 {
 	float2( -0.94201624, -0.39906216 ),
@@ -105,13 +119,8 @@ float ShadowPCF( Texture2D shadowMap, SamplerComparisonState samp,
 }
 
 
-surfaceInput_t CalculateSurfaceInput( const gpuGlobals_t globals, const gpuView_t view, const gpuSurface_t surface, const gpuMaterial_t material, const vsToPsInterpolators input )
+surfaceInput_t CalculateSurfaceInput( const gpuGlobals_t globals, const gpuView_t view, const gpuMaterial_t material, const sampleAttributes_t attribs )
 {
-	const float3 specularColor = material.Ks.rgb;
-	const float specularPower = material.Ns;
-
-	const float3 modelOrigin = float3( surface.model[ 0 ][ 3 ], surface.model[ 1 ][ 3 ], surface.model[ 2 ][ 3 ] );
-
 	float3 albedoSample = material.albedo.rgb;
 	float3 normalSample = float3( 0.0f, 0.0f, 1.0f );
 	float roughnessSample = material.roughness;
@@ -126,7 +135,7 @@ surfaceInput_t CalculateSurfaceInput( const gpuGlobals_t globals, const gpuView_
 	float anisotropySample = material.anisotropy;
 	float transmissionSample = material.transmissionFactor;
 
-	const float2 uv[ 2 ] = { input.uv0.xy, input.uv1.xy };
+	const float2 uv[ 2 ] = { attribs.uv0, attribs.uv1 };
 
 	const bool isTextured = ( material.textured != 0 ) && ( globals.isTextured != 0 );
 
@@ -160,7 +169,7 @@ surfaceInput_t CalculateSurfaceInput( const gpuGlobals_t globals, const gpuView_
 	}
 
 	const float normalBlendFactor = 1.0f;
-	const float3 normal = lerp( float3( 0.0f, 0.0f, 1.0f ), ComputeNormalWS( normalSample, input.tangent, input.bitangent, input.TBN2 ), normalBlendFactor );
+	const float3 normal = lerp( float3( 0.0f, 0.0f, 1.0f ), ComputeNormalWS( normalSample, attribs.T, attribs.B, attribs.N ), normalBlendFactor );
 
 	surfaceInput_t surfaceInput = (surfaceInput_t)0;
 
@@ -173,24 +182,40 @@ surfaceInput_t CalculateSurfaceInput( const gpuGlobals_t globals, const gpuView_
 	surfaceInput.sheenRoughness = saturate( sheenRoughnessSample );
 	surfaceInput.ccStrength = saturate( ccSample );
 	surfaceInput.ccRoughness = saturate( ccRoughnessSample );
-	surfaceInput.ccNormal = normalize( ComputeNormalWS( ccNormalSample, input.tangent, input.bitangent, input.TBN2 ) );
+	surfaceInput.ccNormal = normalize( ComputeNormalWS( ccNormalSample, attribs.T, attribs.B, attribs.N ) );
 	surfaceInput.useClearCoat = ( ccSample > 0.0f );
 	surfaceInput.useSheen = any( sheenSample > 0.0f ) && ( sheenRoughnessSample > 0.0f );
 	surfaceInput.useAniso = ( surfaceInput.aniso != 0.0f );
 
 	surfaceInput.N = normalize( normal );
-	surfaceInput.V = normalize( view.viewOrigin.xyz - input.worldPosition.xyz );
+	surfaceInput.V = normalize( view.viewOrigin.xyz - attribs.worldPosition );
 	surfaceInput.NoV = saturate( dot( surfaceInput.N, surfaceInput.V ) );
 	surfaceInput.F0 = lerp( float3( 0.04f, 0.04f, 0.04f ), surfaceInput.albedo.rgb, surfaceInput.metallic );
 	surfaceInput.F = F_SchlickRoughness( surfaceInput.NoV, surfaceInput.F0, surfaceInput.roughness );
-	surfaceInput.T = input.tangent;
-	surfaceInput.B = input.bitangent;
-	
-	surfaceInput.position = input.worldPosition.xyz;
+	surfaceInput.T = attribs.T;
+	surfaceInput.B = attribs.B;
+
+	surfaceInput.position = attribs.worldPosition;
 	surfaceInput.tangentNormal = normalSample;
 
 	return surfaceInput;
 }
+
+
+// Rasterization interface
+surfaceInput_t CalculateSurfaceInput( const gpuGlobals_t globals, const gpuView_t view, const gpuMaterial_t material, const vsToPsInterpolators input )
+{
+	sampleAttributes_t attribs;
+	attribs.worldPosition = input.worldPosition.xyz;
+	attribs.T = input.tangent;
+	attribs.B = input.bitangent;
+	attribs.N = input.TBN2;
+	attribs.uv0 = input.uv0.xy;
+	attribs.uv1 = input.uv1.xy;
+
+	return CalculateSurfaceInput( globals, view, material, attribs );
+}
+
 
 lightingInput_t CalculateLightingInput( const surfaceInput_t surfaceInput, const gpuLight_t light )
 {
@@ -214,6 +239,152 @@ lightingInput_t CalculateLightingInput( const surfaceInput_t surfaceInput, const
 	lightingInput.Li = radiance;
 
 	return lightingInput;
+}
+
+
+// Evaluate BRDF functions evaluate a particular BRDF at a surface sample
+// Apply* functions modify some BRDF
+// Clearcoat attenuates the base BRDF, Sheen simply adds on top
+
+brdfSample_t EvaluateBaseBrdf( const surfaceInput_t surfaceInput, lightingInput_t lightingInput )
+{
+	const float perceptualRoughness = surfaceInput.roughness;
+	const float metallic = surfaceInput.metallic;
+	const float3 F0 = surfaceInput.F0;
+
+	const float Dc = D_GGX( lightingInput.NoH, perceptualRoughness );
+	const float Gc = G_Smith( surfaceInput.NoV, lightingInput.NoL, perceptualRoughness);
+	const float3 Fc = F_Schlick( lightingInput.HoV, F0 );
+
+	const float3 kS = Fc;
+	float3 kD = float3( 1.0f, 1.0f, 1.0f ) - kS;
+	kD *= 1.0f - metallic;
+
+	float3 numerator = Dc * Gc * Fc;
+	float denominator = 4.0f * surfaceInput.NoV * lightingInput.NoL + 0.00001f;
+
+    brdfSample_t brdf;
+
+    brdf.Fr = numerator / denominator;
+    brdf.Fd = ( kD * surfaceInput.albedo ) / PI;
+    brdf.F = Fc;
+
+	return brdf;
+}
+
+// FIXME: temp BS
+brdfSample_t EvaluateAnisoBrdf( const surfaceInput_t surfaceInput, lightingInput_t lightingInput )
+{
+    const float perceptualRoughness = surfaceInput.roughness;
+    const float metallic = surfaceInput.metallic;
+    const float3 F0 = surfaceInput.F0;
+
+    float sinRot, cosRot;
+    sincos( surfaceInput.anisoRotation, sinRot, cosRot );
+    const float3 T = cosRot * surfaceInput.T + sinRot * surfaceInput.B;
+    const float3 B = -sinRot * surfaceInput.T + cosRot * surfaceInput.B;
+
+    // Roughness split along tangent (at) and bitangent (ab)
+    const float2 anisoR = AnisoRoughness( perceptualRoughness, surfaceInput.aniso );
+    const float at = anisoR.x;
+    const float ab = anisoR.y;
+
+    // Project V and L onto the anisotropic tangent frame
+    const float ToV = dot( T, surfaceInput.V );
+    const float BoV = dot( B, surfaceInput.V );
+    const float ToL = dot( T, lightingInput.L );
+    const float BoL = dot( B, lightingInput.L );
+
+    const float Dc = D_GGX_Aniso( lightingInput.NoH, lightingInput.H, T, B, at, ab );
+    const float Gc = V_SmithGGXCorrelated_Aniso( at, ab, ToV, BoV, ToL, BoL, surfaceInput.NoV, lightingInput.NoL );
+    const float3 Fc = F_Schlick( lightingInput.HoV, F0 );
+
+    float3 kD = ( float3( 1.0f, 1.0f, 1.0f ) - Fc ) * ( 1.0f - metallic );
+
+    brdfSample_t brdf;
+    brdf.Fr = Dc * Gc * Fc;
+    brdf.Fd = ( kD * surfaceInput.albedo ) / PI;
+    brdf.F = Fc;
+
+    return brdf;
+}
+
+
+float3 ApplyShadow( const uint shadowViewId, float3 worldPosition, const float3 Lo )
+{
+	float shadowing = 1.0f; // Assumes spot-light, should be 0.0f for normal lights
+
+	if ( shadowViewId != 0xFF )
+	{
+		const gpuView_t shadowView = views[shadowViewId];
+
+		const uint shadowMapTexId = shadowViewId;
+
+		Texture2D shadowMap = localTextures[ shadowMapTexId ];
+
+		const float shadowBias = 0.001f;
+
+        // Light Space Position
+		float4 lsPosition = mul( mul( shadowView.projMat, shadowView.viewMat ), float4( worldPosition.xyz, 1.0f ) );
+		lsPosition.xyz /= lsPosition.w;
+
+		lsPosition.z -= shadowBias;
+
+		const float2 ndc = 0.5f * lsPosition.xy + 0.5f;
+
+		const float spotRadius = 0.3f;
+		const bool withinSpotlight = ( length(ndc.xy - float2( 0.5f, 0.5f ) ) < spotRadius ); // Similar to an SDF. Distance from center below a threshold
+
+		if ( withinSpotlight )
+		{
+            const float shadowMapSample = shadowMap.SampleCmpLevelZero( depthShadowSampler, ndc.xy, lsPosition.z );
+
+			shadowing = shadowMapSample * globals.shadowParms.w;
+		}
+		else
+		{
+			shadowing = 0.0f;
+		}
+	}
+    return ( shadowing * Lo );
+}
+
+
+void ApplyClearcoatBrdf( const surfaceInput_t surfaceInput, lightingInput_t lightingInput, inout brdfSample_t brdf )
+{
+    const float NoH = saturate( dot( surfaceInput.ccNormal, lightingInput.H ) );
+    const float NoL = saturate( dot( surfaceInput.ccNormal, lightingInput.L ) );
+
+	const float F0 = 0.04f;
+
+    const float Dc = D_GGX( NoH, surfaceInput.ccRoughness );
+    const float Vc = V_Kelemen( lightingInput.LoH );
+    const float Fc = surfaceInput.ccStrength * F_Schlick( lightingInput.LoH, F0 ).x;
+
+    float clearcoat = ( Dc * Vc ) * Fc;
+
+	// Energy loss from base: attenuate by Fresnel of clearcoat
+    const float attenuation = ( 1.0f - Fc );
+
+    brdf.Fd *= attenuation;
+    brdf.Fr *= attenuation * attenuation;
+}
+
+
+void ApplySheenBrdf( const surfaceInput_t surfaceInput, lightingInput_t lightingInput, inout brdfSample_t brdf )
+{
+    const float Dc = D_Charlie( lightingInput.NoH, surfaceInput.sheenRoughness );
+    const float Vc = V_Neubelt( surfaceInput.NoV, lightingInput.NoL );
+
+    const float3 sheenLobe = surfaceInput.sheenColor * Dc * Vc;
+
+    const float sheenMax = max( surfaceInput.sheenColor.r, max( surfaceInput.sheenColor.g, surfaceInput.sheenColor.b ) );
+    const float sheenScaling = 1.0f - sheenMax * 0.157f; // TODO: replace magic number with another BRDF LUT
+
+    // Need to attenuate base energy
+    brdf.Fd *= sheenScaling;
+    brdf.Fr *= sheenScaling;
+    brdf.Fr += sheenLobe;
 }
 
 #endif // LIGHT_HLSL_H
