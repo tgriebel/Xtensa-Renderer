@@ -117,5 +117,6 @@ static const ShaderBinding g_rtBindings[] =
 	BINDING_NAME( rtVertexBuffer ),
 	BINDING_NAME( rtIndexBuffer ),
 	BINDING_NAME( rtSurfaceInfos ),
+	BINDING_NAME( lightBuffer ),
 };
 const uint64_t bindset_rayTracing = Hash( "bindset_rayTracing" );

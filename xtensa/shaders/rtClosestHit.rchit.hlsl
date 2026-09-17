@@ -6,6 +6,7 @@ RT_OUTPUT( 1, 1, rtOutput )
 RT_VERTEX_BUFFER( 1, 2, vtxBuffer )
 RT_INDEX_BUFFER( 1, 3, idxBuffer )
 RT_SURFACE_INFO( 1, 4, surfaceInfos )
+LIGHT_LAYOUT( 1, 5 )
 RT_PUSH_CONSTANTS
 
 #include "lighting.h"
@@ -76,13 +77,33 @@ void closesthit_main( inout hitPayload_t payload, in BuiltInTriangleIntersection
     const gpuMaterial_t material = materials[ surf.materialId ];
     const surfaceInput_t surfaceInput = CalculateSurfaceInput( globals, view, material, surfaceSample );
 
-    // Still a single fixed directional light + flat ambient for now -- no
-    // multi-light loop or shadows yet, see the earlier lighting-refactor plan.
-    const float3 L = normalize( float3( 1.0f, 2.0f, 1.0f ) );
-    const float NoL = saturate( dot( surfaceInput.N, L ) );
+    // Simplified lighting loop without IBL and shadows
+    // Eventually this can be combined with lit.ps.hlsl
+    float3 Lo = float3( 0.0f, 0.0f, 0.0f );
+    for ( int i = 0; i < (int)view.numLights; ++i )
+    {
+        const gpuLight_t light = lights[ i ];
+        const lightingInput_t lightingInput = CalculateLightingInput( surfaceInput, light );
 
-    const float3 diffuse = surfaceInput.albedo * NoL;
+        brdfSample_t brdf;
+        if ( surfaceInput.useAniso ) {
+            brdf = EvaluateAnisoBrdf( surfaceInput, lightingInput );
+        } else {
+            brdf = EvaluateBaseBrdf( surfaceInput, lightingInput );
+        }
+
+        if ( surfaceInput.useClearCoat ) {
+            ApplyClearcoatBrdf( surfaceInput, lightingInput, brdf );
+        }
+        if ( surfaceInput.useSheen ) {
+            ApplySheenBrdf( surfaceInput, lightingInput, brdf );
+        }
+
+        Lo += ( brdf.Fd + brdf.Fr ) * lightingInput.Li * lightingInput.NoL;
+    }
+
+    // Flat ambient approximation until IBL is wired up for RT.
     const float3 ambient = surfaceInput.albedo * 0.03f;
 
-    payload.color = float4( diffuse + ambient + surfaceInput.emissive, 1.0f );
+    payload.color = float4( Lo + ambient + surfaceInput.emissive, 1.0f );
 }

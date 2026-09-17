@@ -67,6 +67,7 @@ void RayTracingTask::FrameBegin()
 	if ( m_tlas != nullptr && m_tlas->GetSurfaceInfoBuffer()->GetMaxSize() > 0 ) {
 		m_parms->Bind( bind_rtSurfaceInfos, ShaderAttachment( m_tlas->GetSurfaceInfoBuffer() ) );
 	}
+	m_parms->Bind( bind_lightBuffer, ShaderAttachment( &m_resources->lightParms ) );
 #endif
 	GpuTask::OnFrameBegin();
 }
