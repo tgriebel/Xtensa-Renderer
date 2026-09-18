@@ -151,7 +151,7 @@
     },
 	{
       "name": "RtDefaultHitGroup",
-      "rchit": "rtClosestHit",
+      "rchit": "rtSceneViewOpaque",
       "rahit": "rtAnyHit"
     },
 	{

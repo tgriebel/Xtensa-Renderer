@@ -657,6 +657,9 @@
     <FxCompile Include="shaders\util.h">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\rtUtil.h">
+      <Filter>Shaders</Filter>
+    </FxCompile>
     <FxCompile Include="shaders\litViewDiffuse.ps.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
@@ -714,7 +717,7 @@
     <FxCompile Include="shaders\rtAnyHit.rahit.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\rtClosestHit.rchit.hlsl">
+    <FxCompile Include="shaders\rtSceneViewOpaque.rchit.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\rtIntersection.rint.hlsl">
