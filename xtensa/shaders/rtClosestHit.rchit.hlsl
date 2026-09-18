@@ -72,6 +72,25 @@ void closesthit_main( inout hitPayload_t payload, in BuiltInTriangleIntersection
 
     const sampleAttributes_t surfaceSample = BuildSampleAttributes( v0, v1, v2, b0, b1, b2 );
 
+    // Build ray-cone for texture LOD calculation
+    {
+        // TODO: derive from surface curvature from roughness
+        const float surfaceSpreadAngle = 0.0f;
+        g_rtTexLod.cone = Propagate( payload.cone, surfaceSpreadAngle, RayTCurrent() );
+
+        const float3 worldPos0 = mul( float4( v0.position.xyz, 1.0f ), ObjectToWorld4x3() );
+        const float3 worldPos1 = mul( float4( v1.position.xyz, 1.0f ), ObjectToWorld4x3() );
+        const float3 worldPos2 = mul( float4( v2.position.xyz, 1.0f ), ObjectToWorld4x3() );
+        g_rtTexLod.triangleWorldArea = 0.5f * length( cross( worldPos1 - worldPos0, worldPos2 - worldPos0 ) );
+
+        const float2 uvEdge1 = ( v1.uv.xy - v0.uv.xy );
+        const float2 uvEdge2 = ( v2.uv.xy - v0.uv.xy );
+        g_rtTexLod.triangleUvArea = 0.5f * abs( uvEdge1.x * uvEdge2.y - uvEdge2.x * uvEdge1.y );
+
+        g_rtTexLod.rayDir = WorldRayDirection();
+        g_rtTexLod.surfaceNormal = surfaceSample.N;
+    }
+
     // Gather surface data
     const gpuView_t view = views[ rtConstants.viewId ];
     const gpuMaterial_t material = materials[ surf.materialId ];

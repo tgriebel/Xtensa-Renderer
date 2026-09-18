@@ -30,8 +30,12 @@ void RayGen()
     ray.TMin      = 0.001f;
     ray.TMax      = 10000.0f;
 
+    // projMat[1][1] == 1 / tan(fovY/2) for a standard perspective projection
+    const float verticalFovRadians = 2.0f * atan( 1.0f / view.projMat[ 1 ][ 1 ] );
+
     hitPayload_t payload;
     payload.color = float4( 0.0f, 0.0f, 0.0f, 1.0f );
+    payload.cone  = InitRayCone( verticalFovRadians, launchSize.y );
 
     TraceRay(
         tlas,

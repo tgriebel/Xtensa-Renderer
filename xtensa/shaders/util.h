@@ -1,6 +1,10 @@
 #ifndef UTIL_HLSL_H
 #define UTIL_HLSL_H
 
+#ifdef USE_RT
+#include "rayCone.h"
+#endif
+
 #ifndef PI
 #define PI              3.14159265359f
 #endif
@@ -275,11 +279,30 @@ float3 VectorDebugColor( const float3 vector )
 }
 
 
+#ifdef USE_RT
+struct rtTexLodContext_t
+{
+	rayCone_t	cone;
+	float		triangleWorldArea;
+	float		triangleUvArea;
+	float3		rayDir;
+	float3		surfaceNormal;
+};
+static rtTexLodContext_t g_rtTexLod;
+#endif
+
+
 // Used to get around texture derivative requirement
 float4 SampleTex2DAuto( Texture2D tex, SamplerState samp, float2 uv )
 {
 #ifdef USE_RT
-	return tex.SampleLevel( samp, uv, 0 );
+	uint texWidth, texHeight;
+	tex.GetDimensions( texWidth, texHeight );
+
+	const float lod = ComputeTextureLOD( g_rtTexLod.cone, g_rtTexLod.triangleWorldArea, g_rtTexLod.triangleUvArea,
+		g_rtTexLod.rayDir, g_rtTexLod.surfaceNormal, (float)texWidth, (float)texHeight );
+
+	return tex.SampleLevel( samp, uv, lod );
 #else
 	return tex.Sample( samp, uv );
 #endif

@@ -1,21 +1,17 @@
 #define USE_RT
 
 #include "globals.h"
+#include "rayCone.h"
 
-// ============================================================
-// Shared payload — must be identical in rgen, rchit, and rmiss
-// ============================================================
-
+// Shared payload (must be identical in rgen, rchit, and rmiss)
 struct hitPayload_t
 {
-	float4	color;
+	float4		color;
+	rayCone_t	cone;
 };
 
 
-// ============================================================
-// Push-constant layout — must match RayTracingTask::baseConstants_t
-// ============================================================
-
+// Push-constant (see RayTracingTask::baseConstants_t)
 struct rtBaseConstants_t
 {
 	uint	viewId;
@@ -27,10 +23,7 @@ struct rtBaseConstants_t
 #define RT_PUSH_CONSTANTS			BIND_INLINE rtBaseConstants_t rtConstants;
 
 
-// ============================================================
-// Binding macros
-// ============================================================
-
+// Bindings
 #define RT_ACCELERATION_STRUCTURE( S, N, NAME )		BIND_SET( S, N ) RaytracingAccelerationStructure NAME;
 #define RT_OUTPUT( S, N, NAME )						BIND_SET( S, N ) RWTexture2D<float4> NAME;
 #define RT_VERTEX_BUFFER( S, N, NAME )				BIND_SET( S, N ) ByteAddressBuffer NAME;
