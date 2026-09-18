@@ -245,11 +245,14 @@ struct gpuPushConstants_t
 
 
 // Per-instance data (i.e. TLAS instance)
+// RT analogue to `gpuSurface_t`
 struct gpuRtSurface_t
 {
 	uint	vertexOffset;
 	uint	firstIndex;
 	uint	materialId;
+	uint	diffuseIblCubeId;
+	uint	envCubeId;
 	uint	pad0;
 };
 

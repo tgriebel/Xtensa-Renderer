@@ -44,6 +44,8 @@ private:
 	{
 		uint32_t	surfId;			// Index to BLAS surface
 		uint32_t	materialId;
+		uint32_t	diffuseIblCubeId;
+		uint32_t	envCubeId;
 		mat4x4f		modelMatrix;
 	};
 
@@ -75,7 +77,7 @@ public:
 	void						Create( const char* name, resourceLifeTime_t lifetime );
 	void						AddGeometry( CommandList* cmdList, const rtSurfaceInfo_t& surfaceInfo );
 	void						BuildPendingGeometry( CommandList* cmdList );
-	void						UpdateSurfaceInstance( uint32_t surfaceUploadId, uint32_t materialId, const mat4x4f& transform );
+	void						UpdateSurfaceInstance( uint32_t surfaceUploadId, uint32_t materialId, uint32_t diffuseIblCubeId, uint32_t envCubeId, const mat4x4f& transform );
 	void						Update( CommandList* cmdList );
 	void						Destroy() override;
 

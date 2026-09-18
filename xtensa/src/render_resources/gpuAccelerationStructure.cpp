@@ -214,10 +214,10 @@ void GpuAccelerationStructure::BuildPendingGeometry( CommandList* cmdList )
 }
 
 
-void GpuAccelerationStructure::UpdateSurfaceInstance( uint32_t surfaceUploadId, uint32_t materialId, const mat4x4f& transform )
+void GpuAccelerationStructure::UpdateSurfaceInstance( uint32_t surfaceUploadId, uint32_t materialId, uint32_t diffuseIblCubeId, uint32_t envCubeId, const mat4x4f& transform )
 {
 	if ( surfaceUploadId < static_cast<uint32_t>( m_blasEntries.size() ) ) {
-		m_pendingInstances.push_back( { surfaceUploadId, materialId, transform } );
+		m_pendingInstances.push_back( { surfaceUploadId, materialId, diffuseIblCubeId, envCubeId, transform } );
 	}
 }
 
@@ -256,9 +256,11 @@ void GpuAccelerationStructure::Update( CommandList* cmdList )
 		inst.accelerationStructureReference = GetBlasDeviceAddress( src.surfId );
 
 		surfaceInfos[ i ].vertexOffset = blas.vertexOffset;
-		surfaceInfos[ i ].firstIndex   = blas.firstIndex;
-		surfaceInfos[ i ].materialId   = src.materialId;
-		surfaceInfos[ i ].pad0         = 0;
+		surfaceInfos[ i ].firstIndex = blas.firstIndex;
+		surfaceInfos[ i ].materialId = src.materialId;
+		surfaceInfos[ i ].diffuseIblCubeId = src.diffuseIblCubeId;
+		surfaceInfos[ i ].envCubeId = src.envCubeId;
+		surfaceInfos[ i ].pad0 = 0;
 	}
 
 	// Rebuilt every frame
@@ -406,7 +408,7 @@ void GpuAccelerationStructure::Destroy()
 void GpuAccelerationStructure::Create( const char*, resourceLifeTime_t ) {}
 void GpuAccelerationStructure::AddGeometry( CommandList*, const rtSurfaceInfo_t& ) {}
 void GpuAccelerationStructure::BuildPendingGeometry( CommandList* ) {}
-void GpuAccelerationStructure::UpdateSurfaceInstance( uint32_t, uint32_t, const mat4x4f& ) {}
+void GpuAccelerationStructure::UpdateSurfaceInstance( uint32_t, uint32_t, uint32_t, uint32_t, const mat4x4f& ) {}
 void GpuAccelerationStructure::Update( CommandList* ) {}
 void GpuAccelerationStructure::Destroy() {}
 

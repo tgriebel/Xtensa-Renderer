@@ -347,4 +347,72 @@ void ApplySheenBrdf( const surfaceInput_t surfaceInput, lightingInput_t lighting
     brdf.Fr += sheenLobe;
 }
 
+
+float3 EvaluateDiffuseAmbient( TextureCube diffuseIBL, const surfaceInput_t surfaceInput )
+{
+    float3 kS = surfaceInput.F;
+    float3 kD = 1.0 - kS;
+    kD *= 1.0 - surfaceInput.metallic;
+
+    float3 ambientHemisphere = AMBIENT.rgb * surfaceInput.albedo; // Overriden by IBL if enabled
+    if ( globals.useDiffuseIBL )
+    {
+        const float3 irradiance = SampleCubeAuto( diffuseIBL, bilinearSamplerWrap, CubeVector( surfaceInput.N ) ).rgb;
+        ambientHemisphere = irradiance * surfaceInput.albedo;
+
+        // Based on CC IBL note in: https://google.github.io/filament/Filament.md.html
+        if ( surfaceInput.useClearCoat )
+        {
+            const float3 clearcoatF0 = float3( 0.04f, 0.04f, 0.04f );
+            const float ccNoV = saturate( dot( surfaceInput.ccNormal, surfaceInput.V ) );
+            float3 clearCoatF = surfaceInput.ccStrength * F_SchlickRoughness( ccNoV, clearcoatF0, surfaceInput.ccRoughness );
+            kD *= ( 1.0f - clearCoatF );
+        }
+
+        if ( surfaceInput.useSheen )
+        {
+            const float sheenMax = max( surfaceInput.sheenColor.r, max( surfaceInput.sheenColor.g, surfaceInput.sheenColor.b ) );
+            const float sheenScaling = 1.0f - sheenMax * 0.157f; // TODO: replace magic number with another BRDF LUT
+            kD *= sheenScaling;
+
+            const float3 sheenIrradiance = SampleCubeAuto( diffuseIBL, bilinearSamplerWrap, CubeVector( surfaceInput.N ) ).rgb;
+            kD += surfaceInput.sheenColor * sheenIrradiance;
+        }
+    }
+    kD *= ambientHemisphere;
+
+    return kD;
+}
+
+
+float3 EvaluateSpecularAmbient( TextureCube specularIBL, Texture2D brdfLUT, const surfaceInput_t surfaceInput )
+{
+    float3 specular = float3( 0.0f, 0.0f, 0.0f );
+    if ( globals.useSpecularIBL )
+    {
+        const float3 R = reflect( -surfaceInput.V, surfaceInput.N );
+        const int MipLevels = (int)GetTextureLevelsCube( specularIBL ) - 1;
+        const float3 specIBL = specularIBL.SampleLevel( bilinearSamplerWrap, CubeVector( R ), surfaceInput.roughness * MipLevels ).rgb;
+
+        const float2 envBRDF = brdfLUT.SampleLevel( bilinearSamplerClampEdge, float2( surfaceInput.NoV, surfaceInput.roughness ), 0.0f ).xy;
+        specular = specIBL * ( surfaceInput.F * envBRDF.x + envBRDF.y );
+
+        // Based on CC IBL note in: https://google.github.io/filament/Filament.md.html
+        if ( surfaceInput.useClearCoat )
+        {
+            const float ccNoV = saturate( dot( surfaceInput.ccNormal, surfaceInput.V ) );
+
+            const float3 ccR = reflect( -surfaceInput.V, surfaceInput.ccNormal );
+            const float3 ccSpecIBL = specularIBL.SampleLevel( bilinearSamplerWrap, CubeVector( ccR ), surfaceInput.ccRoughness * MipLevels ).rgb;
+
+            const float3 clearcoatF0 = float3( 0.04f, 0.04f, 0.04f );
+            float3 clearCoatF = surfaceInput.ccStrength * F_SchlickRoughness( ccNoV, clearcoatF0, surfaceInput.ccRoughness );
+
+            specular *= ( 1.0f - clearCoatF ) * ( 1.0f - clearCoatF );
+            specular += clearCoatF * ccSpecIBL;
+        }
+    }
+    return specular;
+}
+
 #endif // LIGHT_HLSL_H

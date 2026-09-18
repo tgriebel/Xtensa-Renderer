@@ -309,6 +309,17 @@ float4 SampleTex2DAuto( Texture2D tex, SamplerState samp, float2 uv )
 }
 
 
+// Used to get around texture derivative requirement
+float4 SampleCubeAuto( TextureCube tex, SamplerState samp, float3 dir )
+{
+#ifdef USE_RT
+	return tex.SampleLevel( samp, dir, 0.0f ); // TODO: MIP-calculation for cube maps
+#else
+	return tex.Sample( samp, dir );
+#endif
+}
+
+
 float4 SampleTexture( const Texture2D textures[], SamplerState sampler, const gpuMaterial_t material, const int materialTextureSlot, const float2 uv[ 2 ] )
 {
 	const int textureUploadId = material.textureId[ materialTextureSlot ];

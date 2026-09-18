@@ -121,8 +121,8 @@ void closesthit_main( inout hitPayload_t payload, in BuiltInTriangleIntersection
         Lo += ( brdf.Fd + brdf.Fr ) * lightingInput.Li * lightingInput.NoL;
     }
 
-    // Flat ambient approximation until IBL is wired up for RT.
-    const float3 ambient = surfaceInput.albedo * 0.03f;
+    const float3 diffuseAmbient = EvaluateDiffuseAmbient( globalCubemaps[ surf.diffuseIblCubeId ], surfaceInput );
+    const float3 specularAmbient = EvaluateSpecularAmbient( globalCubemaps[ surf.envCubeId ], globalTextures[ globals.brdfLutId ], surfaceInput );
 
-    payload.color = float4( Lo + ambient + surfaceInput.emissive, 1.0f );
+    payload.color = float4( Lo + diffuseAmbient + specularAmbient + surfaceInput.emissive, 1.0f );
 }
