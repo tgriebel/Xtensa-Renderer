@@ -139,7 +139,11 @@
     },
 	{
       "name": "RtRayGen",
-      "rgen": "rtPrimaryRay"
+      "rgen": "rtSceneViewOpaque"
+    },
+	{
+      "name": "RtReflectionsRayGen",
+      "rgen": "rtReflections"
     },
 	{
       "name": "RtIntersection",
@@ -151,7 +155,7 @@
     },
 	{
       "name": "RtDefaultHitGroup",
-      "rchit": "rtSceneViewOpaque",
+      "rchit": "rtLitNonRecursive",
       "rahit": "rtAnyHit"
     },
 	{

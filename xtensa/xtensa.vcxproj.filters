@@ -699,7 +699,10 @@
     <FxCompile Include="shaders\downsampleMin.ps.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\rtPrimaryRay.rgen.hlsl">
+    <FxCompile Include="shaders\rtSceneViewOpaque.rgen.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\rtReflections.rgen.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\dofBokehSample.ps.hlsl">
@@ -717,7 +720,7 @@
     <FxCompile Include="shaders\rtAnyHit.rahit.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\rtSceneViewOpaque.rchit.hlsl">
+    <FxCompile Include="shaders\rtLitNonRecursive.rchit.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\rtIntersection.rint.hlsl">
