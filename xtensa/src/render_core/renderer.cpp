@@ -418,12 +418,15 @@ void Renderer::CommitViews( const Scene* scene )
 
 	const renderConfig_t& config = renderContext.config;
 
+	Image* skyboxImage = scene->GetSkyBoxImage();
+
 	// Main view
 	{
 		renderViews[ 0 ]->SetViewRect( 0, 0, width, height );
 		renderViews[ 0 ]->SetCamera( *scene->mainCamera );
 
 		renderViews[ 0 ]->numLights = lightCount;
+		renderViews[ 0 ]->skyboxImage = skyboxImage;
 		for ( uint32_t lightIx = 0; lightIx < lightCount; ++lightIx ) {
 			renderViews[ 0 ]->lights[ lightIx ] = lightIx;
 		}
@@ -436,6 +439,7 @@ void Renderer::CommitViews( const Scene* scene )
 			}
 
 			renderViews[ 1 ]->numLights = lightCount;
+			renderViews[ 1 ]->skyboxImage = skyboxImage;
 			for ( uint32_t lightIx = 0; lightIx < lightCount; ++lightIx ) {
 				renderViews[ 1 ]->lights[ lightIx ] = lightIx;
 			}

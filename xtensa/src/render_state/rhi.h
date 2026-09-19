@@ -381,7 +381,7 @@ static VkShaderStageFlagBits vk_GetStageFlags( const bindStateFlag_t flags )
 
 	uint32_t vkFlags = 0;
 
-	while ( bitMask < IMAGE_ASPECT_ALL )
+	while ( bitMask <= BIND_STATE_INTERSECTION )
 	{
 		uint32_t bitFlag = flags & bitMask;
 		switch ( bitFlag )

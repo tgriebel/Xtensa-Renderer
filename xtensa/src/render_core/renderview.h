@@ -100,6 +100,7 @@ public:
 		m_committed = false;
 
 		numLights = 0;
+		skyboxImage = nullptr;
 		memset( drawGroupOffset, 0, sizeof( drawGroupOffset ) );
 
 		for( uint32_t multiViewIndex = 0; multiViewIndex < MaxMultiViews; ++multiViewIndex )
@@ -198,6 +199,7 @@ public:
 
 	uint32_t				lights[ MaxLights ];
 	uint32_t				numLights;
+	Image*					skyboxImage;
 	uint32_t				drawGroupOffset[ DRAWPASS_COUNT ];
 	DrawPass*				passes[ MaxMultiViews ][ DRAWPASS_COUNT ];
 	DrawGroup				drawGroup[ DRAWPASS_COUNT ];

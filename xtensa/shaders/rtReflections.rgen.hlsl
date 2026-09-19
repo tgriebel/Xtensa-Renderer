@@ -3,8 +3,7 @@
 #include "rtGlobals.h"
 #include "util.h"
 
-GLOBALS_LAYOUT( 0, 0 )
-VIEW_LAYOUT( 0, 1 )
+GLOBAL_BINDS( 0 )
 RT_ACCELERATION_STRUCTURE( 1, 0, tlas )
 RT_OUTPUT( 1, 1, rtOutput )
 CODE_IMAGE_LAYOUT( 1, 6, Texture2D )
@@ -29,7 +28,13 @@ void RayGen()
     // Sky
     if ( depth <= 0.0f )
     {
-        rtOutput[ launchIndex ] = float4( 0.0f, 0.0f, 0.0f, 1.0f );
+        const float4 viewTarget = mul( view.invProjMat, float4( ndc.x, ndc.y, 1.0f, 1.0f ) );
+        const float3 camDir = normalize( viewTarget.xyz / viewTarget.w );
+        const float3 worldDir = normalize( mul( camDir, (float3x3)view.viewMat ) );
+
+        const float3 skyColor = globalCubemaps[ view.skyboxCubeId ].SampleLevel( bilinearSamplerWrap, CubeVector( worldDir ), 0.0f ).rgb;
+        rtOutput[ launchIndex ] = float4( SrgbToLinear( skyColor ), 1.0f );
+        //rtOutput[ launchIndex ] = float4( 1.0f, 0.0f, 0.0f, 1.0f );
         return;
     }
 

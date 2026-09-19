@@ -28,19 +28,19 @@ BINDING( sourceCubeImages,		IMAGE_CUBE,			1,						BIND_STATE_PS );
 // Raster Resources
 BINDING( viewBuffer,					READ_BUFFER,		1,						BIND_STATE_ALL );
 BINDING( modelBuffer,					READ_BUFFER,		1,						BIND_STATE_ALL_GFX );
-BINDING( image2DArray,					IMAGE_2D_ARRAY,		MaxImageDescriptors,	BIND_STATE_ALL_GFX );
-BINDING( imageCubeArray,				IMAGE_CUBE_ARRAY,	MaxImageDescriptors,	BIND_STATE_ALL_GFX );
-BINDING( materialBuffer,				READ_BUFFER,		1,						BIND_STATE_ALL_GFX );
-BINDING( lightBuffer,					READ_BUFFER,		1,						BIND_STATE_ALL_GFX );
+BINDING( image2DArray,					IMAGE_2D_ARRAY,		MaxImageDescriptors,	BIND_STATE_ALL );
+BINDING( imageCubeArray,				IMAGE_CUBE_ARRAY,	MaxImageDescriptors,	BIND_STATE_ALL );
+BINDING( materialBuffer,				READ_BUFFER,		1,						BIND_STATE_ALL );
+BINDING( lightBuffer,					READ_BUFFER,		1,						BIND_STATE_ALL );
 BINDING( passBuffer,					READ_BUFFER,		1,						BIND_STATE_ALL_GFX );
 BINDING( imageCodeArray,				IMAGE_2D_ARRAY,		MaxCodeImages,			BIND_STATE_ALL_GFX );
 BINDING( imageCodeCubeArray,			IMAGE_CUBE_ARRAY,	MaxCodeImages,			BIND_STATE_ALL_GFX );
 BINDING( imageStencil,					IMAGE_2D,			1,						BIND_STATE_ALL_GFX );
-BINDING( nearestSampler,				IMAGE_SAMPLER,		1,						BIND_STATE_ALL_GFX );
-BINDING( bilinearSamplerWrap,			IMAGE_SAMPLER,		1,						BIND_STATE_ALL_GFX );
-BINDING( bilinearSamplerClampEdge,		IMAGE_SAMPLER,		1,						BIND_STATE_ALL_GFX );
-BINDING( bilinearSamplerClampBorder,	IMAGE_SAMPLER,		1,						BIND_STATE_ALL_GFX );
-BINDING( depthShadowSampler,			IMAGE_SAMPLER,		1,						BIND_STATE_ALL_GFX );
+BINDING( nearestSampler,				IMAGE_SAMPLER,		1,						BIND_STATE_ALL );
+BINDING( bilinearSamplerWrap,			IMAGE_SAMPLER,		1,						BIND_STATE_ALL );
+BINDING( bilinearSamplerClampEdge,		IMAGE_SAMPLER,		1,						BIND_STATE_ALL );
+BINDING( bilinearSamplerClampBorder,	IMAGE_SAMPLER,		1,						BIND_STATE_ALL );
+BINDING( depthShadowSampler,			IMAGE_SAMPLER,		1,						BIND_STATE_ALL );
 
 // Ray-tracing Resources
 BINDING( tlas,							ACCELERATION_STRUCTURE,	1,					BIND_STATE_ALL_RTX );

@@ -136,4 +136,6 @@ public:
 	const Entity*	FindEntity( const uint32_t entityIx ) const ;
 	Entity*			FindEntity( const char* name );
 	const Entity*	FindEntity( const char* name ) const;
+
+	Image*			GetSkyBoxImage() const;
 };

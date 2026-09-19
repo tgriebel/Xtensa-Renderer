@@ -2,6 +2,7 @@
 #include "renderview.h"
 #include "../render_binding/bindings.h"
 #include "../scene/entity.h"
+#include "gpuImage.h"
 
 #if defined( USE_IMGUI )
 #include "../../../external/imgui/imgui.h"
@@ -275,6 +276,7 @@ void RenderView::FrameBegin( const drawPass_t begin, const drawPass_t end )
 			viewBuffer.viewOrigin = GetViewOrigin();
 			viewBuffer.dimensions = vec4f( (float)frameSize[ 0 ], (float)frameSize[ 1 ], 1.0f / frameSize[ 0 ], 1.0f / frameSize[ 1 ] );
 			viewBuffer.numLights = numLights;
+			viewBuffer.skyboxCubeId = ( skyboxImage != nullptr ) ? skyboxImage->gpuImage->GetId() : 0;
 
 			mat4x4f invCheck = viewBuffer.invProjMat * viewBuffer.projMat;
 			assert( IsIdentity( invCheck, 0.001f ) );

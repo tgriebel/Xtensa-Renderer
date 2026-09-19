@@ -209,6 +209,7 @@ struct gpuView_t
 	float4		dimensions;
 	float3		viewOrigin;
 	uint		numLights;
+	uint		skyboxCubeId;
 };
 
 

@@ -3,6 +3,7 @@
 #include <gfxcore/primitives/ray.h>
 #include "entity.h"
 #include "../render_core/log.h"
+#include "../globals/assetDefs.h"
 
 void Scene::CreateEntityBounds( const hdl_t modelHdl, Entity& entity )
 {
@@ -86,4 +87,11 @@ const Entity* Scene::FindEntity( const char* name ) const
 		}
 	}
 	return nullptr;
+}
+
+
+Image* Scene::GetSkyBoxImage() const
+{
+	Asset<Image>* imageAsset = ImageLib().Find( envMap.c_str() );
+	return ( imageAsset != nullptr ) ? &imageAsset->Get() : nullptr;
 }
