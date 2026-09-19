@@ -8,6 +8,8 @@
 #include "../globals/assetDefs.h"
 #include "../render_resources/gpuAccelerationStructure.h"
 
+extern renderConstants_t rc;
+
 
 std::string RayTracingTask::AsString() const
 {
@@ -22,11 +24,16 @@ void RayTracingTask::Init( const rayTracingTaskCreateInfo_t& info )
 	m_context = info.context;
 	m_resources = info.resources;
 	m_name = info.name;
-	m_image = info.image;
 	m_tlas = info.tlas;
 	m_geometry = info.geometry;
 	m_rtOutputImage = info.rtOutputImage;
 	m_viewId = info.viewId;
+
+	m_codeImages.SetRenderContext( m_context );
+	m_codeImages.Resize( MaxRtCodeImages );
+	for ( uint32_t i = 0; i < MaxRtCodeImages; ++i ) {
+		m_codeImages.BindIndex( i, info.codeImages[ i ] != nullptr ? info.codeImages[ i ] : rc.defaultImage );
+	}
 
 	m_shaderConstantsByteSize = 0;
 	if ( ( info.constants != nullptr ) && ( info.constantsByteSize > 0 ) )
@@ -60,14 +67,16 @@ void RayTracingTask::FrameBegin()
 	if ( m_rtOutputImage != nullptr ) {
 		m_parms->Bind( bind_rtOutputImage, ShaderAttachment( m_rtOutputImage ) );
 	}
-	if ( m_geometry != nullptr ) {
-		m_parms->Bind( bind_rtVertexBuffer,  ShaderAttachment( &m_geometry->vb ) );
-		m_parms->Bind( bind_rtIndexBuffer,   ShaderAttachment( &m_geometry->ib ) );
+	if ( m_geometry != nullptr )
+	{
+		m_parms->Bind( bind_rtVertexBuffer, ShaderAttachment( &m_geometry->vb ) );
+		m_parms->Bind( bind_rtIndexBuffer, ShaderAttachment( &m_geometry->ib ) );
 	}
 	if ( m_tlas != nullptr && m_tlas->GetSurfaceInfoBuffer()->GetMaxSize() > 0 ) {
 		m_parms->Bind( bind_rtSurfaceInfos, ShaderAttachment( m_tlas->GetSurfaceInfoBuffer() ) );
 	}
 	m_parms->Bind( bind_lightBuffer, ShaderAttachment( &m_resources->lightParms ) );
+	m_parms->Bind( bind_rtCodeImageArray, ShaderAttachment( &m_codeImages ) );
 #endif
 	GpuTask::OnFrameBegin();
 }
@@ -78,16 +87,15 @@ void RayTracingTask::Execute( CommandList& cmdContext )
 #ifdef USE_VULKAN_RTX
 	cmdContext.MarkerBeginRegion( m_name.c_str(), ColorToVector( ColorLGrey ) );
 
-	assert( m_image != nullptr );
-	const uint32_t width  = m_image->info.width;
-	const uint32_t height = m_image->info.height;
+	assert( m_rtOutputImage != nullptr );
+	const uint32_t width  = m_rtOutputImage->info.width;
+	const uint32_t height = m_rtOutputImage->info.height;
 
-	// Build push-constant block: [baseConstants_t | user constants]
 	uint8_t pushData[ MaxCustomPushConstantBytes ] = {};
 
 	baseConstants_t& base = *reinterpret_cast<baseConstants_t*>( pushData );
 	base.viewId = static_cast<uint32_t>( m_viewId );
-	base.width  = width;
+	base.width = width;
 	base.height = height;
 
 	if ( m_shaderConstantsByteSize > 0 ) {

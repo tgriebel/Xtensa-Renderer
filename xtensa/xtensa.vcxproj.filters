@@ -228,6 +228,7 @@
     <ClCompile Include="src\render_resources\aliasableImageHeap.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
+    <ClCompile Include="src\render_core\log.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -500,6 +501,7 @@
     <ClInclude Include="src\globals\renderConfig.h">
       <Filter>Globals</Filter>
     </ClInclude>
+    <ClInclude Include="src\render_core\log.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -699,12 +701,6 @@
     <FxCompile Include="shaders\downsampleMin.ps.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\rtSceneViewOpaque.rgen.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\rtReflections.rgen.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="shaders\dofBokehSample.ps.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
@@ -720,10 +716,16 @@
     <FxCompile Include="shaders\rtAnyHit.rahit.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\rtIntersection.rint.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
     <FxCompile Include="shaders\rtLitNonRecursive.rchit.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\rtIntersection.rint.hlsl">
+    <FxCompile Include="shaders\rtReflections.rgen.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\rtSceneViewOpaque.rgen.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

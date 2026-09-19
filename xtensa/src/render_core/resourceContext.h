@@ -71,6 +71,7 @@ public:
 	Image*					currentLum;
 	Image*					depthStencilResolvedImage;
 	Image*					rtOutputImage;
+	Image*					rtReflectionsOutputImage;
 	Image					gpuOutput2D[ MaxFrameImages ];
 
 	// Data images
@@ -108,6 +109,7 @@ public:
 		currentLum = NextImage();
 		depthStencilResolvedImage = NextImage();
 		rtOutputImage = NextImage();
+		rtReflectionsOutputImage = NextImage();
 	}
 
 	uint32_t OutputImageCount()

@@ -5,10 +5,13 @@
 #include "../render_core/renderer.h"
 #include "../render_core/renderUploader.h"
 #include "../render_resources/imageView.h"
+#include "../render_resources/imageArray.h"
 #include "../render_resources/gpuAccelerationStructure.h"
 
 class ShaderBindParms;
 class RayTracingTask;
+
+static const uint32_t MaxRtCodeImages = 4;
 
 struct rayTracingTaskCreateInfo_t
 {
@@ -18,14 +21,14 @@ struct rayTracingTaskCreateInfo_t
 	const char*					hitGroupProgName;
 	RenderContext*				context;
 	ResourceContext*			resources;
-	const Image*				image;				// Output image. Determines trace dimensions
 
 	uint64_t					bindSetId;			// Bindset id
 	uint64_t					viewId;				// View id
 
 	const GpuAccelerationStructure* tlas;			// Scene TLAS
-	const GeometryContext*		geometry;			// Scene VB/IB for closest-hit attribute fetch
+	const GeometryContext*		geometry;			// Needed for VB/IB
 	const Image*				rtOutputImage;		// Storage image written by the rgen shader
+	const Image*				codeImages[ MaxRtCodeImages ] = {};	// Optional. Input images for shader that are independent from global texture pool (static for a given frame)
 
 	const void*					constants;			// Optional, Custom shader constants pushed at execute time
 	uint32_t					constantsByteSize;	// Size in bytes
@@ -53,14 +56,13 @@ private:
 
 	std::string						m_name;
 
-	const Image*					m_image = nullptr;
-
 	hdl_t							m_pipelineHdl;
 	uint64_t						m_viewId;
 
 	const GpuAccelerationStructure*	m_tlas = nullptr;
 	const GeometryContext*			m_geometry = nullptr;
 	const Image*					m_rtOutputImage = nullptr;
+	ImageArray						m_codeImages;
 
 	void Init( const rayTracingTaskCreateInfo_t& info );
 	void Shutdown();

@@ -1082,29 +1082,74 @@ void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderCont
 
 		schedule->Link( new TransitionImageTask(  resources->rtOutputImage, gpuImageStateFlags_t::GPU_IMAGE_NONE, gpuImageStateFlags_t::GPU_IMAGE_STORAGE ) );
 
-		rayTracingTaskCreateInfo_t rtInfo{};
-		rtInfo.name = "PrimaryRayTrace";
-		rtInfo.rgenProgName = "RtRayGen";
-		rtInfo.missProgName = "RtMiss";
-		rtInfo.hitGroupProgName = "RtDefaultHitGroup";
-		rtInfo.context = renderContext;
-		rtInfo.resources = resources;
-		rtInfo.image = resources->rtOutputImage;
-		rtInfo.bindSetId = bindset_rayTracing;
-		rtInfo.tlas = resources->tlas;
-		rtInfo.geometry = geometry;
-		rtInfo.rtOutputImage = resources->rtOutputImage;
-		rtInfo.viewId = viewContext->renderViews[ 0 ]->GetViewBufferUploadId();
-		rtInfo.constants = nullptr;
-		rtInfo.constantsByteSize = 0;
+		// RT primary ray trace task (for debugging)
+		{
+			rayTracingTaskCreateInfo_t rtInfo{};
+			rtInfo.name = "PrimaryRayTrace";
+			rtInfo.rgenProgName = "RtRayGen";
+			rtInfo.missProgName = "RtMiss";
+			rtInfo.hitGroupProgName = "RtDefaultHitGroup";
+			rtInfo.context = renderContext;
+			rtInfo.resources = resources;
+			rtInfo.bindSetId = bindset_rayTracing;
+			rtInfo.tlas = resources->tlas;
+			rtInfo.geometry = geometry;
+			rtInfo.rtOutputImage = resources->rtOutputImage;
+			rtInfo.viewId = viewContext->renderViews[ 0 ]->GetViewBufferUploadId();
+			rtInfo.constants = nullptr;
+			rtInfo.constantsByteSize = 0;
 
-		schedule->Link( new RayTracingTask( rtInfo ) );
+			// schedule->Link( new RayTracingTask( rtInfo ) );
+		}
+
+		// RT reflections output image
+		{
+			imageInfo_t info{};
+			info.width = displayWidth;
+			info.height = displayHeight;
+			info.mipLevels = 1;
+			info.layers = 1;
+			info.subsamples = IMAGE_SMP_1;
+			info.fmt = IMAGE_FMT_RGBA_32;
+			info.type = IMAGE_TYPE_2D;
+			info.tiling = IMAGE_TILING_MORTON;
+
+			resources->rtReflectionsOutputImage->Create(
+				info,
+				"FB_rtReflectionsOutput", GPU_IMAGE_STORAGE | GPU_IMAGE_RW, resourceLifeTime_t::RESIZE
+			);
+		}
+
+		schedule->Link( new TransitionImageTask(  resources->rtReflectionsOutputImage, gpuImageStateFlags_t::GPU_IMAGE_NONE, gpuImageStateFlags_t::GPU_IMAGE_STORAGE ) );
+
+		// RT reflections ray trace task
+		{
+			rayTracingTaskCreateInfo_t rtReflectionsInfo{};
+			rtReflectionsInfo.name = "ReflectionsRayTrace";
+			rtReflectionsInfo.rgenProgName = "RtReflectionsRayGen";
+			rtReflectionsInfo.missProgName = "RtMiss";
+			rtReflectionsInfo.hitGroupProgName = "RtDefaultHitGroup";
+			rtReflectionsInfo.context = renderContext;
+			rtReflectionsInfo.resources = resources;
+			rtReflectionsInfo.bindSetId = bindset_rayTracing;
+			rtReflectionsInfo.tlas = resources->tlas;
+			rtReflectionsInfo.geometry = geometry;
+			rtReflectionsInfo.rtOutputImage = resources->rtReflectionsOutputImage;
+			rtReflectionsInfo.codeImages[ 0 ] = resources->gBufferLayerResolvedImage0;
+			rtReflectionsInfo.codeImages[ 1 ] = resources->depthStencilResolvedImage;
+			rtReflectionsInfo.viewId = viewContext->renderViews[ 0 ]->GetViewBufferUploadId();
+			rtReflectionsInfo.constants = nullptr;
+			rtReflectionsInfo.constantsByteSize = 0;
+
+			schedule->Link( new RayTracingTask( rtReflectionsInfo ) );
+		}
 	}
 #endif
 
 	schedule->Link( new RenderTask( viewContext->renderViews[ 0 ], DRAWPASS_OPAQUE_COLOR_BEGIN, DRAWPASS_MAIN_END ) );
 
-	if( config.useCubeViews ) {
+	if( config.useCubeViews )
+	{
 		schedule->Link( new RenderTask( viewContext->renderViews[ 1 ], DRAWPASS_MAIN_BEGIN, DRAWPASS_MAIN_END ) );
 
 		if( config.computeDiffuseIbl )

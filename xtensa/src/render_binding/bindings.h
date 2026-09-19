@@ -48,6 +48,7 @@ BINDING( rtOutputImage,					WRITE_IMAGE_BUFFER,		1,					BIND_STATE_RAYGEN );
 BINDING( rtVertexBuffer,				READ_BUFFER,			1,					BIND_STATE_ALL_RTX );
 BINDING( rtIndexBuffer,					READ_BUFFER,			1,					BIND_STATE_ALL_RTX );
 BINDING( rtSurfaceInfos,				READ_BUFFER,			1,					BIND_STATE_ALL_RTX );
+BINDING( rtCodeImageArray,				IMAGE_2D_ARRAY,			MaxCodeImages,		BIND_STATE_RAYGEN );
 
 static const ShaderBinding g_globalBindings[] =
 {
@@ -118,5 +119,6 @@ static const ShaderBinding g_rtBindings[] =
 	BINDING_NAME( rtIndexBuffer ),
 	BINDING_NAME( rtSurfaceInfos ),
 	BINDING_NAME( lightBuffer ),
+	BINDING_NAME( rtCodeImageArray ),
 };
 const uint64_t bindset_rayTracing = Hash( "bindset_rayTracing" );

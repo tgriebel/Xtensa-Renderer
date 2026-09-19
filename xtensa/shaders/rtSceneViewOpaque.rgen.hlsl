@@ -25,10 +25,10 @@ void RayGen()
     const float3 worldDir = normalize( mul( camDir, (float3x3)view.viewMat ) );
 
     RayDesc ray;
-    ray.Origin    = view.viewOrigin;
+    ray.Origin = view.viewOrigin;
     ray.Direction = worldDir;
-    ray.TMin      = 0.001f;
-    ray.TMax      = 10000.0f;
+    ray.TMin = 0.001f;
+    ray.TMax = 10000.0f;
 
     // projMat[1][1] == 1 / tan(fovY/2) for a standard perspective projection
     const float verticalFovRadians = 2.0f * atan( 1.0f / view.projMat[ 1 ][ 1 ] );
