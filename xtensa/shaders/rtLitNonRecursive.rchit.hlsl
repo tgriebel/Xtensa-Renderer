@@ -63,7 +63,7 @@ void closesthit_main( inout hitPayload_t payload, in BuiltInTriangleIntersection
     const gpuMaterial_t material = materials[ surf.materialId ];
     const surfaceInput_t surfaceInput = CalculateSurfaceInput( globals, view, material, surfaceSample );
 
-    // Simplified lighting loop without IBL and shadows
+    // Simplified lighting loop without shadows
     // Eventually this can be combined with lit.ps.hlsl
     float3 Lo = float3( 0.0f, 0.0f, 0.0f );
     for ( int i = 0; i < (int)view.numLights; ++i )
