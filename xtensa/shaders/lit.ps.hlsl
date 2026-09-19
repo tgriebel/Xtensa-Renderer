@@ -94,13 +94,17 @@ psOutput_t PSMain( vsToPsInterpolators input )
 #endif
     
     Texture2D ssaoImage = localTextures[ 3 ]; // FIXME: Index should come from globals and determined CPU-side
-    
+    Texture2D rtReflectionImage = localTextures[ 4 ]; // FIXME: Index should come from globals and determined CPU-side
+
     const float ssaoSample = ssaoImage.Sample( bilinearSamplerClampEdge, pixelUV ).r;
+    const float3 rtReflectionSample = rtReflectionImage.Sample( bilinearSamplerClampEdge, pixelUV ).rgb;
 
     const float3 kD = EvaluateDiffuseAmbient( globalCubemaps[ diffuseIBL ], surfaceInput );
     const float3 specularAmbient = EvaluateSpecularAmbient( globalCubemaps[ specularIBL ], globalTextures[ brdfLutId ], surfaceInput );
+    //const float3 specular = ( surfaceInput.roughness == 0.0f ) ? rtReflectionSample : specularAmbient;
+    const float3 specular = specularAmbient;
 
-    const float3 ambient = ( kD * ssaoSample + specularAmbient ) * surfaceInput.ao;
+    const float3 ambient = ( kD * ssaoSample + specular ) * surfaceInput.ao;
 
     float4 outColor;
 	outColor.rgb = Lo + ambient + surfaceInput.emissive;

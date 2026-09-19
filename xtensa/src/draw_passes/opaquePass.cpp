@@ -19,7 +19,7 @@ void OpaquePass::Init( RenderContext* renderContext, FrameBuffer* frameBuffer )
 	codeImages.SetRenderContext( renderContext );
 	codeCubeImages.SetRenderContext( renderContext );
 
-	codeImages.Resize( 4 );
+	codeImages.Resize( 5 );
 
 	SetFrameBuffer( frameBuffer );
 }
@@ -31,6 +31,7 @@ void OpaquePass::FrameBegin( const ResourceContext* resources )
 	codeImages.BindIndex( 1, resources->shadowMapImage[ 1 ] );
 	codeImages.BindIndex( 2, resources->shadowMapImage[ 2 ] );
 	codeImages.BindIndex( 3, resources->ssaoBlurImage );
+	codeImages.BindIndex( 4, resources->rtReflectionsOutputImage );
 
 	parms->Bind( BINDING_NAME( lightBuffer ),			&resources->lightParms );
 	parms->Bind( BINDING_NAME( imageCodeArray ),		&codeImages );
