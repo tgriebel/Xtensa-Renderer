@@ -101,8 +101,8 @@ psOutput_t PSMain( vsToPsInterpolators input )
 
     const float3 kD = EvaluateDiffuseAmbient( globalCubemaps[ diffuseIBL ], surfaceInput );
     const float3 specularAmbient = EvaluateSpecularAmbient( globalCubemaps[ specularIBL ], globalTextures[ brdfLutId ], surfaceInput );
-    //const float3 specular = ( surfaceInput.roughness == 0.0f ) ? rtReflectionSample : specularAmbient;
-    const float3 specular = specularAmbient;
+    const float3 specular = ( surfaceInput.roughness == 0.0f ) ? rtReflectionSample : specularAmbient;
+    //const float3 specular = specularAmbient;
 
     const float3 ambient = ( kD * ssaoSample + specular ) * surfaceInput.ao;
 

@@ -10,7 +10,8 @@ CODE_IMAGE_LAYOUT( 1, 6, Texture2D )
 RT_PUSH_CONSTANTS
 
 // localTextures[0] = resolved pre-pass G-buffer (outColor1.ba = oct-encoded view-space normal)
-// localTextures[1] = resolved depth buffer
+// localTextures[1] = resolved depth buffer (used only for the sky/no-surface test)
+// localTextures[2] = resolved pre-pass world position (outColor2.rgb, written directly — no depth reconstruction)
 
 [shader( "raygeneration" )]
 void RayGen()
@@ -38,9 +39,7 @@ void RayGen()
         return;
     }
 
-    float4 viewPosH = mul( view.invProjMat, float4( ndc.x, ndc.y, depth, 1.0f ) );
-    viewPosH /= viewPosH.w;
-    const float3 worldPos = view.viewOrigin + mul( viewPosH.xyz, (float3x3)view.viewMat );
+    const float3 worldPos = localTextures[ 2 ].Load( int3( launchIndex, 0 ) ).rgb;
 
     const float3 normalVS = OctDecode( localTextures[ 0 ].Load( int3( launchIndex, 0 ) ).ba );
     const float3 N = normalize( mul( normalVS, (float3x3)view.viewMat ) );
