@@ -49,6 +49,7 @@ enum imageTiling_t : uint8_t
 };
 
 
+// Explicit enums to prevent careless reordering
 enum imageFmt_t : uint8_t
 {
 	IMAGE_FMT_UNKNOWN			= 0,
@@ -72,11 +73,18 @@ enum imageFmt_t : uint8_t
 	IMAGE_FMT_RGB_32			= 18,
 	IMAGE_FMT_RGBA_32			= 19,
 	IMAGE_FMT_R11G11B10_US		= 20, // Unsigned
-	IMAGE_FMT_RG_16_UINT		= 21, // Appended at the end to preserve legacy files
-	IMAGE_FMT_RG_32_UINT		= 22, // Appended at the end to preserve legacy files
-	IMAGE_FMT_COUNT				= 23,
+	IMAGE_FMT_RG_16_UINT		= 21,
+	IMAGE_FMT_RG_32_UINT		= 22,
+	IMAGE_FMT_R_8_UNORM			= 23,
+	IMAGE_FMT_RG_8_UNORM		= 24,
+	IMAGE_FMT_R_16_UNORM		= 25,
+	IMAGE_FMT_RG_16_SNORM		= 26,
+	IMAGE_FMT_R_32_UINT			= 27,
+	IMAGE_FMT_RGBA_32_UINT		= 28,
+	IMAGE_FMT_A2B10G10R10_UNORM	= 29,
+	IMAGE_FMT_COUNT				= 30,
 };
-static_assert( IMAGE_FMT_COUNT == 23, "Reordering will break content" );
+static_assert( IMAGE_FMT_COUNT == 30, "Reordering will break content" );
 
 
 enum imageSamples_t : uint8_t
@@ -176,29 +184,48 @@ struct colorAspectTableEntry_t
 
 static const colorAspectTableEntry_t s_formatAspectTable[] =
 {
-	{ IMAGE_FMT_UNKNOWN,		IMAGE_ASPECT_NONE		},
-	{ IMAGE_FMT_R_8,			IMAGE_ASPECT_COLOR_FLAG	},
-	{ IMAGE_FMT_R_16,			IMAGE_ASPECT_COLOR_FLAG	},
-	{ IMAGE_FMT_R_32,			IMAGE_ASPECT_COLOR_FLAG	},
-	{ IMAGE_FMT_D_16,			IMAGE_ASPECT_DEPTH_FLAG	},
-	{ IMAGE_FMT_D24S8,			imageAspectFlags_t( IMAGE_ASPECT_DEPTH_FLAG | IMAGE_ASPECT_STENCIL_FLAG ) },
-	{ IMAGE_FMT_D_32,			IMAGE_ASPECT_DEPTH_FLAG	},
-	{ IMAGE_FMT_D_32_S8,		imageAspectFlags_t( IMAGE_ASPECT_DEPTH_FLAG | IMAGE_ASPECT_STENCIL_FLAG ) },
-	{ IMAGE_FMT_RGB_8,			IMAGE_ASPECT_COLOR_FLAG	},
-	{ IMAGE_FMT_RGBA_8,			IMAGE_ASPECT_COLOR_FLAG	},
-	{ IMAGE_FMT_RGBA_8_UNORM,	IMAGE_ASPECT_COLOR_FLAG	},
-	{ IMAGE_FMT_ABGR_8,			IMAGE_ASPECT_COLOR_FLAG	},
-	{ IMAGE_FMT_BGR_8,			IMAGE_ASPECT_COLOR_FLAG	},
-	{ IMAGE_FMT_BGRA_8,			IMAGE_ASPECT_COLOR_FLAG	},
-	{ IMAGE_FMT_RG_16,			IMAGE_ASPECT_COLOR_FLAG	},
-	{ IMAGE_FMT_RG_16_UINT,		IMAGE_ASPECT_COLOR_FLAG	},
-	{ IMAGE_FMT_RGB_16,			IMAGE_ASPECT_COLOR_FLAG	},
-	{ IMAGE_FMT_RGBA_16,		IMAGE_ASPECT_COLOR_FLAG	},
-	{ IMAGE_FMT_RG_32,			IMAGE_ASPECT_COLOR_FLAG	},
-	{ IMAGE_FMT_RG_32_UINT,		IMAGE_ASPECT_COLOR_FLAG	},
-	{ IMAGE_FMT_RGB_32,			IMAGE_ASPECT_COLOR_FLAG	},
-	{ IMAGE_FMT_RGBA_32,		IMAGE_ASPECT_COLOR_FLAG	},
-	{ IMAGE_FMT_R11G11B10_US,	IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_UNKNOWN,			IMAGE_ASPECT_NONE		},
+
+	// Depth / stencil
+	{ IMAGE_FMT_D_16,				IMAGE_ASPECT_DEPTH_FLAG	},
+	{ IMAGE_FMT_D24S8,				imageAspectFlags_t( IMAGE_ASPECT_DEPTH_FLAG | IMAGE_ASPECT_STENCIL_FLAG ) },
+	{ IMAGE_FMT_D_32,				IMAGE_ASPECT_DEPTH_FLAG	},
+	{ IMAGE_FMT_D_32_S8,			imageAspectFlags_t( IMAGE_ASPECT_DEPTH_FLAG | IMAGE_ASPECT_STENCIL_FLAG ) },
+
+	// Single channel (R)
+	{ IMAGE_FMT_R_8,				IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_R_8_UNORM,			IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_R_16,				IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_R_16_UNORM,			IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_R_32,				IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_R_32_UINT,			IMAGE_ASPECT_COLOR_FLAG	},
+
+	// Two channel (RG)
+	{ IMAGE_FMT_RG_16,				IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_RG_16_UINT,			IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_RG_16_SNORM,		IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_RG_8_UNORM,			IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_RG_32,				IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_RG_32_UINT,			IMAGE_ASPECT_COLOR_FLAG	},
+
+	// Three channel (RGB / BGR)
+	{ IMAGE_FMT_RGB_8,				IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_BGR_8,				IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_RGB_16,				IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_RGB_32,				IMAGE_ASPECT_COLOR_FLAG	},
+
+	// Four channel (RGBA / BGRA / ABGR)
+	{ IMAGE_FMT_RGBA_8,				IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_RGBA_8_UNORM,		IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_ABGR_8,				IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_BGRA_8,				IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_RGBA_16,			IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_RGBA_32,			IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_RGBA_32_UINT,		IMAGE_ASPECT_COLOR_FLAG	},
+
+	// Packed
+	{ IMAGE_FMT_R11G11B10_US,		IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_A2B10G10R10_UNORM,	IMAGE_ASPECT_COLOR_FLAG	},
 };
 static_assert( COUNTARRAY( s_formatAspectTable ) == IMAGE_FMT_COUNT );
 
@@ -223,75 +250,122 @@ static inline constexpr bool IsDepthStencilCompatible( const imageFmt_t fmt )
 }
 
 
-inline uint32_t GetBppForFormat( const imageFmt_t format )
+struct bppTableEntry_t
 {
-	switch( format )
-	{
-		case IMAGE_FMT_R_8:				return 1;
-		case IMAGE_FMT_R_16:			return 2;
-		case IMAGE_FMT_R_32:			return 4;
-		case IMAGE_FMT_D_16:			return 2;
-		case IMAGE_FMT_D24S8:			return 4;
-		case IMAGE_FMT_D_32:			return 4;
-		case IMAGE_FMT_D_32_S8:			return 8; // Padded
-		case IMAGE_FMT_RGB_8:			return 3;
-		case IMAGE_FMT_RGBA_8:			return 4;
-		case IMAGE_FMT_RGBA_8_UNORM:	return 4;
-		case IMAGE_FMT_ABGR_8:			return 4;
-		case IMAGE_FMT_BGR_8:			return 3;
-		case IMAGE_FMT_BGRA_8:			return 4;
-		case IMAGE_FMT_RG_16:			return 4;
-		case IMAGE_FMT_RG_16_UINT:		return 4;
-		case IMAGE_FMT_RGB_16:			return 6;
-		case IMAGE_FMT_RGBA_16:			return 8;
-		case IMAGE_FMT_RG_32:			return 8;
-		case IMAGE_FMT_RG_32_UINT:		return 8;
-		case IMAGE_FMT_RGB_32:			return 12;
-		case IMAGE_FMT_RGBA_32:			return 16;
-		case IMAGE_FMT_R11G11B10_US:	return 4;
+	imageFmt_t	fmt;
+	uint8_t		bpp;
+};
 
-		default:
-		{
-			assert( 0 );
-			return 4;
+
+struct channelsTableEntry_t
+{
+	imageFmt_t	fmt;
+	uint8_t		channels;
+};
+
+
+// Compile time check helper
+template< typename T, uint32_t N >
+static constexpr bool IsFormatIndexed( const T ( &table )[ N ] )
+{
+	for( uint32_t i = 0; i < N; ++i )
+	{
+		if( table[ i ].fmt != i ) {
+			return false;
 		}
 	}
+	return true;
 }
 
 
-inline uint32_t GetChannelsForFormat( const imageFmt_t format )
+static constexpr bppTableEntry_t s_bppTable[] =
 {
-	switch( format )
-	{
-		case IMAGE_FMT_R_8:				return 1;
-		case IMAGE_FMT_R_16:			return 1;
-		case IMAGE_FMT_R_32:			return 1;
-		case IMAGE_FMT_D_16:			return 1;
-		case IMAGE_FMT_D24S8:			return 2;
-		case IMAGE_FMT_D_32:			return 1;
-		case IMAGE_FMT_D_32_S8:			return 2;
-		case IMAGE_FMT_RGB_8:			return 3;
-		case IMAGE_FMT_RGBA_8:			return 4;
-		case IMAGE_FMT_RGBA_8_UNORM:	return 4;
-		case IMAGE_FMT_ABGR_8:			return 4;
-		case IMAGE_FMT_BGR_8:			return 3;
-		case IMAGE_FMT_BGRA_8:			return 4;
-		case IMAGE_FMT_RG_16:			return 2;
-		case IMAGE_FMT_RG_16_UINT:		return 2;
-		case IMAGE_FMT_RGB_16:			return 3;
-		case IMAGE_FMT_RGBA_16:			return 4;
-		case IMAGE_FMT_RG_32:			return 2;
-		case IMAGE_FMT_RG_32_UINT:		return 2;
-		case IMAGE_FMT_RGB_32:			return 3;
-		case IMAGE_FMT_RGBA_32:			return 4;
-		case IMAGE_FMT_R11G11B10_US:	return 3;
+	{ IMAGE_FMT_UNKNOWN,			0 },
+	{ IMAGE_FMT_R_8,				1 },
+	{ IMAGE_FMT_R_16,				2 },
+	{ IMAGE_FMT_R_32,				4 },
+	{ IMAGE_FMT_D_16,				2 },
+	{ IMAGE_FMT_D24S8,				4 },
+	{ IMAGE_FMT_D_32,				4 },
+	{ IMAGE_FMT_D_32_S8,			8 }, // Padded
+	{ IMAGE_FMT_RGB_8,				3 },
+	{ IMAGE_FMT_RGBA_8,				4 },
+	{ IMAGE_FMT_RGBA_8_UNORM,		4 },
+	{ IMAGE_FMT_ABGR_8,				4 },
+	{ IMAGE_FMT_BGR_8,				3 },
+	{ IMAGE_FMT_BGRA_8,				4 },
+	{ IMAGE_FMT_RG_16,				4 },
+	{ IMAGE_FMT_RGB_16,				6 },
+	{ IMAGE_FMT_RGBA_16,			8 },
+	{ IMAGE_FMT_RG_32,				8 },
+	{ IMAGE_FMT_RGB_32,				12 },
+	{ IMAGE_FMT_RGBA_32,			16 },
+	{ IMAGE_FMT_R11G11B10_US,		4 },
+	{ IMAGE_FMT_RG_16_UINT,			4 },
+	{ IMAGE_FMT_RG_32_UINT,			8 },
+	{ IMAGE_FMT_R_8_UNORM,			1 },
+	{ IMAGE_FMT_RG_8_UNORM,			2 },
+	{ IMAGE_FMT_R_16_UNORM,			2 },
+	{ IMAGE_FMT_RG_16_SNORM,		4 },
+	{ IMAGE_FMT_R_32_UINT,			4 },
+	{ IMAGE_FMT_RGBA_32_UINT,		16 },
+	{ IMAGE_FMT_A2B10G10R10_UNORM,	4 },
+};
+static_assert( COUNTARRAY( s_bppTable ) == IMAGE_FMT_COUNT );
+static_assert( IsFormatIndexed( s_bppTable ), "s_bppTable entry order must match imageFmt_t exactly" );
 
-		default:
-		{
-			assert( 0 );
-			return 4;
-		}
-	}
+
+static inline constexpr uint32_t GetBppForFormat( const imageFmt_t format )
+{
+	assert( format < IMAGE_FMT_COUNT );
+	assert( s_bppTable[ format ].fmt == format );
+	return s_bppTable[ format ].bpp;
+}
+
+
+// Indexed directly by imageFmt_t, same convention as s_bppTable above.
+static constexpr channelsTableEntry_t s_channelsTable[] =
+{
+	{ IMAGE_FMT_UNKNOWN,			0 },
+	{ IMAGE_FMT_R_8,				1 },
+	{ IMAGE_FMT_R_16,				1 },
+	{ IMAGE_FMT_R_32,				1 },
+	{ IMAGE_FMT_D_16,				1 },
+	{ IMAGE_FMT_D24S8,				2 },
+	{ IMAGE_FMT_D_32,				1 },
+	{ IMAGE_FMT_D_32_S8,			2 },
+	{ IMAGE_FMT_RGB_8,				3 },
+	{ IMAGE_FMT_RGBA_8,				4 },
+	{ IMAGE_FMT_RGBA_8_UNORM,		4 },
+	{ IMAGE_FMT_ABGR_8,				4 },
+	{ IMAGE_FMT_BGR_8,				3 },
+	{ IMAGE_FMT_BGRA_8,				4 },
+	{ IMAGE_FMT_RG_16,				2 },
+	{ IMAGE_FMT_RGB_16,				3 },
+	{ IMAGE_FMT_RGBA_16,			4 },
+	{ IMAGE_FMT_RG_32,				2 },
+	{ IMAGE_FMT_RGB_32,				3 },
+	{ IMAGE_FMT_RGBA_32,			4 },
+	{ IMAGE_FMT_R11G11B10_US,		3 },
+	{ IMAGE_FMT_RG_16_UINT,			2 },
+	{ IMAGE_FMT_RG_32_UINT,			2 },
+	{ IMAGE_FMT_R_8_UNORM,			1 },
+	{ IMAGE_FMT_RG_8_UNORM,			2 },
+	{ IMAGE_FMT_R_16_UNORM,			1 },
+	{ IMAGE_FMT_RG_16_SNORM,		2 },
+	{ IMAGE_FMT_R_32_UINT,			1 },
+	{ IMAGE_FMT_RGBA_32_UINT,		4 },
+	{ IMAGE_FMT_A2B10G10R10_UNORM,	4 },
+};
+static_assert( COUNTARRAY( s_channelsTable ) == IMAGE_FMT_COUNT );
+static_assert( IsFormatIndexed( s_channelsTable ), "s_channelsTable entry order must match imageFmt_t exactly" );
+
+
+static inline constexpr uint32_t GetChannelsForFormat( const imageFmt_t format )
+{
+	assert( format < IMAGE_FMT_COUNT );
+	assert( s_channelsTable[ format ].fmt == format );
+	return s_channelsTable[ format ].channels;
 }
 
 
