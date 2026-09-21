@@ -26,6 +26,18 @@
 extern Scene*	g_scene;
 extern Window	g_window;
 
+// A view's second (or later) framebuffer slot is optional -- callers only populate the slots
+// they actually use. An all-null config would otherwise reach FrameBuffer::Create() and throw
+// "No images provided.", so skip building it entirely.
+static bool HasNoImages( const frameBufferCreateInfo_t& info )
+{
+	return ( info.color0 == nullptr ) &&
+			( info.color1 == nullptr ) &&
+			( info.color2 == nullptr ) &&
+			( info.depthStencil == nullptr ) &&
+			( info.stencil == nullptr );
+}
+
 void DrawDebugMenu( RenderView& view )
 {
 #if defined( USE_IMGUI )
@@ -48,7 +60,6 @@ void RenderView::Init( const renderViewCreateInfo_t& info )
 	const uint32_t frameStateCount = MaxFrameStates;
 
 	m_name = info.name;
-	m_fbSourceImages = info.fbImages;
 	m_region = info.viewMode;
 	m_resources = info.resources;
 	m_surfaceBufferId = info.viewId;
@@ -72,26 +83,42 @@ void RenderView::Init( const renderViewCreateInfo_t& info )
 		for ( uint32_t passIx = 0; passIx < DRAWPASS_COUNT; ++passIx ) {
 			passes[ multiViewIndex ][ passIx ] = nullptr;
 		}
-		m_framebuffers[ multiViewIndex ] = new FrameBuffer();
 
-		if ( info.fbImages.color0 != nullptr ) {
-			m_colorViews[ multiViewIndex ] = new ImageView();
-		}
-		if ( info.fbImages.color1 != nullptr ) {
-			m_gBuffer0Views[ multiViewIndex ] = new ImageView();
-		}
-		if ( info.fbImages.color2 != nullptr ) {
-			m_gBuffer1Views[ multiViewIndex ] = new ImageView();
-		}
-		if ( info.fbImages.depthStencil != nullptr ) {
-			m_depthViews[ multiViewIndex ] = new ImageView();
-		}
-		if ( info.fbImages.stencil != nullptr ) {
-			m_stencilViews[ multiViewIndex ] = new ImageView();
+		for ( uint32_t fbIndex = 0; fbIndex < MaxFrameBuffersPerView; ++fbIndex )
+		{
+			const frameBufferCreateInfo_t& fbImages = info.fbImages[ fbIndex ];
+
+			if ( HasNoImages( fbImages ) ) {
+				continue;
+			}
+
+			m_framebuffers[ fbIndex ][ multiViewIndex ] = new FrameBuffer();
+
+			if ( fbImages.color0 != nullptr ) {
+				m_colorViews[ fbIndex ][ multiViewIndex ] = new ImageView();
+			}
+			if ( fbImages.color1 != nullptr ) {
+				m_gBuffer0Views[ fbIndex ][ multiViewIndex ] = new ImageView();
+			}
+			if ( fbImages.color2 != nullptr ) {
+				m_gBuffer1Views[ fbIndex ][ multiViewIndex ] = new ImageView();
+			}
+			if ( fbImages.depthStencil != nullptr ) {
+				m_depthViews[ fbIndex ][ multiViewIndex ] = new ImageView();
+			}
+			if ( fbImages.stencil != nullptr ) {
+				m_stencilViews[ fbIndex ][ multiViewIndex ] = new ImageView();
+			}
 		}
 	}
 
-	CreateFrameBuffers( info.fbImages );
+	for ( uint32_t fbIndex = 0; fbIndex < MaxFrameBuffersPerView; ++fbIndex )
+	{
+		if ( HasNoImages( info.fbImages[ fbIndex ] ) ) {
+			continue;
+		}
+		CreateFrameBuffers( info.fbImages, fbIndex );
+	}
 
 	uint32_t beginPass;
 	uint32_t endPass;
@@ -119,7 +146,7 @@ void RenderView::Init( const renderViewCreateInfo_t& info )
 
 	for ( uint32_t multiViewIndex = 0; multiViewIndex < m_multiViewCount; ++multiViewIndex )
 	{
-		FrameBuffer* fb = m_framebuffers[ multiViewIndex ];
+		FrameBuffer* fb = m_framebuffers[ 0 ][ multiViewIndex ];
 
 		for ( uint32_t passIx = beginPass; passIx <= endPass; ++passIx )
 		{
@@ -176,9 +203,10 @@ void RenderView::Init( const renderViewCreateInfo_t& info )
 }
 
 
-void RenderView::CreateFrameBuffers( const frameBufferCreateInfo_t& info )
+void RenderView::CreateFrameBuffers( const frameBufferCreateInfo_t createInfos[ MaxFrameBuffersPerView ], const uint32_t fbIndex )
 {
-	m_fbSourceImages = info;
+	const frameBufferCreateInfo_t& info = createInfos[ fbIndex ];
+	m_fbSourceImages[ fbIndex ] = info;
 
 	for ( uint32_t multiViewIndex = 0; multiViewIndex < m_multiViewCount; ++multiViewIndex )
 	{
@@ -195,7 +223,7 @@ void RenderView::CreateFrameBuffers( const frameBufferCreateInfo_t& info )
 
 			subView.aspect = GetColorAspectFlags( colorInfo.fmt );
 
-			m_colorViews[ multiViewIndex ]->Init( info.color0, colorInfo, subView, resourceLifeTime_t::RESIZE );
+			m_colorViews[ fbIndex ][ multiViewIndex ]->Init( info.color0, colorInfo, subView, resourceLifeTime_t::RESIZE );
 		}
 
 		if ( info.color1 != nullptr )
@@ -205,7 +233,7 @@ void RenderView::CreateFrameBuffers( const frameBufferCreateInfo_t& info )
 
 			subView.aspect = GetColorAspectFlags( color1Info.fmt );
 
-			m_gBuffer0Views[ multiViewIndex ]->Init( info.color1, color1Info, subView, resourceLifeTime_t::RESIZE );
+			m_gBuffer0Views[ fbIndex ][ multiViewIndex ]->Init( info.color1, color1Info, subView, resourceLifeTime_t::RESIZE );
 		}
 
 		if ( info.color2 != nullptr )
@@ -215,7 +243,7 @@ void RenderView::CreateFrameBuffers( const frameBufferCreateInfo_t& info )
 
 			subView.aspect = GetColorAspectFlags( color2Info.fmt );
 
-			m_gBuffer1Views[ multiViewIndex ]->Init( info.color2, color2Info, subView, resourceLifeTime_t::RESIZE );
+			m_gBuffer1Views[ fbIndex ][ multiViewIndex ]->Init( info.color2, color2Info, subView, resourceLifeTime_t::RESIZE );
 		}
 
 		if ( info.depthStencil != nullptr )
@@ -225,7 +253,7 @@ void RenderView::CreateFrameBuffers( const frameBufferCreateInfo_t& info )
 
 			subView.aspect = GetColorAspectFlags( depthInfo.fmt );
 
-			m_depthViews[ multiViewIndex ]->Init( info.depthStencil, depthInfo, subView, resourceLifeTime_t::RESIZE );
+			m_depthViews[ fbIndex ][ multiViewIndex ]->Init( info.depthStencil, depthInfo, subView, resourceLifeTime_t::RESIZE );
 		}
 
 		if ( info.stencil != nullptr )
@@ -235,20 +263,20 @@ void RenderView::CreateFrameBuffers( const frameBufferCreateInfo_t& info )
 
 			subView.aspect = GetColorAspectFlags( stencilInfo.fmt );
 
-			m_stencilViews[ multiViewIndex ]->Init( info.stencil, stencilInfo, subView, resourceLifeTime_t::RESIZE );
+			m_stencilViews[ fbIndex ][ multiViewIndex ]->Init( info.stencil, stencilInfo, subView, resourceLifeTime_t::RESIZE );
 		}
 
 		frameBufferCreateInfo_t fbInfo {};
 		fbInfo.name = info.name;
 		fbInfo.swapBuffering = info.swapBuffering;
 		fbInfo.context = m_context;
-		fbInfo.color0 = m_colorViews[ multiViewIndex ];
-		fbInfo.color1 = m_gBuffer0Views[ multiViewIndex ];
-		fbInfo.color2 = m_gBuffer1Views[ multiViewIndex ];
-		fbInfo.depthStencil = m_depthViews[ multiViewIndex ];
-		fbInfo.stencil = m_stencilViews[ multiViewIndex ];
-		
-		m_framebuffers[ multiViewIndex ]->Create( fbInfo );
+		fbInfo.color0 = m_colorViews[ fbIndex ][ multiViewIndex ];
+		fbInfo.color1 = m_gBuffer0Views[ fbIndex ][ multiViewIndex ];
+		fbInfo.color2 = m_gBuffer1Views[ fbIndex ][ multiViewIndex ];
+		fbInfo.depthStencil = m_depthViews[ fbIndex ][ multiViewIndex ];
+		fbInfo.stencil = m_stencilViews[ fbIndex ][ multiViewIndex ];
+
+		m_framebuffers[ fbIndex ][ multiViewIndex ]->Create( fbInfo );
 	}
 }
 
@@ -383,7 +411,7 @@ void RenderView::Resize()
 			pass->Resize();
 		}
 	}
-	SetViewRect( 0, 0, m_framebuffers[ 0 ]->GetWidth(), m_framebuffers[ 0 ]->GetHeight() );
+	SetViewRect( 0, 0, m_framebuffers[ 0 ][ 0 ]->GetWidth(), m_framebuffers[ 0 ][ 0 ]->GetHeight() );
 
 	m_lastResizeFrame = m_context->FrameNumber();
 }
@@ -470,10 +498,10 @@ const ShaderBindParms* RenderView::BindParms() const
 
 vec2i RenderView::GetFrameSize() const
 {
-	if( m_framebuffers[ 0 ] == nullptr ) {
+	if( m_framebuffers[ 0 ][ 0 ] == nullptr ) {
 		return vec2i( 0, 0 );
 	}
-	return vec2i( static_cast<int32_t>( m_framebuffers[ 0 ]->GetWidth() ), static_cast<int32_t>( m_framebuffers[ 0 ]->GetHeight() ) );
+	return vec2i( static_cast<int32_t>( m_framebuffers[ 0 ][ 0 ]->GetWidth() ), static_cast<int32_t>( m_framebuffers[ 0 ][ 0 ]->GetHeight() ) );
 }
 
 

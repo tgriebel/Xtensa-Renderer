@@ -92,11 +92,11 @@ void Renderer::Init( const renderConfig_t& initConfig )
 		info.resources = &resources;
 		info.isCubeView = ( resources.shadowMapImage[ i ]->info.type == imageType_t::IMAGE_TYPE_CUBE );
 
-		info.fbImages.name = "ShadowFB";
-		info.fbImages.context = &renderContext;
-		info.fbImages.lifetime = resourceLifeTime_t::REBOOT;
-		info.fbImages.swapBuffering = swapBuffering_t::SINGLE_FRAME;
-		info.fbImages.depthStencil = resources.shadowMapImage[ i ];
+		info.fbImages[ 0 ].name = "ShadowFB";
+		info.fbImages[ 0 ].context = &renderContext;
+		info.fbImages[ 0 ].lifetime = resourceLifeTime_t::REBOOT;
+		info.fbImages[ 0 ].swapBuffering = swapBuffering_t::SINGLE_FRAME;
+		info.fbImages[ 0 ].depthStencil = resources.shadowMapImage[ i ];
 
 		info.clear = true;
 		info.clearDepth = 1.0f;
@@ -122,15 +122,15 @@ void Renderer::Init( const renderConfig_t& initConfig )
 		info.context = &renderContext;
 		info.resources = &resources;
 
-		info.fbImages.name = "MainFB";
-		info.fbImages.context = &renderContext;
-		info.fbImages.lifetime = resourceLifeTime_t::REBOOT;
-		info.fbImages.swapBuffering = swapBuffering_t::SINGLE_FRAME;
-		info.fbImages.color0 = resources.mainColorImage;
-		info.fbImages.color1 = resources.gBufferLayerImage0;
-		info.fbImages.color2 = resources.gBufferLayerImage1;
-		info.fbImages.depthStencil = resources.depthStencilImage;
-		info.fbImages.stencil = &resources.stencilImageView;
+		info.fbImages[ 0 ].name = "MainFB";
+		info.fbImages[ 0 ].context = &renderContext;
+		info.fbImages[ 0 ].lifetime = resourceLifeTime_t::REBOOT;
+		info.fbImages[ 0 ].swapBuffering = swapBuffering_t::SINGLE_FRAME;
+		info.fbImages[ 0 ].color0 = resources.mainColorImage;
+		info.fbImages[ 0 ].color1 = resources.gBufferLayerImage0;
+		info.fbImages[ 0 ].color2 = resources.gBufferLayerImage1;
+		info.fbImages[ 0 ].depthStencil = resources.depthStencilImage;
+		info.fbImages[ 0 ].stencil = &resources.stencilImageView;
 
 		info.clear = true;
 		info.clearColor = vec4f( 0.0f, 0.5f, 0.5f, 1.0f );
@@ -189,12 +189,12 @@ void Renderer::Init( const renderConfig_t& initConfig )
 		info.resources = &resources;
 
 		info.isCubeView = true;
-		info.fbImages.name = "CubeFB";
-		info.fbImages.context = &renderContext;
-		info.fbImages.lifetime = resourceLifeTime_t::REBOOT;
-		info.fbImages.swapBuffering = swapBuffering_t::SINGLE_FRAME;
-		info.fbImages.color0 = resources.cubeFbColorImage;
-		info.fbImages.depthStencil = resources.cubeFbDepthImage;
+		info.fbImages[ 0 ].name = "CubeFB";
+		info.fbImages[ 0 ].context = &renderContext;
+		info.fbImages[ 0 ].lifetime = resourceLifeTime_t::REBOOT;
+		info.fbImages[ 0 ].swapBuffering = swapBuffering_t::SINGLE_FRAME;
+		info.fbImages[ 0 ].color0 = resources.cubeFbColorImage;
+		info.fbImages[ 0 ].depthStencil = resources.cubeFbDepthImage;
 
 		info.clear = true;
 		info.clearColor = vec4f( 0.0f, 0.5f, 0.5f, 1.0f );
@@ -220,11 +220,11 @@ void Renderer::Init( const renderConfig_t& initConfig )
 		info.context = &renderContext;
 		info.resources = &resources;
 
-		info.fbImages.name = "BackBufferFB";
-		info.fbImages.context = &renderContext;
-		info.fbImages.lifetime = resourceLifeTime_t::RESIZE;
-		info.fbImages.swapBuffering = swapBuffering_t::MULTI_FRAME;
-		info.fbImages.color0 = g_swapChain.GetBackBuffer();
+		info.fbImages[ 0 ].name = "BackBufferFB";
+		info.fbImages[ 0 ].context = &renderContext;
+		info.fbImages[ 0 ].lifetime = resourceLifeTime_t::RESIZE;
+		info.fbImages[ 0 ].swapBuffering = swapBuffering_t::MULTI_FRAME;
+		info.fbImages[ 0 ].color0 = g_swapChain.GetBackBuffer();
 
 		info.clear = false;
 		info.clearColor = vec4f( 0.0f, 0.5f, 0.5f, 1.0f );
