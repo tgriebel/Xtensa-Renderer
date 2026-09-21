@@ -128,7 +128,7 @@ struct psOutput_t
     float4 outColor : SV_Target0;
 #ifdef USE_MRT
 	float4 outColor1 : SV_Target1;
-//	float4 outColor2 : SV_Target2;
+	float4 outColor2 : SV_Target2;
 #endif
 };
 

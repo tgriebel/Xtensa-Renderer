@@ -291,7 +291,7 @@ void FrameBuffer::Create( const frameBufferCreateInfo_t& createInfo )
 			THROW_ERROR( "Color attachment 0 has to be used if 1 and 2 are." );
 		}
 
-		if ( ( createInfo.color2 != nullptr ) && ( createInfo.color1 != nullptr ) ) {
+		if ( ( createInfo.color2 != nullptr ) && ( createInfo.color1 == nullptr ) ) {
 			THROW_ERROR( "Color attachment 1 has to be used if 2 is." );
 		}
 

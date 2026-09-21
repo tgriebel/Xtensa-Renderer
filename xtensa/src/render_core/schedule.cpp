@@ -497,7 +497,7 @@ void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderCont
 	if( ForceDisableMSAA == false )
 	{
 		resolveTaskCreateInfo_t info{};
-		info.count = 2;
+		info.count = 3;
 		info.context = renderContext;
 		info.resources = resources;
 		info.resolves[ 0 ].info.src = resources->gBufferLayerImage0;
@@ -513,6 +513,16 @@ void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderCont
 		info.resolves[ 1 ].info.src = resources->depthStencilImage;
 		info.resolves[ 1 ].info.dst = resources->depthStencilResolvedImage;
 		info.resolves[ 1 ].useApi = false;
+
+		info.resolves[ 2 ].info.src = resources->gBufferLayerImage1;
+		info.resolves[ 2 ].info.dst = resources->gBufferLayerResolvedImage1;
+		info.resolves[ 2 ].info.mode = resolveMode_t::AVERAGE;
+		info.resolves[ 2 ].info.baseArray = 0;
+		info.resolves[ 2 ].info.arrayCount = 1;
+		info.resolves[ 2 ].info.baseMip = 0;
+		info.resolves[ 2 ].info.transitionSourceFromWrite = false;
+		info.resolves[ 2 ].info.writeSourceAfterResolve = false;
+		info.resolves[ 2 ].useApi = true;
 
 		tasks.resolvePostDepth = new ResolveImageTask( info );
 	}
@@ -1137,6 +1147,7 @@ void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderCont
 			rtReflectionsInfo.rtOutputImage = resources->rtReflectionsOutputImage;
 			rtReflectionsInfo.codeImages[ 0 ] = resources->gBufferLayerResolvedImage0;
 			rtReflectionsInfo.codeImages[ 1 ] = resources->depthStencilResolvedImage;
+			rtReflectionsInfo.codeImages[ 2 ] = resources->gBufferLayerResolvedImage1;
 			rtReflectionsInfo.viewId = viewContext->renderViews[ 0 ]->GetViewBufferUploadId();
 			rtReflectionsInfo.constants = nullptr;
 			rtReflectionsInfo.constantsByteSize = 0;

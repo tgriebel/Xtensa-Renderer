@@ -43,7 +43,11 @@ psOutput_t PSMain( vsToPsInterpolators input )
     const float3 normalVS = mul( views[ viewId ].viewMat, float4( normalWS, 0.0f ) ).xyz;
     
     output.outColor1.ba = OctEncode( normalVS );
-#endif    
+#endif
+
+#ifdef USE_MRT
+    output.outColor2 = float4( input.worldPosition.xyz, 1.0f );
+#endif
 
 	return output;
 }

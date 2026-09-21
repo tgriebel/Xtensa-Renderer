@@ -128,6 +128,7 @@ void Renderer::Init( const renderConfig_t& initConfig )
 		info.fbImages.swapBuffering = swapBuffering_t::SINGLE_FRAME;
 		info.fbImages.color0 = resources.mainColorImage;
 		info.fbImages.color1 = resources.gBufferLayerImage0;
+		info.fbImages.color2 = resources.gBufferLayerImage1;
 		info.fbImages.depthStencil = resources.depthStencilImage;
 		info.fbImages.stencil = &resources.stencilImageView;
 
