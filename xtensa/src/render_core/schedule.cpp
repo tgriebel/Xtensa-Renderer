@@ -1052,7 +1052,7 @@ void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderCont
 	for( uint32_t i = 0; i < MaxShadowViews; ++i ) {
 		schedule->Link( new RenderTask( viewContext->shadowViews[ i ], DRAWPASS_SHADOW_BEGIN, DRAWPASS_SHADOW_END ) );
 	}
-	schedule->Link( new RenderTask( viewContext->renderViews[ 0 ], DRAWPASS_DEPTH, DRAWPASS_DEPTH ) );
+	schedule->Link( new RenderTask( viewContext->renderViews[ 0 ], DRAWPASS_PREPASS, DRAWPASS_PREPASS ) );
 	if( tasks.resolvePostDepth )
 	{
 		schedule->Link( tasks.resolvePostDepth );

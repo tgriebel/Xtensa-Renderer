@@ -22,7 +22,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -57,7 +57,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -92,7 +92,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -127,7 +127,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -162,7 +162,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -197,7 +197,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -232,7 +232,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -267,7 +267,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -302,7 +302,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -337,7 +337,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -372,7 +372,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -407,7 +407,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -442,7 +442,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -477,7 +477,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -512,7 +512,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -547,7 +547,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -582,7 +582,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -617,7 +617,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -652,7 +652,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -687,7 +687,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -722,7 +722,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -757,7 +757,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -792,7 +792,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -827,7 +827,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -862,7 +862,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -897,7 +897,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -932,7 +932,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -967,7 +967,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1002,7 +1002,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1037,7 +1037,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1072,7 +1072,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1107,7 +1107,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1142,7 +1142,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1177,7 +1177,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1212,7 +1212,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1247,7 +1247,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1282,7 +1282,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1317,7 +1317,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1352,7 +1352,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1387,7 +1387,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1422,7 +1422,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1457,7 +1457,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1492,7 +1492,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1527,7 +1527,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1562,7 +1562,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1597,7 +1597,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1632,7 +1632,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1667,7 +1667,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1702,7 +1702,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1737,7 +1737,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1772,7 +1772,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1807,7 +1807,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1842,7 +1842,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1877,7 +1877,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1912,7 +1912,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1947,7 +1947,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -1982,7 +1982,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -2017,7 +2017,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -2052,7 +2052,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -2087,7 +2087,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -2122,7 +2122,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -2157,7 +2157,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -2192,7 +2192,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""
@@ -2227,7 +2227,7 @@
             ""
           ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [
             ""

@@ -161,7 +161,7 @@ void CreateCodeAssets()
 		{
 			Material material;
 			material.usage = MATERIAL_USAGE_GGX;
-			material.AddShader( DRAWPASS_DEPTH, AssetLibGpuProgram::Handle( "Prepass" ) );
+			material.AddShader( DRAWPASS_PREPASS, AssetLibGpuProgram::Handle( "Prepass" ) );
 			material.AddShader( DRAWPASS_SHADOW, AssetLibGpuProgram::Handle( "Shadow" ) );
 			material.AddShader( DRAWPASS_DEBUG_WIREFRAME, AssetLibGpuProgram::Handle( "Debug" ) );
 			material.AddShader( DRAWPASS_DEBUG_3D, AssetLibGpuProgram::Handle( "DebugSolid" ) );

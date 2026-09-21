@@ -1,16 +1,17 @@
-#include "depthPass.h"
+#include "prePass.h"
 #include "../render_binding/bindings.h"
 #include "../globals/renderConstants.h"
 #include "../render_core/renderer.h"
 
 extern renderConstants_t rc;
 
-void DepthPass::Init( RenderContext* renderContext, FrameBuffer* frameBuffer )
+void PrePass::Init( RenderContext* renderContext, FrameBuffer* frameBuffer )
 {
-	m_name = "Depth Pass";
-	m_passId = DRAWPASS_DEPTH;
+	m_name = "Pre Pass";
+	m_passId = DRAWPASS_PREPASS;
 
 	const bool velocityInDepth = true;
+	const bool visibilityInPrepass = false;
 
 	m_stateBits = GFX_STATE_NONE;
 	m_stateBits |= GFX_STATE_DEPTH_TEST;
@@ -24,6 +25,10 @@ void DepthPass::Init( RenderContext* renderContext, FrameBuffer* frameBuffer )
 		m_stateBits |= GFX_STATE_COLOR1_MASK;
 	}
 
+	if( visibilityInPrepass ) {
+		m_stateBits |= GFX_STATE_COLOR2_MASK;
+	}
+
 	codeImages.SetRenderContext( renderContext );
 	codeCubeImages.SetRenderContext( renderContext );
 
@@ -31,7 +36,7 @@ void DepthPass::Init( RenderContext* renderContext, FrameBuffer* frameBuffer )
 }
 
 
-void DepthPass::FrameBegin( const ResourceContext* resources )
+void PrePass::FrameBegin( const ResourceContext* resources )
 {
 	parms->Bind( BINDING_NAME( lightBuffer ),			&resources->lightParms );
 	parms->Bind( BINDING_NAME( imageCodeArray ),		&codeImages );
@@ -40,7 +45,7 @@ void DepthPass::FrameBegin( const ResourceContext* resources )
 }
 
 
-void DepthPass::FrameEnd()
+void PrePass::FrameEnd()
 {
 
 }

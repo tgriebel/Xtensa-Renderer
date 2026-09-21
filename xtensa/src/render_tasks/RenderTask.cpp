@@ -25,7 +25,7 @@ static inline bool SkipPass( const drawSurf_t& surf, const drawPass_t pass )
 	if ( ( surf.flags & SKIP_OPAQUE ) != 0 )
 	{
 		if ( ( pass == DRAWPASS_SHADOW ) ||
-			( pass == DRAWPASS_DEPTH ) ||
+			( pass == DRAWPASS_PREPASS ) ||
 			( pass == DRAWPASS_TERRAIN ) ||
 			( pass == DRAWPASS_OPAQUE ) ||
 			( pass == DRAWPASS_SKYBOX ) ||
@@ -223,7 +223,7 @@ void RenderTask::RenderViewSurfaces( GfxCmdList* cmdContext, const uint32_t mult
 			{
 				cmdContext->MarkerInsert( surface.dbgName, ColorToVector( Color::LGrey ) );
 
-				if ( passIx == DRAWPASS_DEPTH ) {
+				if ( passIx == DRAWPASS_PREPASS ) {
 					vkCmdSetStencilReference( cmdBuffer, VK_STENCIL_FACE_FRONT_BIT, surface.stencilBit );
 				}
 

@@ -40,7 +40,7 @@
           "shader": "Shadow",
           "perms": [ "" ]
         },
-        "DRAWPASS_DEPTH": {
+        "DRAWPASS_PREPASS": {
           "shader": "Prepass",
           "perms": [ "" ]
         },

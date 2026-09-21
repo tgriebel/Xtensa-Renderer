@@ -110,7 +110,7 @@
     <ClCompile Include="src\draw_passes\shadowPass.cpp">
       <Filter>Draw Passes</Filter>
     </ClCompile>
-    <ClCompile Include="src\draw_passes\depthPass.cpp">
+    <ClCompile Include="src\draw_passes\prePass.cpp">
       <Filter>Draw Passes</Filter>
     </ClCompile>
     <ClCompile Include="src\draw_passes\opaquePass.cpp">
@@ -368,7 +368,7 @@
     <ClInclude Include="src\draw_passes\opaquePass.h">
       <Filter>Draw Passes</Filter>
     </ClInclude>
-    <ClInclude Include="src\draw_passes\depthPass.h">
+    <ClInclude Include="src\draw_passes\prePass.h">
       <Filter>Draw Passes</Filter>
     </ClInclude>
     <ClInclude Include="src\draw_passes\debug3dPass.h">
@@ -578,6 +578,9 @@
     <FxCompile Include="shaders\prepass.ps.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\visBuffer.ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
     <FxCompile Include="shaders\downsample.ps.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
@@ -666,6 +669,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\brdf.h">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\visBuffer.h">
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\lightUtil.h">

@@ -29,7 +29,7 @@
       "illum": 0.0,
       "shaders": {
           "DRAWPASS_SHADOW": { "shader": "Shadow", "perms": [""] },
-          "DRAWPASS_DEPTH": { "shader": "Prepass", "perms": [""] },
+          "DRAWPASS_PREPASS": { "shader": "Prepass", "perms": [""] },
           "DRAWPASS_OPAQUE": { "shader": "LitOpaque", "perms": [""] },
 		  "DRAWPASS_DEBUG_WIREFRAME": { "shader": "Debug", "perms": [""] }
       },

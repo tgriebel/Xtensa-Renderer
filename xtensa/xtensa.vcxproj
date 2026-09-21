@@ -304,6 +304,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
+    <FxCompile Include="shaders\visBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <ClInclude Include="shaders\gpuShared.h">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
     </ClInclude>
@@ -353,7 +357,7 @@
     <ClInclude Include="src\app\window.h" />
     <ClInclude Include="src\draw_passes\debug2dPass.h" />
     <ClInclude Include="src\draw_passes\debug3dPass.h" />
-    <ClInclude Include="src\draw_passes\depthPass.h" />
+    <ClInclude Include="src\draw_passes\prePass.h" />
     <ClInclude Include="src\draw_passes\drawpass.h" />
     <ClInclude Include="src\draw_passes\opaquePass.h" />
     <ClInclude Include="src\draw_passes\postPass.h" />
@@ -433,7 +437,7 @@
     <ClCompile Include="src\app\window.cpp" />
     <ClCompile Include="src\draw_passes\debug2dPass.cpp" />
     <ClCompile Include="src\draw_passes\debug3dPass.cpp" />
-    <ClCompile Include="src\draw_passes\depthPass.cpp" />
+    <ClCompile Include="src\draw_passes\prePass.cpp" />
     <ClCompile Include="src\draw_passes\drawpass.cpp" />
     <ClCompile Include="src\draw_passes\opaquePass.cpp" />
     <ClCompile Include="src\draw_passes\postPass.cpp" />
@@ -515,6 +519,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shaders\prepass.ps.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shaders\visBuffer.ps.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

@@ -320,7 +320,7 @@ int ParseMaterialShaderObject( parseState_t& st, void* object, uint32_t offset )
 	static const enumString_t enumMap[ objectCount ] =
 	{
 		MAKE_ENUM_STRING( DRAWPASS_SHADOW ),
-		MAKE_ENUM_STRING( DRAWPASS_DEPTH ),
+		MAKE_ENUM_STRING( DRAWPASS_PREPASS ),
 		MAKE_ENUM_STRING( DRAWPASS_OPAQUE ),
 		MAKE_ENUM_STRING( DRAWPASS_TRANS ),
 		MAKE_ENUM_STRING( DRAWPASS_TERRAIN ),

@@ -2,10 +2,10 @@
 
 #include "drawpass.h"
 
-class DepthPass : public DrawPass
+class PrePass : public DrawPass
 {
 public:
-	DepthPass( RenderContext* renderContext, FrameBuffer* fb )
+	PrePass( RenderContext* renderContext, FrameBuffer* fb )
 	{
 		Init( renderContext, fb );
 	}

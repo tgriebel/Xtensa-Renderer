@@ -14,7 +14,7 @@
 
 #include "../draw_passes/debug2dPass.h"
 #include "../draw_passes/debug3dPass.h"
-#include "../draw_passes/depthPass.h"
+#include "../draw_passes/prePass.h"
 #include "../draw_passes/opaquePass.h"
 #include "../draw_passes/transPass.h"
 #include "../draw_passes/shadowPass.h"
@@ -126,8 +126,8 @@ void RenderView::Init( const renderViewCreateInfo_t& info )
 				case DRAWPASS_SHADOW:
 					passes[ multiViewIndex ][ passIx ] = new ShadowPass( m_context, fb );
 					break;
-				case DRAWPASS_DEPTH:
-					passes[ multiViewIndex ][ passIx ] = new DepthPass( m_context, fb );
+				case DRAWPASS_PREPASS:
+					passes[ multiViewIndex ][ passIx ] = new PrePass( m_context, fb );
 					break;
 				case DRAWPASS_TERRAIN:
 					passes[ multiViewIndex ][ passIx ] = new TerrainPass( m_context, fb );
@@ -563,7 +563,7 @@ const bool RenderView::CanRenderSurface( const Entity& ent, const Material& mate
 	}
 	else if( GetViewType() == renderViewType_t::STANDARD_RASTER )
 	{
-		const drawPass_t mainPasses[] = { DRAWPASS_DEPTH,
+		const drawPass_t mainPasses[] = { DRAWPASS_PREPASS,
 											DRAWPASS_TERRAIN,
 											DRAWPASS_OPAQUE,
 											DRAWPASS_SKYBOX,
