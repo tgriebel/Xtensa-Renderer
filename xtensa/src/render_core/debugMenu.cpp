@@ -240,6 +240,7 @@ std::string GetLightingDebugModeName( const gpuDebugLightingMode_t mode )
 		case DEBUG_SHEENROUGHNESS:	return "SheenRoughness";
 		case DEBUG_AO:				return "AO";
 		case DEBUG_BRDF_LUT:		return "BRDF";
+		case DEBUG_POSITION:		return "Position";
 	}
 	return "<unknown>";
 }

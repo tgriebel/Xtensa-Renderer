@@ -154,18 +154,21 @@ psOutput_t PSMain( vsToPsInterpolators input )
         case DEBUG_AO:
             outColor.rgb = surfaceInput.ao.rrr;
             break;
-        
-                
+                     
         case DEBUG_BRDF_LUT:
             outColor.rg = globalTextures[ brdfLutId ].Sample( bilinearSamplerClampEdge, float2( surfaceInput.NoV, surfaceInput.roughness ) ).rg;
             outColor.b = 0.0f;
             break;
-        
+
+        case DEBUG_POSITION:
+            outColor.rgb = surfaceInput.position;
+            break;
+
         default:
             break;
     }
 #endif
-    
+
     psOutput_t output = (psOutput_t)0;
 
 #ifdef USE_MRT
