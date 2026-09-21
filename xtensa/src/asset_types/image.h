@@ -10,18 +10,20 @@ class GpuImage;
 
 enum gpuImageStateFlags_t : uint8_t;
 
+
+// Reordering enums will break content
 enum imageType_t : uint8_t
 {
-	IMAGE_TYPE_UNKNOWN,
-	IMAGE_TYPE_2D,
-	IMAGE_TYPE_2D_ARRAY,
-	IMAGE_TYPE_3D,
-	IMAGE_TYPE_3D_ARRAY,
-	IMAGE_TYPE_CUBE,
-	IMAGE_TYPE_CUBE_ARRAY,
-	IMAGE_TYPE_DEPTH,
-	IMAGE_TYPE_STENCIL,
-	IMAGE_TYPE_DEPTH_STENCIL,
+	IMAGE_TYPE_UNKNOWN			= 0,
+	IMAGE_TYPE_2D				= 1,
+	IMAGE_TYPE_2D_ARRAY			= 2,
+	IMAGE_TYPE_3D				= 3,
+	IMAGE_TYPE_3D_ARRAY			= 4,
+	IMAGE_TYPE_CUBE				= 5,
+	IMAGE_TYPE_CUBE_ARRAY		= 6,
+	IMAGE_TYPE_DEPTH			= 7,
+	IMAGE_TYPE_STENCIL			= 8,
+	IMAGE_TYPE_DEPTH_STENCIL	= 9,
 };
 
 
@@ -36,40 +38,45 @@ enum imageAspectFlags_t : uint8_t
 	IMAGE_ASPECT_PLANE2			= ( 1 << 5 ),
 	IMAGE_ASPECT_ALL			= ( 1 << 6 ) - 1
 };
+static_assert( IMAGE_ASPECT_ALL == 0x3F, "Reordering will break content" );
 
 
+// Reordering enums will break content
 enum imageTiling_t : uint8_t
 {
-	IMAGE_TILING_LINEAR,
-	IMAGE_TILING_MORTON,
+	IMAGE_TILING_LINEAR	= 0,
+	IMAGE_TILING_MORTON	= 1,
 };
 
 
 enum imageFmt_t : uint8_t
 {
-	IMAGE_FMT_UNKNOWN,
-	IMAGE_FMT_R_8,
-	IMAGE_FMT_R_16,
-	IMAGE_FMT_R_32,
-	IMAGE_FMT_D_16,
-	IMAGE_FMT_D24S8,
-	IMAGE_FMT_D_32,
-	IMAGE_FMT_D_32_S8,
-	IMAGE_FMT_RGB_8,
-	IMAGE_FMT_RGBA_8,
-	IMAGE_FMT_RGBA_8_UNORM, // Unsigned
-	IMAGE_FMT_ABGR_8,
-	IMAGE_FMT_BGR_8,
-	IMAGE_FMT_BGRA_8,
-	IMAGE_FMT_RG_16,
-	IMAGE_FMT_RGB_16,
-	IMAGE_FMT_RGBA_16,
-	IMAGE_FMT_RG_32,
-	IMAGE_FMT_RGB_32,
-	IMAGE_FMT_RGBA_32,
-	IMAGE_FMT_R11G11B10_US, // Unsigned
-	IMAGE_FMT_COUNT,
+	IMAGE_FMT_UNKNOWN			= 0,
+	IMAGE_FMT_R_8				= 1,
+	IMAGE_FMT_R_16				= 2,
+	IMAGE_FMT_R_32				= 3,
+	IMAGE_FMT_D_16				= 4,
+	IMAGE_FMT_D24S8				= 5,
+	IMAGE_FMT_D_32				= 6,
+	IMAGE_FMT_D_32_S8			= 7,
+	IMAGE_FMT_RGB_8				= 8,
+	IMAGE_FMT_RGBA_8			= 9,
+	IMAGE_FMT_RGBA_8_UNORM		= 10, // Unsigned
+	IMAGE_FMT_ABGR_8			= 11,
+	IMAGE_FMT_BGR_8				= 12,
+	IMAGE_FMT_BGRA_8			= 13,
+	IMAGE_FMT_RG_16				= 14,
+	IMAGE_FMT_RGB_16			= 15,
+	IMAGE_FMT_RGBA_16			= 16,
+	IMAGE_FMT_RG_32				= 17,
+	IMAGE_FMT_RGB_32			= 18,
+	IMAGE_FMT_RGBA_32			= 19,
+	IMAGE_FMT_R11G11B10_US		= 20, // Unsigned
+	IMAGE_FMT_RG_16_UINT		= 21, // Appended at the end to preserve legacy files
+	IMAGE_FMT_RG_32_UINT		= 22, // Appended at the end to preserve legacy files
+	IMAGE_FMT_COUNT				= 23,
 };
+static_assert( IMAGE_FMT_COUNT == 23, "Reordering will break content" );
 
 
 enum imageSamples_t : uint8_t
@@ -99,14 +106,15 @@ struct imageInfo_t
 };
 
 
+// Reordering enums will break content
 enum imageCubeFace : uint8_t
 {
-	IMAGE_CUBE_FACE_X_POS,
-	IMAGE_CUBE_FACE_X_NEG,
-	IMAGE_CUBE_FACE_Y_POS,
-	IMAGE_CUBE_FACE_Y_NEG,
-	IMAGE_CUBE_FACE_Z_POS,
-	IMAGE_CUBE_FACE_Z_NEG,
+	IMAGE_CUBE_FACE_X_POS	= 0,
+	IMAGE_CUBE_FACE_X_NEG	= 1,
+	IMAGE_CUBE_FACE_Y_POS	= 2,
+	IMAGE_CUBE_FACE_Y_NEG	= 3,
+	IMAGE_CUBE_FACE_Z_POS	= 4,
+	IMAGE_CUBE_FACE_Z_NEG	= 5,
 };
 
 
@@ -122,26 +130,26 @@ struct imageSubResourceView_t
 
 enum samplerAddress_t
 {
-	SAMPLER_ADDRESS_WRAP = 0,
-	SAMPLER_ADDRESS_CLAMP_EDGE = 1,
-	SAMPLER_ADDRESS_CLAMP_BORDER = 2,
+	SAMPLER_ADDRESS_WRAP			= 0,
+	SAMPLER_ADDRESS_CLAMP_EDGE		= 1,
+	SAMPLER_ADDRESS_CLAMP_BORDER	= 2,
 	SAMPLER_ADDRESS_MODES,
 };
 
 
 enum samplerFilter_t
 {
-	SAMPLER_FILTER_NEAREST = 0,
-	SAMPLER_FILTER_BILINEAR = 1,
-	SAMPLER_FILTER_TRILINEAR = 2,
+	SAMPLER_FILTER_NEAREST		= 0,
+	SAMPLER_FILTER_BILINEAR		= 1,
+	SAMPLER_FILTER_TRILINEAR	= 2,
 	SAMPLER_FILTER_MODES,
 };
 
 
 enum samplerBorderColor_t
 {
-	SAMPLER_BORDER_WHITE = 0,
-	SAMPLER_BORDER_BLACK = 1,
+	SAMPLER_BORDER_WHITE	= 0,
+	SAMPLER_BORDER_BLACK	= 1,
 };
 
 
@@ -166,7 +174,7 @@ struct colorAspectTableEntry_t
 };
 
 
-static const colorAspectTableEntry_t formatAspectTable[] =
+static const colorAspectTableEntry_t s_formatAspectTable[] =
 {
 	{ IMAGE_FMT_UNKNOWN,		IMAGE_ASPECT_NONE		},
 	{ IMAGE_FMT_R_8,			IMAGE_ASPECT_COLOR_FLAG	},
@@ -183,22 +191,25 @@ static const colorAspectTableEntry_t formatAspectTable[] =
 	{ IMAGE_FMT_BGR_8,			IMAGE_ASPECT_COLOR_FLAG	},
 	{ IMAGE_FMT_BGRA_8,			IMAGE_ASPECT_COLOR_FLAG	},
 	{ IMAGE_FMT_RG_16,			IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_RG_16_UINT,		IMAGE_ASPECT_COLOR_FLAG	},
 	{ IMAGE_FMT_RGB_16,			IMAGE_ASPECT_COLOR_FLAG	},
 	{ IMAGE_FMT_RGBA_16,		IMAGE_ASPECT_COLOR_FLAG	},
 	{ IMAGE_FMT_RG_32,			IMAGE_ASPECT_COLOR_FLAG	},
+	{ IMAGE_FMT_RG_32_UINT,		IMAGE_ASPECT_COLOR_FLAG	},
 	{ IMAGE_FMT_RGB_32,			IMAGE_ASPECT_COLOR_FLAG	},
 	{ IMAGE_FMT_RGBA_32,		IMAGE_ASPECT_COLOR_FLAG	},
 	{ IMAGE_FMT_R11G11B10_US,	IMAGE_ASPECT_COLOR_FLAG	},
 };
+static_assert( COUNTARRAY( s_formatAspectTable ) == IMAGE_FMT_COUNT );
 
 
 static inline constexpr imageAspectFlags_t GetColorAspectFlags( const imageFmt_t fmt )
 {
-	for( uint32_t i = 0; i < COUNTARRAY( formatAspectTable ); ++i )
+	for( uint32_t i = 0; i < COUNTARRAY( s_formatAspectTable ); ++i )
 	{
-		if( formatAspectTable[ i ].fmt == fmt )
+		if( s_formatAspectTable[ i ].fmt == fmt )
 		{
-			return formatAspectTable[ i ].aspect;
+			return s_formatAspectTable[ i ].aspect;
 		}
 	}
 	return IMAGE_ASPECT_NONE;
@@ -229,9 +240,12 @@ inline uint32_t GetBppForFormat( const imageFmt_t format )
 		case IMAGE_FMT_ABGR_8:			return 4;
 		case IMAGE_FMT_BGR_8:			return 3;
 		case IMAGE_FMT_BGRA_8:			return 4;
+		case IMAGE_FMT_RG_16:			return 4;
+		case IMAGE_FMT_RG_16_UINT:		return 4;
 		case IMAGE_FMT_RGB_16:			return 6;
 		case IMAGE_FMT_RGBA_16:			return 8;
 		case IMAGE_FMT_RG_32:			return 8;
+		case IMAGE_FMT_RG_32_UINT:		return 8;
 		case IMAGE_FMT_RGB_32:			return 12;
 		case IMAGE_FMT_RGBA_32:			return 16;
 		case IMAGE_FMT_R11G11B10_US:	return 4;
@@ -263,9 +277,11 @@ inline uint32_t GetChannelsForFormat( const imageFmt_t format )
 		case IMAGE_FMT_BGR_8:			return 3;
 		case IMAGE_FMT_BGRA_8:			return 4;
 		case IMAGE_FMT_RG_16:			return 2;
+		case IMAGE_FMT_RG_16_UINT:		return 2;
 		case IMAGE_FMT_RGB_16:			return 3;
 		case IMAGE_FMT_RGBA_16:			return 4;
 		case IMAGE_FMT_RG_32:			return 2;
+		case IMAGE_FMT_RG_32_UINT:		return 2;
 		case IMAGE_FMT_RGB_32:			return 3;
 		case IMAGE_FMT_RGBA_32:			return 4;
 		case IMAGE_FMT_R11G11B10_US:	return 3;
