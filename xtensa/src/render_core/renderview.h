@@ -13,11 +13,15 @@ class RenderContext;
 
 static const uint32_t MaxMultiViews = 6; // Max of 6 because of cubemaps
 
-enum class renderViewType_t : uint32_t
+// Defines how a render view draws geometry to an image
+// These are mutually exclusive since they define specific data-flows
+enum class renderViewMode_t : uint32_t
 {
-	SHADOW			= 0,
-	STANDARD_RASTER = 1,
-	STANDARD_2D		= 2,
+	SHADOW		= 0,	// Rasterize once (depth only)
+	FORWARD		= 1,	// Rasterize opaques twice (depth prepass + forward pass)
+	DEFERRED	= 2,	// Rasterize once (gbuffer prepass / transparent pass)
+	VISIBILITY	= 3,	// Rasterize once (visibility buffer prepass / transparent pass)
+	DRAW_2D		= 4,	// Draw only 2D elements (UI, overlays, etc)
 	COUNT,
 	UNKNOWN,
 };
@@ -25,7 +29,7 @@ enum class renderViewType_t : uint32_t
 
 struct renderViewCreateInfo_t
 {
-	renderViewType_t			viewType;
+	renderViewMode_t			viewMode;
 	renderPassTransition_t		transition;
 	frameBufferCreateInfo_t		fbImages;
 
@@ -76,7 +80,7 @@ private:
 	mat4x4f					m_previousViewProjMatrices[ MaxMultiViews ];
 	frameBufferCreateInfo_t	m_fbSourceImages;
 	const char*				m_name;
-	renderViewType_t		m_region;
+	renderViewMode_t		m_region;
 	uint32_t				m_multiViewCount;
 	int32_t					m_viewBufferId;
 	int32_t					m_surfaceBufferId;
@@ -116,7 +120,7 @@ public:
 				passes[ multiViewIndex ][ passIndex ] = nullptr;
 			}
 		}
-		m_region = renderViewType_t::UNKNOWN;
+		m_region = renderViewMode_t::UNKNOWN;
 	}
 
 	~RenderView()
@@ -188,7 +192,7 @@ public:
 	inline const vec3f&		GetViewOrigin( const uint32_t multiView = 0 ) const { return m_viewOrigin; }
 
 	const char*				GetName() const;
-	const renderViewType_t	GetViewType() const;
+	const renderViewMode_t	GetViewMode() const;
 	const bool				CanRenderSurface( const Entity& ent, const Material& material, const renderFlags_t renderFlags ) const;
 
 	const void				Commit();

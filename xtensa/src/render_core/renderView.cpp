@@ -49,7 +49,7 @@ void RenderView::Init( const renderViewCreateInfo_t& info )
 
 	m_name = info.name;
 	m_fbSourceImages = info.fbImages;
-	m_region = info.viewType;
+	m_region = info.viewMode;
 	m_resources = info.resources;
 	m_surfaceBufferId = info.viewId;
 	m_viewBufferId = info.viewId;
@@ -98,17 +98,19 @@ void RenderView::Init( const renderViewCreateInfo_t& info )
 
 	switch ( m_region )
 	{
-		case renderViewType_t::SHADOW:
+		case renderViewMode_t::SHADOW:
 		{
 			beginPass = DRAWPASS_SHADOW_BEGIN;
 			endPass = DRAWPASS_SHADOW_END;
 		} break;
-		case renderViewType_t::STANDARD_RASTER:
+		case renderViewMode_t::FORWARD:
+		case renderViewMode_t::VISIBILITY:
+		case renderViewMode_t::DEFERRED:
 		{
 			beginPass = DRAWPASS_MAIN_BEGIN;
 			endPass = DRAWPASS_MAIN_END;
 		} break;
-		case renderViewType_t::STANDARD_2D:
+		case renderViewMode_t::DRAW_2D:
 		{
 			beginPass = DRAWPASS_2D_BEGIN;
 			endPass = DRAWPASS_2D_END;
@@ -400,9 +402,11 @@ drawPass_t RenderView::ViewRegionPassBegin() const
 {
 	switch ( m_region )
 	{
-		case renderViewType_t::SHADOW:			return DRAWPASS_SHADOW_BEGIN;
-		case renderViewType_t::STANDARD_RASTER:	return DRAWPASS_MAIN_BEGIN;
-		case renderViewType_t::STANDARD_2D:		return DRAWPASS_2D_BEGIN;
+		case renderViewMode_t::SHADOW:		return DRAWPASS_SHADOW_BEGIN;
+		case renderViewMode_t::FORWARD:		return DRAWPASS_MAIN_BEGIN;
+		case renderViewMode_t::DEFERRED:	return DRAWPASS_MAIN_BEGIN;
+		case renderViewMode_t::VISIBILITY:	return DRAWPASS_MAIN_BEGIN;
+		case renderViewMode_t::DRAW_2D:		return DRAWPASS_2D_BEGIN;
 	}
 	return DRAWPASS_COUNT;
 }
@@ -412,9 +416,11 @@ drawPass_t RenderView::ViewRegionPassEnd() const
 {
 	switch ( m_region )
 	{
-		case renderViewType_t::SHADOW:			return DRAWPASS_SHADOW_END;
-		case renderViewType_t::STANDARD_RASTER:	return DRAWPASS_MAIN_END;
-		case renderViewType_t::STANDARD_2D:		return DRAWPASS_2D_END;
+		case renderViewMode_t::SHADOW:		return DRAWPASS_SHADOW_END;
+		case renderViewMode_t::FORWARD:		return DRAWPASS_MAIN_END;
+		case renderViewMode_t::DEFERRED:	return DRAWPASS_MAIN_END;
+		case renderViewMode_t::VISIBILITY:	return DRAWPASS_MAIN_END;
+		case renderViewMode_t::DRAW_2D:		return DRAWPASS_2D_END;
 	}
 	return DRAWPASS_COUNT;
 }
@@ -531,7 +537,7 @@ const char* RenderView::GetName() const
 }
 
 
-const renderViewType_t RenderView::GetViewType() const
+const renderViewMode_t RenderView::GetViewMode() const
 {
 	return m_region;
 }
@@ -539,7 +545,7 @@ const renderViewType_t RenderView::GetViewType() const
 
 const bool RenderView::CanRenderSurface( const Entity& ent, const Material& material, const renderFlags_t renderFlags ) const
 {
-	if( GetViewType() == renderViewType_t::SHADOW )
+	if( GetViewMode() == renderViewMode_t::SHADOW )
 	{
 		if( material.GetShader( DRAWPASS_SHADOW ) == INVALID_HDL )
 		{
@@ -554,14 +560,14 @@ const bool RenderView::CanRenderSurface( const Entity& ent, const Material& mate
 			return false;
 		}
 	}
-	else if( GetViewType() == renderViewType_t::STANDARD_2D )
+	else if( GetViewMode() == renderViewMode_t::DRAW_2D )
 	{
 		if( ( material.GetShader( DRAWPASS_2D ) == INVALID_HDL ) && ( material.GetShader( DRAWPASS_DEBUG_2D ) == INVALID_HDL ) )
 		{
 			return false;
 		}
 	}
-	else if( GetViewType() == renderViewType_t::STANDARD_RASTER )
+	else if( GetViewMode() == renderViewMode_t::FORWARD )
 	{
 		const drawPass_t mainPasses[] = { DRAWPASS_PREPASS,
 											DRAWPASS_TERRAIN,
