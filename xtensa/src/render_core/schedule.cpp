@@ -1137,10 +1137,31 @@ void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderCont
 		tasks.screenshotReadback = new ImageReadbackTask( info );
 	}
 
-	for( uint32_t i = 0; i < MaxShadowViews; ++i ) {
-		schedule->Link( new RenderTask( viewContext->shadowViews[ i ], DRAWPASS_SHADOW_BEGIN, DRAWPASS_SHADOW_END ) );
+	for( uint32_t i = 0; i < MaxShadowViews; ++i )
+	{
+		frameBufferCreateInfo_t shadowFbInfo{};
+		shadowFbInfo.name = "ShadowFB";
+		shadowFbInfo.context = renderContext;
+		shadowFbInfo.lifetime = resourceLifeTime_t::REBOOT;
+		shadowFbInfo.swapBuffering = swapBuffering_t::SINGLE_FRAME;
+		shadowFbInfo.depthStencil = resources->shadowMapImage[ i ];
+
+		schedule->Link( new RenderTask( viewContext->shadowViews[ i ], DRAWPASS_SHADOW_BEGIN, DRAWPASS_SHADOW_END, shadowFbInfo ) );
 	}
-	schedule->Link( new RenderTask( viewContext->renderViews[ 0 ], DRAWPASS_PREPASS, DRAWPASS_PREPASS ) );
+	{
+		frameBufferCreateInfo_t prePassFbInfo{};
+		prePassFbInfo.name = "PrepassFB";
+		prePassFbInfo.context = renderContext;
+		prePassFbInfo.lifetime = resourceLifeTime_t::REBOOT;
+		prePassFbInfo.swapBuffering = swapBuffering_t::SINGLE_FRAME;
+		prePassFbInfo.color0 = resources->mainColorImage;
+		prePassFbInfo.color1 = resources->gBufferLayerImage0;
+		prePassFbInfo.color2 = resources->gBufferLayerImage1;
+		prePassFbInfo.depthStencil = resources->depthStencilImage;
+		prePassFbInfo.stencil = &resources->stencilImageView;
+
+		schedule->Link( new RenderTask( viewContext->renderViews[ 0 ], DRAWPASS_PREPASS, DRAWPASS_PREPASS, prePassFbInfo ) );
+	}
 	if( tasks.resolvePostDepth )
 	{
 		schedule->Link( tasks.resolvePostDepth );
@@ -1168,11 +1189,32 @@ void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderCont
 		schedule->Link( tasks.reflectionsRayTrace );
 	}
 
-	schedule->Link( new RenderTask( viewContext->renderViews[ 0 ], DRAWPASS_OPAQUE_COLOR_BEGIN, DRAWPASS_MAIN_END ) );
+	{
+		frameBufferCreateInfo_t mainFbInfo{};
+		mainFbInfo.name = "MainFB";
+		mainFbInfo.context = renderContext;
+		mainFbInfo.lifetime = resourceLifeTime_t::REBOOT;
+		mainFbInfo.swapBuffering = swapBuffering_t::SINGLE_FRAME;
+		mainFbInfo.color0 = resources->mainColorImage;
+		mainFbInfo.color1 = resources->gBufferLayerImage0;
+		mainFbInfo.color2 = resources->gBufferLayerImage1;
+		mainFbInfo.depthStencil = resources->depthStencilImage;
+		mainFbInfo.stencil = &resources->stencilImageView;
+
+		schedule->Link( new RenderTask( viewContext->renderViews[ 0 ], DRAWPASS_OPAQUE_COLOR_BEGIN, DRAWPASS_MAIN_END, mainFbInfo ) );
+	}
 
 	if( config.useCubeViews )
 	{
-		schedule->Link( new RenderTask( viewContext->renderViews[ 1 ], DRAWPASS_MAIN_BEGIN, DRAWPASS_MAIN_END ) );
+		frameBufferCreateInfo_t cubeFbInfo{};
+		cubeFbInfo.name = "CubeFB";
+		cubeFbInfo.context = renderContext;
+		cubeFbInfo.lifetime = resourceLifeTime_t::REBOOT;
+		cubeFbInfo.swapBuffering = swapBuffering_t::SINGLE_FRAME;
+		cubeFbInfo.color0 = resources->cubeFbColorImage;
+		cubeFbInfo.depthStencil = resources->cubeFbDepthImage;
+
+		schedule->Link( new RenderTask( viewContext->renderViews[ 1 ], DRAWPASS_MAIN_BEGIN, DRAWPASS_MAIN_END, cubeFbInfo ) );
 
 		if( config.computeDiffuseIbl )
 		{
@@ -1228,9 +1270,18 @@ void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderCont
 		schedule->Link( new TransitionImageTask( g_swapChain.GetBackBuffer(), gpuImageStateFlags_t::GPU_IMAGE_READ, gpuImageStateFlags_t::GPU_IMAGE_WRITE ) );
 	}
 
-	schedule->Link( new RenderTask( viewContext->view2Ds[ 0 ], DRAWPASS_2D, DRAWPASS_2D ) );
-	schedule->Link( new ImguiTask( viewContext->view2Ds[ 0 ]->passes[ 0 ][ DRAWPASS_DEBUG_2D ], renderContext, resources, false ) );
-	schedule->Link( new RenderTask( viewContext->view2Ds[ 0 ], DRAWPASS_DEBUG_2D, DRAWPASS_DEBUG_2D ) );
+	{
+		frameBufferCreateInfo_t backBufferFbInfo{};
+		backBufferFbInfo.name = "BackBufferFB";
+		backBufferFbInfo.context = renderContext;
+		backBufferFbInfo.lifetime = resourceLifeTime_t::RESIZE;
+		backBufferFbInfo.swapBuffering = swapBuffering_t::MULTI_FRAME;
+		backBufferFbInfo.color0 = g_swapChain.GetBackBuffer();
+
+		schedule->Link( new RenderTask( viewContext->view2Ds[ 0 ], DRAWPASS_2D, DRAWPASS_2D, backBufferFbInfo ) );
+		schedule->Link( new ImguiTask( viewContext->view2Ds[ 0 ]->passes[ 0 ][ DRAWPASS_DEBUG_2D ], renderContext, resources, false ) );
+		schedule->Link( new RenderTask( viewContext->view2Ds[ 0 ], DRAWPASS_DEBUG_2D, DRAWPASS_DEBUG_2D, backBufferFbInfo ) );
+	}
 	//schedule->Link( new TransitionImageTask( g_swapChain.GetBackBuffer(), gpuImageStateFlags_t::GPU_IMAGE_WRITE, gpuImageStateFlags_t::GPU_IMAGE_PRESENT ) );
 
 	schedule->AsString();

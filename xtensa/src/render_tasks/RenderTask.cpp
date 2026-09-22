@@ -296,6 +296,32 @@ void RenderTask::Init( RenderView* view, drawPass_t begin, drawPass_t end )
 void RenderTask::Shutdown()
 {
 	m_finishedSemaphore.Destroy();
+
+	delete m_frameBuffer;
+	m_frameBuffer = nullptr;
+}
+
+
+void RenderTask::CreateFrameBuffer( const frameBufferCreateInfo_t& fbInfo )
+{
+	assert( m_frameBuffer == nullptr );
+
+	m_frameBuffer = new FrameBuffer();
+	m_frameBuffer->Create( fbInfo );
+
+	const uint32_t multiViewCount = m_renderView->GetMultiViewCount();
+	for( uint32_t multiViewIndex = 0; multiViewIndex < multiViewCount; ++multiViewIndex )
+	{
+		for( uint32_t passIx = m_beginPass; passIx <= m_endPass; ++passIx )
+		{
+			DrawPass* pass = m_renderView->passes[ multiViewIndex ][ passIx ];
+			if( pass == nullptr )
+			{
+				continue;
+			}
+			pass->SetFrameBuffer( m_frameBuffer );
+		}
+	}
 }
 
 

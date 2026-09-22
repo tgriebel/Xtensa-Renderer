@@ -85,6 +85,7 @@ private:
 	drawPass_t		m_beginPass;
 	drawPass_t		m_endPass;
 	GpuSemaphore	m_finishedSemaphore;
+	FrameBuffer*	m_frameBuffer = nullptr;
 
 	void Init( RenderView* view, drawPass_t begin, drawPass_t end );
 	void Shutdown();
@@ -101,10 +102,18 @@ public:
 		Init( view, begin, end );
 	}
 
+	RenderTask( RenderView* view, drawPass_t begin, drawPass_t end, const frameBufferCreateInfo_t& fbInfo )
+	{
+		Init( view, begin, end );
+		CreateFrameBuffer( fbInfo );
+	}
+
 	~RenderTask()
 	{
 		Shutdown();
 	}
+
+	void			CreateFrameBuffer( const frameBufferCreateInfo_t& fbInfo );
 
 	void			FrameBegin();
 	void			FrameEnd();

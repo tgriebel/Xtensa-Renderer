@@ -92,12 +92,6 @@ void Renderer::Init( const renderConfig_t& initConfig )
 		info.resources = &resources;
 		info.isCubeView = ( resources.shadowMapImage[ i ]->info.type == imageType_t::IMAGE_TYPE_CUBE );
 
-		info.fbImages[ 0 ].name = "ShadowFB";
-		info.fbImages[ 0 ].context = &renderContext;
-		info.fbImages[ 0 ].lifetime = resourceLifeTime_t::REBOOT;
-		info.fbImages[ 0 ].swapBuffering = swapBuffering_t::SINGLE_FRAME;
-		info.fbImages[ 0 ].depthStencil = resources.shadowMapImage[ i ];
-
 		info.clear = true;
 		info.clearDepth = 1.0f;
 
@@ -121,16 +115,6 @@ void Renderer::Init( const renderConfig_t& initConfig )
 		info.viewId = viewCount;
 		info.context = &renderContext;
 		info.resources = &resources;
-
-		info.fbImages[ 0 ].name = "MainFB";
-		info.fbImages[ 0 ].context = &renderContext;
-		info.fbImages[ 0 ].lifetime = resourceLifeTime_t::REBOOT;
-		info.fbImages[ 0 ].swapBuffering = swapBuffering_t::SINGLE_FRAME;
-		info.fbImages[ 0 ].color0 = resources.mainColorImage;
-		info.fbImages[ 0 ].color1 = resources.gBufferLayerImage0;
-		info.fbImages[ 0 ].color2 = resources.gBufferLayerImage1;
-		info.fbImages[ 0 ].depthStencil = resources.depthStencilImage;
-		info.fbImages[ 0 ].stencil = &resources.stencilImageView;
 
 		info.clear = true;
 		info.clearColor = vec4f( 0.0f, 0.5f, 0.5f, 1.0f );
@@ -189,12 +173,6 @@ void Renderer::Init( const renderConfig_t& initConfig )
 		info.resources = &resources;
 
 		info.isCubeView = true;
-		info.fbImages[ 0 ].name = "CubeFB";
-		info.fbImages[ 0 ].context = &renderContext;
-		info.fbImages[ 0 ].lifetime = resourceLifeTime_t::REBOOT;
-		info.fbImages[ 0 ].swapBuffering = swapBuffering_t::SINGLE_FRAME;
-		info.fbImages[ 0 ].color0 = resources.cubeFbColorImage;
-		info.fbImages[ 0 ].depthStencil = resources.cubeFbDepthImage;
 
 		info.clear = true;
 		info.clearColor = vec4f( 0.0f, 0.5f, 0.5f, 1.0f );
@@ -220,12 +198,6 @@ void Renderer::Init( const renderConfig_t& initConfig )
 		info.context = &renderContext;
 		info.resources = &resources;
 
-		info.fbImages[ 0 ].name = "BackBufferFB";
-		info.fbImages[ 0 ].context = &renderContext;
-		info.fbImages[ 0 ].lifetime = resourceLifeTime_t::RESIZE;
-		info.fbImages[ 0 ].swapBuffering = swapBuffering_t::MULTI_FRAME;
-		info.fbImages[ 0 ].color0 = g_swapChain.GetBackBuffer();
-
 		info.clear = false;
 		info.clearColor = vec4f( 0.0f, 0.5f, 0.5f, 1.0f );
 		info.finalize = true;
@@ -248,7 +220,22 @@ void Renderer::Init( const renderConfig_t& initConfig )
 	}
 	view2Ds[ 0 ]->Commit();
 
-	InitImGui( view2Ds[ 0 ]->passes[ 0 ][ DRAWPASS_DEBUG_2D ]->GetFrameBuffer() );
+	// Workaround for ImGui
+	// It requires an image to initialize, so a temp framebuffer is created
+	// Framebuffers are lightweight and just encapsulate images (in this case the swapchain backbuffer)
+	{
+		frameBufferCreateInfo_t imguiFbInfo{};
+		imguiFbInfo.name = "ImGuiInitFB";
+		imguiFbInfo.context = &renderContext;
+		imguiFbInfo.lifetime = resourceLifeTime_t::REBOOT;
+		imguiFbInfo.swapBuffering = swapBuffering_t::MULTI_FRAME;
+		imguiFbInfo.color0 = g_swapChain.GetBackBuffer();
+
+		FrameBuffer* imguiFb = new FrameBuffer();
+		imguiFb->Create( imguiFbInfo );
+
+		InitImGui( imguiFb );
+	}
 
 	uploader.Boot( &renderContext, &resources );
 

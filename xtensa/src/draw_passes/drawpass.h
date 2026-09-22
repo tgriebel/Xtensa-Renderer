@@ -10,14 +10,6 @@
 
 class ResourceContext;
 
-struct scissor_t
-{
-	int32_t		x;
-	int32_t		y;
-	uint32_t	width;
-	uint32_t	height;
-};
-
 class DrawPass
 {
 private:
@@ -31,24 +23,8 @@ protected:
 	imageSamples_t		m_sampleRate;
 	gfxStateBits_t		m_stateBits;
 
-
-	void SetFrameBuffer( FrameBuffer* frameBuffer )
-	{
-		m_sampleRate = frameBuffer->SampleCount();
-		m_viewport.x = 0;
-		m_viewport.y = 0;
-		m_viewport.width = frameBuffer->GetWidth();
-		m_viewport.height = frameBuffer->GetHeight();
-
-		m_scissor.x = m_viewport.x;
-		m_scissor.y = m_viewport.y;
-		m_scissor.width = m_viewport.width;
-		m_scissor.height = m_viewport.height;
-
-		m_fb = frameBuffer;
-	}
-
 public:
+
 	virtual void Init( RenderContext* renderContext, FrameBuffer* fb ) = 0;
 
 	virtual void FrameBegin( const ResourceContext* resources ) = 0;
@@ -77,6 +53,30 @@ public:
 	inline imageSamples_t SampleRate() const
 	{
 		return m_sampleRate;
+	}
+
+	void SetFrameBuffer( FrameBuffer* frameBuffer )
+	{
+		m_fb = frameBuffer;
+
+		if( frameBuffer == nullptr )
+		{
+			m_sampleRate = IMAGE_SMP_1;
+			m_viewport = viewport_t();
+			m_scissor = scissor_t{};
+			return;
+		}
+
+		m_sampleRate = frameBuffer->SampleCount();
+		m_viewport.x = 0;
+		m_viewport.y = 0;
+		m_viewport.width = frameBuffer->GetWidth();
+		m_viewport.height = frameBuffer->GetHeight();
+
+		m_scissor.x = m_viewport.x;
+		m_scissor.y = m_viewport.y;
+		m_scissor.width = m_viewport.width;
+		m_scissor.height = m_viewport.height;
 	}
 
 	inline void SetViewport( const int32_t x, const int32_t y, const uint32_t width, const uint32_t height )

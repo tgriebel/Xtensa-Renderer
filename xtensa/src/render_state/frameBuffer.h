@@ -9,6 +9,15 @@
 #include "../render_resources/imageView.h"
 
 
+struct scissor_t
+{
+	int32_t		x;
+	int32_t		y;
+	uint32_t	width;
+	uint32_t	height;
+};
+
+
 struct frameBufferCreateInfo_t
 {
 	swapBuffering_t		swapBuffering;

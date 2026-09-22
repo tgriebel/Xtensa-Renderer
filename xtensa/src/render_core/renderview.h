@@ -26,28 +26,23 @@ enum class renderViewMode_t : uint32_t
 	UNKNOWN,
 };
 
-// How many unique framebuffers can be used by a single view
-// Allows for complex workflows such as deferred and half-resolution passes
-static const uint32_t MaxFrameBuffersPerView = 2;
-
 struct renderViewCreateInfo_t
 {
-	renderViewMode_t			viewMode;
-	renderPassTransition_t		transition;
-	frameBufferCreateInfo_t		fbImages[ MaxFrameBuffersPerView ];
+	renderViewMode_t				viewMode;
+	renderPassTransition_t			transition;
 
-	const char*					name;
-	ResourceContext*			resources;
-	RenderContext*				context;
+	const char*						name;
+	ResourceContext*				resources;
+	RenderContext*					context;
 
-	vec4f						clearColor;
-	float						clearDepth;
-	bool						clear;
-	uint8_t						clearStencil;
-	bool						finalize;
+	vec4f							clearColor;
+	float							clearDepth;
+	bool							clear;
+	uint8_t							clearStencil;
+	bool							finalize;
 
-	bool						isCubeView;
-	int							viewId;
+	bool							isCubeView;
+	int								viewId;
 };
 
 
@@ -58,12 +53,6 @@ private:
 
 	ResourceContext*		m_resources;
 	RenderContext*			m_context;
-	FrameBuffer*			m_framebuffers[ MaxFrameBuffersPerView ][ MaxMultiViews ];
-	ImageView*				m_colorViews[ MaxFrameBuffersPerView ][ MaxMultiViews ];
-	ImageView*				m_gBuffer0Views[ MaxFrameBuffersPerView ][ MaxMultiViews ];
-	ImageView*				m_gBuffer1Views[ MaxFrameBuffersPerView ][ MaxMultiViews ];
-	ImageView*				m_depthViews[ MaxFrameBuffersPerView ][ MaxMultiViews ];
-	ImageView*				m_stencilViews[ MaxFrameBuffersPerView ][ MaxMultiViews ];
 	uint32_t				m_uploadViewIds[ MaxMultiViews ];
 	GpuBufferView			m_viewParmeters[ MaxMultiViews ];
 	GpuBufferView			m_surfParmeters;
@@ -81,7 +70,6 @@ private:
 	mat4x4f					m_invProjMatrices[ MaxMultiViews ];
 	mat4x4f					m_viewProjMatrices[ MaxMultiViews ];
 	mat4x4f					m_previousViewProjMatrices[ MaxMultiViews ];
-	frameBufferCreateInfo_t	m_fbSourceImages[ MaxFrameBuffersPerView ];
 	const char*				m_name;
 	renderViewMode_t		m_region;
 	uint32_t				m_multiViewCount;
@@ -117,10 +105,6 @@ public:
 			m_invProjMatrices[ multiViewIndex ] = mat4x4f( 1.0f );
 			m_viewProjMatrices[ multiViewIndex ] = mat4x4f( 1.0f );
 
-			for ( uint32_t fbIndex = 0; fbIndex < MaxFrameBuffersPerView; ++fbIndex ) {
-				m_framebuffers[ fbIndex ][ multiViewIndex ] = nullptr;
-			}
-
 			for ( uint32_t passIndex = 0; passIndex < DRAWPASS_COUNT; ++passIndex ) {
 				passes[ multiViewIndex ][ passIndex ] = nullptr;
 			}
@@ -140,34 +124,10 @@ public:
 					passes[ multiViewIndex ][ passIndex ] = nullptr;
 				}
 			}
-			for ( uint32_t fbIndex = 0; fbIndex < MaxFrameBuffersPerView; ++fbIndex )
-			{
-				if( m_framebuffers[ fbIndex ][ multiViewIndex ] != nullptr )
-				{
-					delete m_framebuffers[ fbIndex ][ multiViewIndex ];
-					m_framebuffers[ fbIndex ][ multiViewIndex ] = nullptr;
-
-					delete m_colorViews[ fbIndex ][ multiViewIndex ];
-					m_colorViews[ fbIndex ][ multiViewIndex ] = nullptr;
-
-					delete m_gBuffer0Views[ fbIndex ][ multiViewIndex ];
-					m_gBuffer0Views[ fbIndex ][ multiViewIndex ] = nullptr;
-
-					delete m_gBuffer1Views[ fbIndex ][ multiViewIndex ];
-					m_gBuffer1Views[ fbIndex ][ multiViewIndex ] = nullptr;
-
-					delete m_depthViews[ fbIndex ][ multiViewIndex ];
-					m_depthViews[ fbIndex ][ multiViewIndex ] = nullptr;
-
-					delete m_stencilViews[ fbIndex ][ multiViewIndex ];
-					m_stencilViews[ fbIndex ][ multiViewIndex ] = nullptr;
-				}
-			}
 		}
 	}
 
 	void					Init( const renderViewCreateInfo_t& info );
-	void					CreateFrameBuffers( const frameBufferCreateInfo_t createInfos[ MaxFrameBuffersPerView ], const uint32_t fbIndex);
 	void					FrameBegin( const drawPass_t begin, const drawPass_t end );
 	void					FrameEnd( const drawPass_t begin, const drawPass_t end );
 	void					Resize();

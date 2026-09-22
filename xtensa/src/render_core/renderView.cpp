@@ -26,18 +26,6 @@
 extern Scene*	g_scene;
 extern Window	g_window;
 
-// A view's second (or later) framebuffer slot is optional -- callers only populate the slots
-// they actually use. An all-null config would otherwise reach FrameBuffer::Create() and throw
-// "No images provided.", so skip building it entirely.
-static bool HasNoImages( const frameBufferCreateInfo_t& info )
-{
-	return ( info.color0 == nullptr ) &&
-			( info.color1 == nullptr ) &&
-			( info.color2 == nullptr ) &&
-			( info.depthStencil == nullptr ) &&
-			( info.stencil == nullptr );
-}
-
 void DrawDebugMenu( RenderView& view )
 {
 #if defined( USE_IMGUI )
@@ -83,41 +71,6 @@ void RenderView::Init( const renderViewCreateInfo_t& info )
 		for ( uint32_t passIx = 0; passIx < DRAWPASS_COUNT; ++passIx ) {
 			passes[ multiViewIndex ][ passIx ] = nullptr;
 		}
-
-		for ( uint32_t fbIndex = 0; fbIndex < MaxFrameBuffersPerView; ++fbIndex )
-		{
-			const frameBufferCreateInfo_t& fbImages = info.fbImages[ fbIndex ];
-
-			if ( HasNoImages( fbImages ) ) {
-				continue;
-			}
-
-			m_framebuffers[ fbIndex ][ multiViewIndex ] = new FrameBuffer();
-
-			if ( fbImages.color0 != nullptr ) {
-				m_colorViews[ fbIndex ][ multiViewIndex ] = new ImageView();
-			}
-			if ( fbImages.color1 != nullptr ) {
-				m_gBuffer0Views[ fbIndex ][ multiViewIndex ] = new ImageView();
-			}
-			if ( fbImages.color2 != nullptr ) {
-				m_gBuffer1Views[ fbIndex ][ multiViewIndex ] = new ImageView();
-			}
-			if ( fbImages.depthStencil != nullptr ) {
-				m_depthViews[ fbIndex ][ multiViewIndex ] = new ImageView();
-			}
-			if ( fbImages.stencil != nullptr ) {
-				m_stencilViews[ fbIndex ][ multiViewIndex ] = new ImageView();
-			}
-		}
-	}
-
-	for ( uint32_t fbIndex = 0; fbIndex < MaxFrameBuffersPerView; ++fbIndex )
-	{
-		if ( HasNoImages( info.fbImages[ fbIndex ] ) ) {
-			continue;
-		}
-		CreateFrameBuffers( info.fbImages, fbIndex );
 	}
 
 	uint32_t beginPass;
@@ -146,7 +99,7 @@ void RenderView::Init( const renderViewCreateInfo_t& info )
 
 	for ( uint32_t multiViewIndex = 0; multiViewIndex < m_multiViewCount; ++multiViewIndex )
 	{
-		FrameBuffer* fb = m_framebuffers[ 0 ][ multiViewIndex ];
+		FrameBuffer* fb = nullptr;
 
 		for ( uint32_t passIx = beginPass; passIx <= endPass; ++passIx )
 		{
@@ -203,84 +156,6 @@ void RenderView::Init( const renderViewCreateInfo_t& info )
 }
 
 
-void RenderView::CreateFrameBuffers( const frameBufferCreateInfo_t createInfos[ MaxFrameBuffersPerView ], const uint32_t fbIndex )
-{
-	const frameBufferCreateInfo_t& info = createInfos[ fbIndex ];
-	m_fbSourceImages[ fbIndex ] = info;
-
-	for ( uint32_t multiViewIndex = 0; multiViewIndex < m_multiViewCount; ++multiViewIndex )
-	{
-		imageSubResourceView_t subView{};
-		subView.arrayCount = 1;
-		subView.baseArray = m_isCubeView ? vk_MapToGlslCubemapConvention( multiViewIndex ) : 0; // This is all that changes for cube views
-		subView.baseMip = 0;
-		subView.mipLevels = 1;
-
-		if( info.color0 != nullptr )
-		{
-			imageInfo_t colorInfo = info.color0->info;
-			colorInfo.type = IMAGE_TYPE_2D;
-
-			subView.aspect = GetColorAspectFlags( colorInfo.fmt );
-
-			m_colorViews[ fbIndex ][ multiViewIndex ]->Init( info.color0, colorInfo, subView, resourceLifeTime_t::RESIZE );
-		}
-
-		if ( info.color1 != nullptr )
-		{
-			imageInfo_t color1Info = info.color1->info;
-			color1Info.type = IMAGE_TYPE_2D;
-
-			subView.aspect = GetColorAspectFlags( color1Info.fmt );
-
-			m_gBuffer0Views[ fbIndex ][ multiViewIndex ]->Init( info.color1, color1Info, subView, resourceLifeTime_t::RESIZE );
-		}
-
-		if ( info.color2 != nullptr )
-		{
-			imageInfo_t color2Info = info.color2->info;
-			color2Info.type = IMAGE_TYPE_2D;
-
-			subView.aspect = GetColorAspectFlags( color2Info.fmt );
-
-			m_gBuffer1Views[ fbIndex ][ multiViewIndex ]->Init( info.color2, color2Info, subView, resourceLifeTime_t::RESIZE );
-		}
-
-		if ( info.depthStencil != nullptr )
-		{
-			imageInfo_t depthInfo = info.depthStencil->info;
-			depthInfo.type = IMAGE_TYPE_2D;
-
-			subView.aspect = GetColorAspectFlags( depthInfo.fmt );
-
-			m_depthViews[ fbIndex ][ multiViewIndex ]->Init( info.depthStencil, depthInfo, subView, resourceLifeTime_t::RESIZE );
-		}
-
-		if ( info.stencil != nullptr )
-		{
-			imageInfo_t stencilInfo = info.stencil->info;
-			stencilInfo.type = IMAGE_TYPE_2D;
-
-			subView.aspect = GetColorAspectFlags( stencilInfo.fmt );
-
-			m_stencilViews[ fbIndex ][ multiViewIndex ]->Init( info.stencil, stencilInfo, subView, resourceLifeTime_t::RESIZE );
-		}
-
-		frameBufferCreateInfo_t fbInfo {};
-		fbInfo.name = info.name;
-		fbInfo.swapBuffering = info.swapBuffering;
-		fbInfo.context = m_context;
-		fbInfo.color0 = m_colorViews[ fbIndex ][ multiViewIndex ];
-		fbInfo.color1 = m_gBuffer0Views[ fbIndex ][ multiViewIndex ];
-		fbInfo.color2 = m_gBuffer1Views[ fbIndex ][ multiViewIndex ];
-		fbInfo.depthStencil = m_depthViews[ fbIndex ][ multiViewIndex ];
-		fbInfo.stencil = m_stencilViews[ fbIndex ][ multiViewIndex ];
-
-		m_framebuffers[ fbIndex ][ multiViewIndex ]->Create( fbInfo );
-	}
-}
-
-
 void RenderView::FrameBegin( const drawPass_t begin, const drawPass_t end )
 {
 	if( IsCommitted() == false )
@@ -297,7 +172,7 @@ void RenderView::FrameBegin( const drawPass_t begin, const drawPass_t end )
 		{
 			gpuView_t viewBuffer = {};
 
-			const vec2i& frameSize = GetFrameSize();
+			const vec2i& frameSize = GetFrameSize(); // TODO: Deprecated
 			viewBuffer.viewMat = GetViewMatrix( multiViewIndex );
 			viewBuffer.projMat = GetProjMatrix( multiViewIndex );
 			viewBuffer.invProjMat = GetInvProjMatrix( multiViewIndex );
@@ -398,8 +273,6 @@ void RenderView::Resize()
 		return;
 	}
 
-	//CreateFrameBuffers( m_fbSourceImages );
-
 	for ( uint32_t multiViewIndex = 0; multiViewIndex < m_multiViewCount; ++multiViewIndex )
 	{
 		for ( uint32_t passIx = 0; passIx < DRAWPASS_COUNT; ++passIx )
@@ -411,7 +284,8 @@ void RenderView::Resize()
 			pass->Resize();
 		}
 	}
-	SetViewRect( 0, 0, m_framebuffers[ 0 ][ 0 ]->GetWidth(), m_framebuffers[ 0 ][ 0 ]->GetHeight() );
+	const vec2i frameSize = GetFrameSize(); // TODO: Deprecated
+	SetViewRect( 0, 0, frameSize[ 0 ], frameSize[ 1 ] );
 
 	m_lastResizeFrame = m_context->FrameNumber();
 }
@@ -495,13 +369,15 @@ const ShaderBindParms* RenderView::BindParms() const
 	return m_viewParms;
 }
 
-
+// Deprecated. RenderViews no longer own a framebuffer
 vec2i RenderView::GetFrameSize() const
 {
-	if( m_framebuffers[ 0 ][ 0 ] == nullptr ) {
+	const DrawPass* pass = passes[ 0 ][ ViewRegionPassBegin() ];
+	if( ( pass == nullptr ) || ( pass->GetFrameBuffer() == nullptr ) ) {
 		return vec2i( 0, 0 );
 	}
-	return vec2i( static_cast<int32_t>( m_framebuffers[ 0 ][ 0 ]->GetWidth() ), static_cast<int32_t>( m_framebuffers[ 0 ][ 0 ]->GetHeight() ) );
+	const FrameBuffer* fb = pass->GetFrameBuffer();
+	return vec2i( static_cast<int32_t>( fb->GetWidth() ), static_cast<int32_t>( fb->GetHeight() ) );
 }
 
 
