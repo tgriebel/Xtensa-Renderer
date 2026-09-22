@@ -10,6 +10,7 @@ class ResolveImageTask;
 class ComputeTask;
 class TransitionImageTask;
 class SubScheduleTask;
+class RayTracingTask;
 
 // FIXME: Temp, remove once interface becomes clear
 // Intentionally lazy pointers to arrays because this will be removed
@@ -53,6 +54,12 @@ struct availableTasks_t
 	ImageMipTask*		bloomUpsampleTask				= nullptr;
 
 	SubScheduleTask*	postProcessChain				= nullptr;
+
+	// Ray Tracing
+	TransitionImageTask*	rtOutputTransition				= nullptr;
+	RayTracingTask*			primaryRayTrace					= nullptr; // Debug only, not linked into the schedule
+	TransitionImageTask*	rtReflectionsOutputTransition	= nullptr;
+	RayTracingTask*			reflectionsRayTrace				= nullptr;
 };
 
 void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderContext, ResourceContext* resourceContext, RenderViewContext* viewContext, const GeometryContext* geometry, TaskSchedule* schedule );
