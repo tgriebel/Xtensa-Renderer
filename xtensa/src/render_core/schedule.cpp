@@ -1152,7 +1152,7 @@ void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderCont
 		frameBufferCreateInfo_t prePassFbInfo{};
 		prePassFbInfo.name = "PrepassFB";
 		prePassFbInfo.context = renderContext;
-		prePassFbInfo.lifetime = resourceLifeTime_t::REBOOT;
+		prePassFbInfo.lifetime = resourceLifeTime_t::RESIZE;
 		prePassFbInfo.swapBuffering = swapBuffering_t::SINGLE_FRAME;
 		prePassFbInfo.color0 = resources->mainColorImage;
 		prePassFbInfo.color1 = resources->gBufferLayerImage0;
@@ -1178,10 +1178,11 @@ void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderCont
 		schedule->Link( tasks.dof );
 	}
 
+	// Debugging
 	if( tasks.primaryRayTrace )
 	{
 		//schedule->Link( tasks.rtOutputTransition );
-		//schedule->Link( tasks.primaryRayTrace ); // debugging
+		//schedule->Link( tasks.primaryRayTrace );
 	}
 	if( tasks.reflectionsRayTrace )
 	{
@@ -1193,7 +1194,7 @@ void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderCont
 		frameBufferCreateInfo_t mainFbInfo{};
 		mainFbInfo.name = "MainFB";
 		mainFbInfo.context = renderContext;
-		mainFbInfo.lifetime = resourceLifeTime_t::REBOOT;
+		mainFbInfo.lifetime = resourceLifeTime_t::RESIZE;
 		mainFbInfo.swapBuffering = swapBuffering_t::SINGLE_FRAME;
 		mainFbInfo.color0 = resources->mainColorImage;
 		mainFbInfo.color1 = resources->gBufferLayerImage0;
