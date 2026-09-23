@@ -193,7 +193,9 @@ void Renderer::CommitRayTraceInstances( const Scene* scene )
 	for ( uint32_t entIx = 0; entIx < entCount; ++entIx )
 	{
 		const Entity& ent = *scene->entities[ entIx ];
-		if ( ent.HasFlag( ENT_FLAG_NO_DRAW ) ) {
+		if (	ent.HasFlag( ENT_FLAG_NO_DRAW )		||
+				ent.HasFlag( ENT_FLAG_WIREFRAME )	||
+				ent.HasFlag( ENT_FLAG_DEBUG ) ) {
 			continue;
 		}
 
