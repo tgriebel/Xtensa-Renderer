@@ -1,6 +1,15 @@
 {
     "extension": "ngfx-proj",
     "files": [
+        {
+            "path": "renderer_2026_09_19_11_38_56.ngfx-capture"
+        },
+        {
+            "path": "renderer_2026_09_19_11_43_35.ngfx-capture"
+        },
+        {
+            "path": "renderer_2026_09_19_13_21_57.ngfx-capture"
+        }
     ],
     "launcher": {
         "activity/fd/capturemode": "Manual",
@@ -325,8 +334,15 @@
         "platform/win32/arguments": "",
         "platform/win32/autoconnect": true,
         "platform/win32/environment": "",
-        "platform/win32/executable": "",
-        "platform/win32/workingdir": "",
+        "platform/win32/executable": "C:/Users/thoma/source/repos/Vulkan-Renderer/x64/Debug/renderer.exe",
+        "platform/win32/executable/history": [
+            "C:/Users/thoma/source/repos/Vulkan-Renderer/x64/Debug/renderer.exe",
+            "C:\\Users\\thoma\\source\\repos\\Vulkan-Renderer\\x64\\Debug"
+        ],
+        "platform/win32/workingdir": "C:/Users/thoma/source/repos/Vulkan-Renderer/xtensa",
+        "platform/win32/workingdir/history": [
+            "C:/Users/thoma/source/repos/Vulkan-Renderer/xtensa"
+        ],
         "platform/windows (x86_64)/device": "localhost"
     },
     "owns_project_directory": true,
