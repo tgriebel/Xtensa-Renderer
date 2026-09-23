@@ -3,6 +3,7 @@
 #include "../asset_types/image.h"
 #include "../globals/common.h"
 #include "../render_state/rhi.h"
+#include "../render_state/frameBuffer.h"
 #include "../asset_types/gpuProgram.h"
 #include "../render_resources/gpuBuffer.h"
 
