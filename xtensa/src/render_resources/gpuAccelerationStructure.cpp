@@ -249,11 +249,16 @@ void GpuAccelerationStructure::Update( CommandList* cmdList )
 			}
 		}
 
+		VkAccelerationStructureDeviceAddressInfoKHR addressInfo{};
+		addressInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_DEVICE_ADDRESS_INFO_KHR;
+		addressInfo.accelerationStructure = m_blasEntries[ src.surfId ].handle;
+		const uint64_t blasAddress = context.vkGetAccelerationStructureDeviceAddressKHR( context.device, &addressInfo );
+
 		inst.instanceCustomIndex = i;
 		inst.mask = 0xFF;
 		inst.instanceShaderBindingTableRecordOffset = 0;
 		inst.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;
-		inst.accelerationStructureReference = GetBlasDeviceAddress( src.surfId );
+		inst.accelerationStructureReference = blasAddress;
 
 		surfaceInfos[ i ].vertexOffset = blas.vertexOffset;
 		surfaceInfos[ i ].firstIndex = blas.firstIndex;
@@ -371,15 +376,6 @@ void GpuAccelerationStructure::Update( CommandList* cmdList )
 			VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR,
 			0, 1, &tlasBarrier, 0, nullptr, 0, nullptr );
 	}
-}
-
-
-VkDeviceAddress GpuAccelerationStructure::GetBlasDeviceAddress( uint32_t index ) const
-{
-	VkAccelerationStructureDeviceAddressInfoKHR addressInfo{};
-	addressInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_DEVICE_ADDRESS_INFO_KHR;
-	addressInfo.accelerationStructure = m_blasEntries[ index ].handle;
-	return context.vkGetAccelerationStructureDeviceAddressKHR( context.device, &addressInfo );
 }
 
 

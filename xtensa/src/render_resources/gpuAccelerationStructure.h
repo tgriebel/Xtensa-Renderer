@@ -82,7 +82,6 @@ public:
 	void						Destroy() override;
 
 #ifdef USE_VULKAN_RTX
-	VkDeviceAddress				GetBlasDeviceAddress( uint32_t index ) const;
 	uint32_t					GetBlasCount() const { return static_cast<uint32_t>( m_blasEntries.size() ); }
 	bool						IsBuilt() const { return m_tlas != VK_NULL_HANDLE; }
 	const GpuBuffer*			GetSurfaceInfoBuffer() const { return &m_rtSurfaceInfoBuf; }
