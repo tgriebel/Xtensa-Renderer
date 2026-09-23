@@ -27,7 +27,7 @@ Pr 0.0
 Pm 0.7
 map_Bump models/chess_board/Marble09_nrm.jpg
 map_Kd models/chess_board/marble.jpg
-map_Ks models/chess_board/Marble09_rgh.jpg
+map_Pr models/chess_board/Marble09_rgh.jpg
 
 newmtl ChessBoardWhite
 Ns 225.000000
@@ -42,4 +42,4 @@ Pr 0.0
 Pm 0.7
 map_Bump models/chess_board/Marble09_nrm.jpg
 map_Kd models/chess_board/Marble09_disp.jpg
-map_Ks models/chess_board/gray.jpg
+map_Pr models/chess_board/gray.jpg
