@@ -80,6 +80,9 @@
     <ClCompile Include="src\render_state\frameBuffer.cpp">
       <Filter>Device Context</Filter>
     </ClCompile>
+    <ClCompile Include="src\render_state\rhi_vulkan.cpp">
+      <Filter>Device Context</Filter>
+    </ClCompile>
     <ClCompile Include="src\draw_passes\drawpass.cpp">
       <Filter>Draw Passes</Filter>
     </ClCompile>

@@ -466,6 +466,7 @@
     <ClCompile Include="src\render_state\cmdContext.cpp" />
     <ClCompile Include="src\render_state\deviceContext.cpp" />
     <ClCompile Include="src\render_state\frameBuffer.cpp" />
+    <ClCompile Include="src\render_state\rhi_vulkan.cpp" />
     <ClCompile Include="src\render_tasks\imageShaderTask.cpp" />
     <ClCompile Include="src\render_tasks\ImageReadbackTask.cpp" />
     <ClCompile Include="src\render_tasks\imageMipTask.cpp" />
