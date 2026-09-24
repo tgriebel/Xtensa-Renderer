@@ -9,7 +9,7 @@
 #include "../render_core/renderer.h"
 #include "../render_resources/gpuAccelerationStructure.h"
 #include "../render_core/debugMenu.h"
-#include "../render_core/gpuImage.h"
+#include "../render_resources/gpuImage.h"
 #include "../render_resources/imageSampler.h"
 #include "../render_state/rhi.h"
 #include "../render_state/deviceContext.h"

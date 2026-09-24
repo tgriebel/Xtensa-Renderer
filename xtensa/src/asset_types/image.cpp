@@ -8,7 +8,7 @@
 #include "../io/serializeClasses.h"
 #include "../io/io.h"
 #include "../asset_types/assetLib.h"
-#include "../render_core/gpuImage.h"
+#include "../render_resources/gpuImage.h"
 #include "../render_resources/aliasableImageHeap.h"
 
 

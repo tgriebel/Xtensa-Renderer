@@ -5,7 +5,7 @@
 
 #include "../globals/common.h"
 #include "../globals/render_util.h"
-#include "../render_core/gpuImage.h"
+#include "../render_resources/gpuImage.h"
 #include "entity.h"
 #include "sceneBase.h"
 #include "../asset_types/gpuProgram.h"

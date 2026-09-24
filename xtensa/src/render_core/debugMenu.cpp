@@ -1,5 +1,5 @@
 #include "../globals/common.h"
-#include "gpuImage.h"
+#include "../render_resources/gpuImage.h"
 #include "debugMenu.h"
 #include "../globals/assetDefs.h"
 #include "../scene/sceneBase.h"

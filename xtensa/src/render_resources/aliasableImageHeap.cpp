@@ -1,6 +1,6 @@
 #include "aliasableImageHeap.h"
 
-#include "../render_core/gpuImage.h"
+#include "gpuImage.h"
 #include "../render_state/deviceContext.h"
 #include "../render_state/rhi.h"
 

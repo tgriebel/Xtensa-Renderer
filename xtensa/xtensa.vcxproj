@@ -375,7 +375,7 @@
     <ClInclude Include="src\render_binding\pipeline.h" />
     <ClInclude Include="src\render_binding\shaderBinding.h" />
     <ClInclude Include="src\render_core\debugMenu.h" />
-    <ClInclude Include="src\render_core\gpuImage.h" />
+    <ClInclude Include="src\render_resources\gpuImage.h" />
     <ClInclude Include="src\render_core\gpuTimerPool.h" />
     <ClInclude Include="src\render_core\GpuSync.h" />
     <ClInclude Include="src\render_core\log.h" />
@@ -454,7 +454,7 @@
     <ClCompile Include="src\render_binding\pipeline.cpp" />
     <ClCompile Include="src\render_binding\shaderBinding.cpp" />
     <ClCompile Include="src\render_core\debugMenu.cpp" />
-    <ClCompile Include="src\render_core\gpuImage.cpp" />
+    <ClCompile Include="src\render_resources\gpuImage.cpp" />
     <ClCompile Include="src\render_core\gpuTimerPool.cpp" />
     <ClCompile Include="src\render_core\GpuSync.cpp" />
     <ClCompile Include="src\render_core\log.cpp" />

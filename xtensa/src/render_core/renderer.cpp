@@ -11,7 +11,7 @@
 #include <gfxcore/math/vector.h>
 
 #include "debugMenu.h"
-#include "gpuImage.h"
+#include "../render_resources/gpuImage.h"
 #include "gpuTimerPool.h"
 #include "swapChain.h"
 

@@ -2,7 +2,7 @@
 #include "../render_core/log.h"
 #include "../render_core/swapChain.h"
 #include "../draw_passes/drawpass.h"
-#include "../render_core/gpuImage.h"
+#include "../render_resources/gpuImage.h"
 #include "../render_core/renderer.h"
 #include "../render_binding/bindings.h"
 #include "../app/cvar.h"

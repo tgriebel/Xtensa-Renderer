@@ -5,7 +5,7 @@
 #include "../app/window.h"
 #include "../render_state/deviceContext.h"
 #include "../render_state/rhi.h"
-#include "../render_core/gpuImage.h"
+#include "../render_resources/gpuImage.h"
 #include "../render_state/frameBuffer.h"
 
 #ifdef USE_VULKAN

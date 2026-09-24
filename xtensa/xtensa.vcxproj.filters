@@ -53,8 +53,8 @@
     <ClCompile Include="scenes\emu\nesScene.cpp">
       <Filter>Scene Types</Filter>
     </ClCompile>
-    <ClCompile Include="src\render_core\gpuImage.cpp">
-      <Filter>Core</Filter>
+    <ClCompile Include="src\render_resources\gpuImage.cpp">
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="src\render_binding\shaderBinding.cpp">
       <Filter>Binding</Filter>
@@ -296,8 +296,8 @@
     <ClInclude Include="scenes\emu\nesScene.h">
       <Filter>Scene Types</Filter>
     </ClInclude>
-    <ClInclude Include="src\render_core\gpuImage.h">
-      <Filter>Core</Filter>
+    <ClInclude Include="src\render_resources\gpuImage.h">
+      <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="src\render_state\rhi.h">
       <Filter>Device Context</Filter>

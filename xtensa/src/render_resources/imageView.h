@@ -1,5 +1,5 @@
 #pragma once
-#include "../render_core/gpuImage.h"
+#include "gpuImage.h"
 #include "../render_state/deviceContext.h"
 #include "../asset_types/image.h"
 

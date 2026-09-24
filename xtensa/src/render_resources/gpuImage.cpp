@@ -4,7 +4,7 @@
 #include "../render_state/rhi.h"
 #include "../asset_types/image.h"
 #include "../render_core/swapChain.h"
-#include "../render_resources/aliasableImageHeap.h"
+#include "aliasableImageHeap.h"
 
 // TODO: move
 #ifdef USE_VULKAN	

@@ -1,6 +1,6 @@
 #include "renderResource.h"
 #include "../render_state/cmdContext.h"
-#include "../render_core/gpuImage.h"
+#include "../render_resources/gpuImage.h"
 #include <algorithm>
 #include "../app/window.h"
 #include "log.h"

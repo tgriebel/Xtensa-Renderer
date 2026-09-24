@@ -2,7 +2,7 @@
 #include "renderview.h"
 #include "../render_binding/bindings.h"
 #include "../scene/entity.h"
-#include "gpuImage.h"
+#include "../render_resources/gpuImage.h"
 
 #if defined( USE_IMGUI )
 #include "../../../external/imgui/imgui.h"
