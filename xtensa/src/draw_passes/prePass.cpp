@@ -10,23 +10,19 @@ void PrePass::Init( RenderContext* renderContext, FrameBuffer* frameBuffer )
 	m_name = "Pre Pass";
 	m_passId = DRAWPASS_PREPASS;
 
-	const bool velocityInDepth = true;
-	const bool visibilityInPrepass = false;
+	const bool useVisibilityBuffer = true;
+	const bool writeVelocity = true;
 
 	m_stateBits = GFX_STATE_NONE;
 	m_stateBits |= GFX_STATE_DEPTH_TEST;
 	m_stateBits |= GFX_STATE_DEPTH_WRITE;
-	m_stateBits |= GFX_STATE_COLOR0_MASK;
 	m_stateBits |= GFX_STATE_CULL_MODE_BACK;
 	m_stateBits |= GFX_STATE_STENCIL_ENABLE;
 	m_stateBits |= GFX_STATE_MRT_ENABLE;
 
-	if( velocityInDepth == false ) {
+	if( writeVelocity == false )
+	{
 		m_stateBits |= GFX_STATE_COLOR1_MASK;
-	}
-
-	if( visibilityInPrepass ) {
-		m_stateBits |= GFX_STATE_COLOR2_MASK;
 	}
 
 	codeImages.SetRenderContext( renderContext );
