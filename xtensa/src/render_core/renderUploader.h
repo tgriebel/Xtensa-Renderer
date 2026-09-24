@@ -79,7 +79,7 @@ public:
 	void				Shutdown();
 
 	void				OnReboot();
-	void				OnFrameBegin();
+	void				OnFrameBegin( GpuTimelineSemaphore* frameCompleteTimeline, uint64_t waitValue );
 	void				Upload();
 
 	void				QueueImageUpload( Asset<Image>& imageAsset );

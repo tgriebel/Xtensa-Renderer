@@ -96,6 +96,9 @@ private:
 	ComputeCmdList						computeContext;
 	ComputeState						particleState;
 
+	// Monotonic GPU semaphore inserted between frames
+	GpuTimelineSemaphore				frameCompleteSemaphore;
+
 	// Shader resources
 	ResourceContext						resources;
 	committedLightsArray_t				committedLights;

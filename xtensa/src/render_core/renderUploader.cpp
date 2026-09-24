@@ -117,7 +117,7 @@ void RenderUploader::OnReboot()
 }
 
 
-void RenderUploader::OnFrameBegin()
+void RenderUploader::OnFrameBegin( GpuTimelineSemaphore* frameCompleteTimeline, uint64_t waitValue )
 {
 	uploadFence.Wait();
 	commands.Begin();
@@ -130,6 +130,8 @@ void RenderUploader::OnFrameBegin()
 	UpdateTextureData( &commands );
 
 	commands.End();
+
+	commands.Wait( frameCompleteTimeline, waitValue );
 	commands.Signal( &finishedSemaphore );
 	commands.Submit( &uploadFence );
 

@@ -275,6 +275,7 @@ void Renderer::Destroy()
 	// Sync
 	gfxContext.presentSemaphore.Destroy();
 	gfxContext.renderFinishedSemaphore.Destroy();
+	frameCompleteSemaphore.Destroy();
 	computeContext.semaphore.Destroy();
 
 	for( size_t i = 0; i < MaxFrameStates; ++i )
@@ -920,6 +921,7 @@ void Renderer::CreateSyncObjects()
 	gfxContext.presentSemaphore.Create( "PresentSemaphore" );
 	gfxContext.renderFinishedSemaphore.Create( "RenderSemaphore" );
 	computeContext.semaphore.Create( "ComputeSemaphore" );
+	frameCompleteSemaphore.Create( "FrameCompleteTimeline" );
 
 	for ( size_t i = 0; i < MaxFrameStates; ++i ) {
 		gfxContext.frameFence[ i ].Create( "FrameFence" );
@@ -927,5 +929,6 @@ void Renderer::CreateSyncObjects()
 
 #ifdef USE_VULKAN
 	gfxContext.presentSemaphore.waitStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+	frameCompleteSemaphore.waitStage = static_cast<VkPipelineStageFlagBits>( VK_PIPELINE_STAGE_TRANSFER_BIT | VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR );
 #endif
 }

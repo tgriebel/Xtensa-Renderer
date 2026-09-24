@@ -31,6 +31,8 @@ void CommandList::Begin()
 
 	waitSemaphores.clear();
 	signalSemaphores.clear();
+	waitTimelineSemaphores.clear();
+	signalTimelineSemaphores.clear();
 
 	VkCommandBufferBeginInfo beginInfo{ };
 	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -111,6 +113,18 @@ void CommandList::Signal( GpuSemaphore* semaphore )
 }
 
 
+void CommandList::Wait( GpuTimelineSemaphore* semaphore, uint64_t value )
+{
+	waitTimelineSemaphores.push_back( { semaphore, value } );
+}
+
+
+void CommandList::Signal( GpuTimelineSemaphore* semaphore, uint64_t value )
+{
+	signalTimelineSemaphores.push_back( { semaphore, value } );
+}
+
+
 void CommandList::MarkerBeginRegion( const char* pMarkerName, const vec4f& color )
 {
 	if ( context.debugMarkersEnabled )
@@ -178,22 +192,43 @@ void CommandList::Submit( const GpuFence* fence )
 	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
 	std::vector<VkPipelineStageFlags> vk_waitStages;
-	std::vector<VkSemaphore> vk_waitSemaphores;	
-	vk_waitStages.reserve( waitSemaphores.size() );
-	vk_waitSemaphores.reserve( waitSemaphores.size() );
+	std::vector<VkSemaphore> vk_waitSemaphores;
+	std::vector<uint64_t> vk_waitValues;
+	vk_waitStages.reserve( waitSemaphores.size() + waitTimelineSemaphores.size() );
+	vk_waitSemaphores.reserve( waitSemaphores.size() + waitTimelineSemaphores.size() );
+	vk_waitValues.reserve( waitSemaphores.size() + waitTimelineSemaphores.size() );
 
 	for( GpuSemaphore* semaphore : waitSemaphores )
 	{
 		assert( semaphore->waitStage != VK_PIPELINE_STAGE_NONE_KHR );
 		vk_waitStages.push_back( semaphore->waitStage );
 		vk_waitSemaphores.push_back( semaphore->GetVkObject() );
+		vk_waitValues.push_back( 0 );
+	}
+
+	for( const timelineSemaphoreOp_t& op : waitTimelineSemaphores )
+	{
+		assert( op.semaphore->waitStage != VK_PIPELINE_STAGE_NONE_KHR );
+		vk_waitStages.push_back( op.semaphore->waitStage );
+		vk_waitSemaphores.push_back( op.semaphore->GetVkObject() );
+		vk_waitValues.push_back( op.value );
 	}
 
 	std::vector<VkSemaphore> vk_signalSemaphores;
-	vk_signalSemaphores.reserve( signalSemaphores.size() );
+	std::vector<uint64_t> vk_signalValues;
+	vk_signalSemaphores.reserve( signalSemaphores.size() + signalTimelineSemaphores.size() );
+	vk_signalValues.reserve( signalSemaphores.size() + signalTimelineSemaphores.size() );
 
-	for ( GpuSemaphore* semaphore : signalSemaphores ) {
+	for ( GpuSemaphore* semaphore : signalSemaphores )
+	{
 		vk_signalSemaphores.push_back( semaphore->GetVkObject() );
+		vk_signalValues.push_back( 0 );
+	}
+
+	for ( const timelineSemaphoreOp_t& op : signalTimelineSemaphores )
+	{
+		vk_signalSemaphores.push_back( op.semaphore->GetVkObject() );
+		vk_signalValues.push_back( op.value );
 	}
 
 	if ( vk_waitSemaphores.size() > 0 )
@@ -209,6 +244,20 @@ void CommandList::Submit( const GpuFence* fence )
 	{
 		submitInfo.signalSemaphoreCount = static_cast<uint32_t>( vk_signalSemaphores.size() );
 		submitInfo.pSignalSemaphores = vk_signalSemaphores.data();
+	}
+
+	// Only needed when a timeline semaphore is actually part of this submit -- values are ignored
+	// by the driver for any binary semaphores mixed into the lists above, so when only binary
+	// semaphores are present there's no need to chain this at all.
+	VkTimelineSemaphoreSubmitInfo timelineInfo{};
+	if( ( waitTimelineSemaphores.empty() == false ) || ( signalTimelineSemaphores.empty() == false ) )
+	{
+		timelineInfo.sType = VK_STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO;
+		timelineInfo.waitSemaphoreValueCount = static_cast<uint32_t>( vk_waitValues.size() );
+		timelineInfo.pWaitSemaphoreValues = vk_waitValues.data();
+		timelineInfo.signalSemaphoreValueCount = static_cast<uint32_t>( vk_signalValues.size() );
+		timelineInfo.pSignalSemaphoreValues = vk_signalValues.data();
+		submitInfo.pNext = &timelineInfo;
 	}
 
 	VkFence vk_fence = ( fence != nullptr ) ? fence->GetVkObject() : VK_NULL_HANDLE;

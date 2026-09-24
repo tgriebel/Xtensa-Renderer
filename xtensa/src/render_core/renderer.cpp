@@ -287,7 +287,7 @@ void Renderer::Render()
 
 	BuildPipelines();
 
-	uploader.OnFrameBegin();
+	uploader.OnFrameBegin( &frameCompleteSemaphore, renderContext.frameNumber - 1 );
 
 	UpdateBuffers();
 	UpdateBindSets();
@@ -352,6 +352,7 @@ void Renderer::SubmitFrame()
 		gfxContext.Wait( &gfxContext.presentSemaphore );
 		gfxContext.Wait( uploader.GetFinishedSemaphore() );
 		gfxContext.Signal( &gfxContext.renderFinishedSemaphore );
+		gfxContext.Signal( &frameCompleteSemaphore, renderContext.frameNumber );
 		gfxContext.Submit( &gfxContext.frameFence[ context.bufferId ] );
 	}
 

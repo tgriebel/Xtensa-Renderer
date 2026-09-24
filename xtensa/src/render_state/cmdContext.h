@@ -79,8 +79,16 @@ protected:
 	bool						isOpen;
 
 private:
-	std::vector<GpuSemaphore*>	waitSemaphores;
-	std::vector<GpuSemaphore*>	signalSemaphores;
+	struct timelineSemaphoreOp_t
+	{
+		GpuTimelineSemaphore*	semaphore;
+		uint64_t				value;
+	};
+
+	std::vector<GpuSemaphore*>				waitSemaphores;
+	std::vector<GpuSemaphore*>				signalSemaphores;
+	std::vector<timelineSemaphoreOp_t>		waitTimelineSemaphores;
+	std::vector<timelineSemaphoreOp_t>		signalTimelineSemaphores;
 #ifdef USE_VULKAN
 	VkCommandPool				commandPool;
 	VkCommandBuffer				commandBuffers[ MaxFrameStates ];
@@ -114,6 +122,8 @@ public:
 	void						EndTimestamp( const char* name );
 	void						Wait( GpuSemaphore* semaphore );
 	void						Signal( GpuSemaphore* semaphore );
+	void						Wait( GpuTimelineSemaphore* semaphore, uint64_t value );
+	void						Signal( GpuTimelineSemaphore* semaphore, uint64_t value );
 	void						Submit( const GpuFence* fence = nullptr );
 	void						Dispatch( const Asset<GpuProgram>& progAsset, const ShaderBindParms& bindParms, const uint32_t x, const uint32_t y, const uint32_t z );
 	void						Dispatch( const Asset<GpuProgram>& progAsset, const ShaderBindParms& bindParms, const void* constants, const uint32_t constantsByteSize, const uint32_t x, const uint32_t y, const uint32_t z );
