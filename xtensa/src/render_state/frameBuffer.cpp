@@ -301,10 +301,27 @@ void FrameBuffer::Create( const frameBufferCreateInfo_t& createInfo )
 				continue;
 			}
 			if( images[ firstValidIx ]->info.width != images[ imageIx ]->info.width ||
-				images[ firstValidIx ]->info.height != images[ imageIx ]->info.height || 
+				images[ firstValidIx ]->info.height != images[ imageIx ]->info.height ||
 				images[ firstValidIx ]->info.layers != images[ imageIx ]->info.layers )
 			{
 				THROW_ERROR( "Framebuffer images must have the same dimensions." );
+			}
+		}
+
+		if( createInfo.lifetime == resourceLifeTime_t::RESIZE )
+		{
+			for ( uint32_t imageIx = 0; imageIx < MaxAttachmentCount; ++imageIx )
+			{
+				if( images[ imageIx ] == nullptr ) {
+					continue;
+				}
+				if( HasFlags( images[ imageIx ]->gpuImage->GetFlags(), gpuImageStateFlags_t::GPU_IMAGE_PRESENT ) ) {
+					continue;
+				}
+				if( images[ imageIx ]->GetLifetime() != resourceLifeTime_t::RESIZE )
+				{
+					THROW_ERROR( "Framebuffer images must also be RESIZE lifetime." );
+				}
 			}
 		}
 	}
