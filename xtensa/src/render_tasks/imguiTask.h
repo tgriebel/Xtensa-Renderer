@@ -23,7 +23,7 @@ private:
 	renderPassTransition_t	m_transitionState = {};
 	ResourceContext*		m_resources;
 	RenderContext*			m_context;
-	const DrawPass*			m_imguiPass;
+	FrameBuffer*			m_frameBuffer = nullptr;
 	DrawPass*				m_imagePass;
 	GpuBuffer				m_buffer;
 
@@ -36,13 +36,13 @@ private:
 	bool					m_imageStatDispatched;
 	uint32_t				m_imageStatHistogram[ ImageStatHistogramBins ];
 
-	void Init( const DrawPass* pass, RenderContext* renderContext, ResourceContext* resourceContext, const bool finalizeImage );
+	void Init( RenderContext* renderContext, ResourceContext* resourceContext, const frameBufferCreateInfo_t& fbInfo, const bool finalizeImage );
 	void Shutdown();
 
 public:
-	ImguiTask( const DrawPass* pass, RenderContext* renderContext, ResourceContext* resourceContext, const bool finalizeImage )
+	ImguiTask( RenderContext* renderContext, ResourceContext* resourceContext, const frameBufferCreateInfo_t& fbInfo, const bool finalizeImage )
 	{
-		Init( pass, renderContext, resourceContext, finalizeImage );
+		Init( renderContext, resourceContext, fbInfo, finalizeImage );
 	}
 
 	~ImguiTask()

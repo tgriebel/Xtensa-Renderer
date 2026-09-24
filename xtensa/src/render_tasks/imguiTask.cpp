@@ -136,17 +136,18 @@ void AddImageViewerCallback( ImDrawList* dl, const imageViewerCallbackData_t& ca
 }
 
 
-void ImguiTask::Init( const DrawPass* pass, RenderContext* renderContext, ResourceContext* resourceContext, const bool finalizeImage )
+void ImguiTask::Init( RenderContext* renderContext, ResourceContext* resourceContext, const frameBufferCreateInfo_t& fbInfo, const bool finalizeImage )
 {
 	m_context = renderContext;
 	m_resources = resourceContext;
 
-	m_imguiPass = pass;
-
 	m_transitionState.flags.presentAfter = finalizeImage;
 	m_transitionState.flags.store = true;
 
-	m_imagePass = new PostPass( m_context, const_cast<FrameBuffer*>( m_imguiPass->GetFrameBuffer() ) );
+	m_frameBuffer = new FrameBuffer();
+	m_frameBuffer->Create( fbInfo );
+
+	m_imagePass = new PostPass( m_context, m_frameBuffer );
 
 	m_imagePass->parms = m_context->RegisterBindParm( "ImguiBindParms", bindset_imageShader);
 
@@ -200,6 +201,11 @@ void ImguiTask::Shutdown()
 		delete m_imagePass;
 		m_imagePass = nullptr;
 	}
+	if( m_frameBuffer != nullptr )
+	{
+		delete m_frameBuffer;
+		m_frameBuffer = nullptr;
+	}
 	m_buffer.Destroy();
 	m_imageStatBuffer.Destroy();
 	m_imageStatParmsBuffer.Destroy();
@@ -218,7 +224,7 @@ void ImguiTask::FrameBegin()
 		uint32_t	sampleIndex;
 	};
 
-	const viewport_t viewport = m_imguiPass->GetViewport();
+	const viewport_t viewport = m_imagePass->GetViewport();
 
 	m_imagePass->codeImages.BindIndex( 0, rc.redImage );
 	m_imagePass->codeCubeImages.BindIndex( 0, rc.defaultImageCube );
@@ -348,7 +354,10 @@ void ImguiTask::FrameEnd()
 
 void ImguiTask::Resize()
 {
-
+	if( ( m_frameBuffer != nullptr ) && ( m_frameBuffer->GetLifetime() == resourceLifeTime_t::RESIZE ) )
+	{
+		m_imagePass->SetFrameBuffer( m_frameBuffer );
+	}
 }
 
 
@@ -376,7 +385,7 @@ void ImguiTask::Execute( CommandList& cmdContext )
 	}
 
 #ifdef USE_IMGUI
-	const FrameBuffer* fb = m_imguiPass->GetFrameBuffer();
+	const FrameBuffer* fb = m_frameBuffer;
 	VkCommandBuffer cmdBuffer = cmdContext.CommandBuffer();
 
 	VkRenderingAttachmentInfo colorAttachment = {};
@@ -386,10 +395,12 @@ void ImguiTask::Execute( CommandList& cmdContext )
 	colorAttachment.loadOp      = VK_ATTACHMENT_LOAD_OP_LOAD;
 	colorAttachment.storeOp     = VK_ATTACHMENT_STORE_OP_STORE;
 
+	const viewport_t& renderViewport = m_imagePass->GetViewport();
+
 	VkRenderingInfo renderingInfo = {};
 	renderingInfo.sType                = VK_STRUCTURE_TYPE_RENDERING_INFO;
-	renderingInfo.renderArea.offset    = { m_imguiPass->GetViewport().x, m_imguiPass->GetViewport().y };
-	renderingInfo.renderArea.extent    = { m_imguiPass->GetViewport().width, m_imguiPass->GetViewport().height };
+	renderingInfo.renderArea.offset    = { renderViewport.x, renderViewport.y };
+	renderingInfo.renderArea.extent    = { renderViewport.width, renderViewport.height };
 	renderingInfo.layerCount           = 1;
 	renderingInfo.colorAttachmentCount = 1;
 	renderingInfo.pColorAttachments    = &colorAttachment;
