@@ -1154,7 +1154,7 @@ void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderCont
 		prePassFbInfo.context = renderContext;
 		prePassFbInfo.lifetime = resourceLifeTime_t::RESIZE;
 		prePassFbInfo.swapBuffering = swapBuffering_t::SINGLE_FRAME;
-		prePassFbInfo.color0 = resources->mainColorImage;
+		prePassFbInfo.color0 = resources->visBufferImage;
 		prePassFbInfo.color1 = resources->gBufferLayerImage0;
 		prePassFbInfo.color2 = resources->gBufferLayerImage1;
 		prePassFbInfo.depthStencil = resources->depthStencilImage;
@@ -1280,8 +1280,12 @@ void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderCont
 		backBufferFbInfo.color0 = g_swapChain.GetBackBuffer();
 
 		schedule->Link( new RenderTask( viewContext->view2Ds[ 0 ], DRAWPASS_2D, DRAWPASS_2D, backBufferFbInfo ) );
+
+		// FIXME: Temp hack b/c ImguiTask needs the RenderTask to define a framebuffer before it's created
+		RenderTask* debug2dTask = new RenderTask( viewContext->view2Ds[ 0 ], DRAWPASS_DEBUG_2D, DRAWPASS_DEBUG_2D, backBufferFbInfo );
+
 		schedule->Link( new ImguiTask( viewContext->view2Ds[ 0 ]->passes[ 0 ][ DRAWPASS_DEBUG_2D ], renderContext, resources, false ) );
-		schedule->Link( new RenderTask( viewContext->view2Ds[ 0 ], DRAWPASS_DEBUG_2D, DRAWPASS_DEBUG_2D, backBufferFbInfo ) );
+		schedule->Link( debug2dTask );
 	}
 	//schedule->Link( new TransitionImageTask( g_swapChain.GetBackBuffer(), gpuImageStateFlags_t::GPU_IMAGE_WRITE, gpuImageStateFlags_t::GPU_IMAGE_PRESENT ) );
 

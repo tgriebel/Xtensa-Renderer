@@ -1,22 +1,33 @@
 #include "globals.h"
 #include "util.h"
 
-PS_LAYOUT_STANDARD( Texture2D )
+PS_LAYOUT_STANDARD( Texture2D ) // Must come before visBuffer.h -> lighting.h
+
+#include "visBuffer.h"
 
 #ifdef USE_MRT
 #define VELOCITY_IN_PREPASS
 #define NORMAL_IN_PREPASS
 #endif
 
-psOutput_t PSMain( vsToPsInterpolators input )
+struct prepassOutput_t
 {
-	psOutput_t output = (psOutput_t)0;
-    
+	uint2 outVisibility : SV_Target0;
+#ifdef USE_MRT
+	float4 outColor1 : SV_Target1;
+	float4 outColor2 : SV_Target2;
+#endif
+};
+
+prepassOutput_t PSMain( vsToPsInterpolators input, uint primitiveId : SV_PrimitiveID )
+{
+	prepassOutput_t output = (prepassOutput_t)0;
+
     const uint materialId = pushConstants.materialId;
     const uint viewId = pushConstants.viewId;
-    
-	output.outColor = float4( 1.0f, 0.0f, 0.0f, 1.0f );
-    
+
+	output.outVisibility = EncodeVisibility( input.objectId, primitiveId );
+
 #ifdef VELOCITY_IN_PREPASS
     const float2 current = input.clipPosition.xy / input.clipPosition.w;
     const float2 previous = input.prevClipPosition.xy / input.prevClipPosition.w;

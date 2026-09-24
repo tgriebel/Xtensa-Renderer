@@ -1,6 +1,8 @@
 #ifndef VISBUFFER_HLSL_H
 #define VISBUFFER_HLSL_H
 
+#include "lighting.h"
+
 // See John Hable's blog post for all the core implementation details on visibility buffers
 // https://filmicworlds.com/blog/visibility-buffer-rendering-with-material-graphs/
 

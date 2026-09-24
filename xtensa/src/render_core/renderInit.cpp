@@ -772,7 +772,14 @@ void Renderer::CreateFramebuffers()
 			info,
 			"FB_gBufferLayer", GPU_IMAGE_RW | GPU_IMAGE_TRANSFER_SRC, lifeTime
 		);
-		
+
+		info.fmt = IMAGE_FMT_RG_32_UINT;
+
+		resources.visBufferImage->Create(
+			info,
+			"FB_visBuffer", GPU_IMAGE_RW, lifeTime
+		);
+
 		info.fmt = IMAGE_FMT_D_32_S8;
 		info.type = IMAGE_TYPE_2D;
 
