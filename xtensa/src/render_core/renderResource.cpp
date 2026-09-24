@@ -3,7 +3,7 @@
 #include "../render_resources/gpuImage.h"
 #include <algorithm>
 #include "../app/window.h"
-#include "log.h"
+#include <SysCore/log.h>
 
 extern Window g_window;
 

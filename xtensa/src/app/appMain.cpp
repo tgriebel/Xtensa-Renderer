@@ -13,7 +13,7 @@
 #include "../scene/assetBaker.h"
 #include "../scene/codeAssets.h"
 #include "cvar.h"
-#include "../render_core/log.h"
+#include <SysCore/log.h>
 
 #include "../../scenes/chess/chessScene.h"
 #include "../../scenes/emu/nesScene.h"

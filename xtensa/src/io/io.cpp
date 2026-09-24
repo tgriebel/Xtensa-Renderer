@@ -15,7 +15,7 @@
 #include "../scene/assetManager.h"
 
 #include "../asset_types/image.h"
-#include "../render_core/log.h"
+#include <SysCore/log.h>
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "../../external/tiny_obj_loader.h"

@@ -1,5 +1,5 @@
 #include "deviceContext.h"
-#include "../render_core/log.h"
+#include <SysCore/log.h>
 #include "../render_core/swapChain.h"
 #include "../draw_passes/drawpass.h"
 #include "../render_resources/gpuImage.h"

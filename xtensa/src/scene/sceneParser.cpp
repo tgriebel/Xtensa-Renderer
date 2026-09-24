@@ -13,7 +13,7 @@
 #include "../asset_types/material.h"
 
 #include "../io/io.h"
-#include "../render_core/log.h"
+#include <SysCore/log.h>
 
 //#define JSMN_PARENT_LINKS
 #include <SysCore/jsmn.h>

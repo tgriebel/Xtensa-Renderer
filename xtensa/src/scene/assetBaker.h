@@ -9,7 +9,7 @@
 #include <SysCore/systemUtils.h>
 
 #include "../asset_types/assetLib.h"
-#include "../render_core/log.h"
+#include <SysCore/log.h>
 
 class Model;
 class Material;

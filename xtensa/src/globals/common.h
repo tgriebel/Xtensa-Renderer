@@ -54,7 +54,7 @@
 #include <SysCore/array.h>
 #include <SysCore/timer.h>
 
-#include "../render_core/log.h"
+#include <SysCore/log.h>
 
 const uint32_t	DescriptorPoolMaxUniformBuffers	= 1024;
 const uint32_t	DescriptorPoolMaxStorageBuffers	= 1024;

@@ -11,7 +11,7 @@
 #include <string>
 #include <thread>
 #include <vector>
-#include <syscore/systemUtils.h>
+#include "systemUtils.h"
 
 // Log system uses stack for storing system-specific tags (e.g. "Renderer")
 static thread_local std::vector<const char*> s_systemStack;

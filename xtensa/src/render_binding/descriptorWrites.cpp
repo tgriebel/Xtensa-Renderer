@@ -13,7 +13,7 @@
 #include "../render_resources/imageSampler.h"
 #include "../render_state/rhi.h"
 #include "../render_state/deviceContext.h"
-#include "../render_core/log.h"
+#include <SysCore/log.h>
 #include "bindings.h"
 
 union descriptorInfo_t

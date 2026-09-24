@@ -2,7 +2,7 @@
 
 #include <gfxcore/primitives/ray.h>
 #include "entity.h"
-#include "../render_core/log.h"
+#include <SysCore/log.h>
 #include "../globals/assetDefs.h"
 
 void Scene::CreateEntityBounds( const hdl_t modelHdl, Entity& entity )

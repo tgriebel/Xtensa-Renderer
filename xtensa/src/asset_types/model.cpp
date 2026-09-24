@@ -6,7 +6,7 @@
 #include "../scene/assetManager.h"
 #include "../scene/assetBaker.h"
 #include "../io/serializeClasses.h"
-#include "../render_core/log.h"
+#include <SysCore/log.h>
 
 bool ModelLoader::Load( Asset<Model>& modelAsset )
 {

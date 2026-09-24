@@ -12,7 +12,7 @@
 #include "imguiInterface.h"
 #endif
 
-#include "../render_core/log.h"
+#include <SysCore/log.h>
 #include "../render_core/debugMenu.h"
 #include "../render_core/gpuTimerPool.h"
 #include "../render_core/schedule.h"

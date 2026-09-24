@@ -231,7 +231,6 @@
     <ClCompile Include="src\render_resources\aliasableImageHeap.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
-    <ClCompile Include="src\render_core\log.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -504,7 +503,6 @@
     <ClInclude Include="src\globals\renderConfig.h">
       <Filter>Globals</Filter>
     </ClInclude>
-    <ClInclude Include="src\render_core\log.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">

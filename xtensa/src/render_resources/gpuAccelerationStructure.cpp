@@ -2,7 +2,7 @@
 #include "../render_state/cmdContext.h"
 #include "../render_state/deviceContext.h"
 #include "../render_core/renderUploader.h"
-#include "../render_core/log.h"
+#include <SysCore/log.h>
 
 #include <SysCore/common.h>
 using namespace SysCore;

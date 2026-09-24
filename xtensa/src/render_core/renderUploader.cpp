@@ -15,7 +15,7 @@
 #include "../../shaders/gpuShared.h"
 
 #include "swapChain.h"
-#include "log.h"
+#include <SysCore/log.h>
 
 extern Scene* g_scene;
 

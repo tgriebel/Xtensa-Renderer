@@ -1,4 +1,4 @@
-#include "log.h"
+#include <SysCore/log.h>
 
 // Verbose debug prints
 #if 0

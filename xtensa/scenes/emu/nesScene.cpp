@@ -1,7 +1,7 @@
 #include "nesScene.h"
 #include "../../src/app/window.h"
 #include "../../src/globals/assetDefs.h"
-#include "../../src/render_core/log.h"
+#include <SysCore/log.h>
 
 #include <windows.h> 
 #include <stdio.h>

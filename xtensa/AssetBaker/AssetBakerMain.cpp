@@ -19,7 +19,7 @@
 #include "../src/asset_types/image.h"
 #include "../src/asset_types/gpuProgram.h"
 #include "../src/scene/sceneParser.h"
-#include "../src/render_core/log.h"
+#include <SysCore/log.h>
 
 // Globals expected by shared translation units (asset libraries, scene parser, etc.)
 AssetManager	g_assets;

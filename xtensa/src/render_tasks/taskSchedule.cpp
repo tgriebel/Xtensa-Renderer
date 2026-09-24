@@ -1,6 +1,6 @@
 #include "TaskSchedule.h"
 #include "../render_core/renderResource.h"
-#include "../render_core/log.h"
+#include <SysCore/log.h>
 
 
 uint32_t TaskSchedule::TaskCount() const
