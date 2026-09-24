@@ -1,30 +1,13 @@
 #include "GpuSync.h"
 #include "../render_state/deviceContext.h"
 
-void GpuSemaphore::Create( const char* name, const bool isBinary )
+void GpuSemaphore::Create( const char* name )
 {
 #ifdef USE_VULKAN
-
-	isTimeline = ( isBinary == false );
-
-	VkSemaphoreTypeCreateInfo timelineCreateInfo{};
 	VkSemaphoreCreateInfo semaphoreInfo{ };
 	semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
-	if( isTimeline )
-	{
-		timelineCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO;
-		timelineCreateInfo.pNext = NULL;
-		timelineCreateInfo.semaphoreType = VK_SEMAPHORE_TYPE_TIMELINE;
-		timelineCreateInfo.initialValue = 0;
-
-		semaphoreInfo.flags = VK_SEMAPHORE_TYPE_TIMELINE;
-		semaphoreInfo.pNext = &timelineCreateInfo;
-	}
-
-	const uint32_t instanceCount = isTimeline ? 1 : MaxFrameStates;
-
-	for( uint32_t i = 0; i < instanceCount; ++i )
+	for( uint32_t i = 0; i < MaxFrameStates; ++i )
 	{
 		VK_CHECK_RESULT( vkCreateSemaphore( context.device, &semaphoreInfo, nullptr, &semaphores[ i ] ) );
 
@@ -37,8 +20,7 @@ void GpuSemaphore::Create( const char* name, const bool isBinary )
 void GpuSemaphore::Destroy()
 {
 #ifdef USE_VULKAN
-	const uint32_t instanceCount = isTimeline ? 1 : MaxFrameStates;
-	for ( uint32_t i = 0; i < instanceCount; ++i ) {
+	for ( uint32_t i = 0; i < MaxFrameStates; ++i ) {
 		vkDestroySemaphore( context.device, semaphores[ i ], nullptr );
 	}
 #endif
@@ -47,13 +29,54 @@ void GpuSemaphore::Destroy()
 #ifdef USE_VULKAN
 VkSemaphore& GpuSemaphore::VkObject()
 {
-	return isTimeline ? semaphores[ 0 ] : semaphores[ context.bufferId ];
+	return semaphores[ context.bufferId ];
 }
 
 
 VkSemaphore GpuSemaphore::GetVkObject() const
 {
-	return isTimeline ? semaphores[ 0 ] : semaphores[ context.bufferId ];
+	return semaphores[ context.bufferId ];
+}
+#endif
+
+
+void GpuTimelineSemaphore::Create( const char* name )
+{
+#ifdef USE_VULKAN
+	VkSemaphoreTypeCreateInfo timelineCreateInfo{ };
+	timelineCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO;
+	timelineCreateInfo.pNext = NULL;
+	timelineCreateInfo.semaphoreType = VK_SEMAPHORE_TYPE_TIMELINE;
+	timelineCreateInfo.initialValue = 0;
+
+	VkSemaphoreCreateInfo semaphoreInfo{ };
+	semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+	semaphoreInfo.pNext = &timelineCreateInfo;
+
+	VK_CHECK_RESULT( vkCreateSemaphore( context.device, &semaphoreInfo, nullptr, &semaphore ) );
+
+	vk_SetObjectName( (uint64_t)semaphore, VK_OBJECT_TYPE_SEMAPHORE, vk_BuildObjectName( "TimelineSemaphore", name, 0 ).c_str() );
+#endif
+}
+
+
+void GpuTimelineSemaphore::Destroy()
+{
+#ifdef USE_VULKAN
+	vkDestroySemaphore( context.device, semaphore, nullptr );
+#endif
+}
+
+#ifdef USE_VULKAN
+VkSemaphore& GpuTimelineSemaphore::VkObject()
+{
+	return semaphore;
+}
+
+
+VkSemaphore GpuTimelineSemaphore::GetVkObject() const
+{
+	return semaphore;
 }
 #endif
 
