@@ -929,6 +929,6 @@ void Renderer::CreateSyncObjects()
 
 #ifdef USE_VULKAN
 	gfxContext.presentSemaphore.waitStage = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-	frameCompleteSemaphore.waitStage = static_cast<VkPipelineStageFlagBits>( VK_PIPELINE_STAGE_TRANSFER_BIT | VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR );
+	frameCompleteSemaphore.waitStage = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
 #endif
 }
