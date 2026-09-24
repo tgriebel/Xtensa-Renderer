@@ -7,6 +7,8 @@ class GpuSemaphore
 #ifdef USE_VULKAN
 private:
 	VkSemaphore				semaphores[ MaxFrameStates ];
+	bool					isTimeline = false;
+
 public:
 	VkPipelineStageFlagBits	waitStage;
 #endif
@@ -16,6 +18,7 @@ public:
 #ifdef USE_VULKAN
 	VkSemaphore&			VkObject();
 	VkSemaphore				GetVkObject() const;
+	bool					IsTimeline() const { return isTimeline; }
 #endif
 };
 

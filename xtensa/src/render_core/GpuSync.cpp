@@ -5,12 +5,14 @@ void GpuSemaphore::Create( const char* name, const bool isBinary )
 {
 #ifdef USE_VULKAN
 
+	isTimeline = ( isBinary == false );
+
 	VkSemaphoreTypeCreateInfo timelineCreateInfo{};
 	VkSemaphoreCreateInfo semaphoreInfo{ };
 	semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
-	if( isBinary == false )
-	{	
+	if( isTimeline )
+	{
 		timelineCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO;
 		timelineCreateInfo.pNext = NULL;
 		timelineCreateInfo.semaphoreType = VK_SEMAPHORE_TYPE_TIMELINE;
@@ -20,7 +22,9 @@ void GpuSemaphore::Create( const char* name, const bool isBinary )
 		semaphoreInfo.pNext = &timelineCreateInfo;
 	}
 
-	for( uint32_t i = 0; i < MaxFrameStates; ++i )
+	const uint32_t instanceCount = isTimeline ? 1 : MaxFrameStates;
+
+	for( uint32_t i = 0; i < instanceCount; ++i )
 	{
 		VK_CHECK_RESULT( vkCreateSemaphore( context.device, &semaphoreInfo, nullptr, &semaphores[ i ] ) );
 
@@ -33,7 +37,8 @@ void GpuSemaphore::Create( const char* name, const bool isBinary )
 void GpuSemaphore::Destroy()
 {
 #ifdef USE_VULKAN
-	for ( uint32_t i = 0; i < MaxFrameStates; ++i ) {
+	const uint32_t instanceCount = isTimeline ? 1 : MaxFrameStates;
+	for ( uint32_t i = 0; i < instanceCount; ++i ) {
 		vkDestroySemaphore( context.device, semaphores[ i ], nullptr );
 	}
 #endif
@@ -42,13 +47,13 @@ void GpuSemaphore::Destroy()
 #ifdef USE_VULKAN
 VkSemaphore& GpuSemaphore::VkObject()
 {
-	return semaphores[ context.bufferId ];
+	return isTimeline ? semaphores[ 0 ] : semaphores[ context.bufferId ];
 }
 
 
 VkSemaphore GpuSemaphore::GetVkObject() const
 {
-	return semaphores[ context.bufferId ];
+	return isTimeline ? semaphores[ 0 ] : semaphores[ context.bufferId ];
 }
 #endif
 

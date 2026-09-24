@@ -540,6 +540,7 @@ void DeviceContext::Create( Window& window )
 		vk12Features.vulkanMemoryModelDeviceScope = VK_TRUE;
 		vk12Features.runtimeDescriptorArray = VK_TRUE;
 		vk12Features.shaderSampledImageArrayNonUniformIndexing = VK_TRUE;
+		vk12Features.timelineSemaphore = VK_TRUE;
 #ifdef USE_VULKAN_RTX
 		vk12Features.bufferDeviceAddress = VK_TRUE;
 #endif
