@@ -1,0 +1,60 @@
+Vulkan reference count by file (xtensa/src)
+Pattern matched: Vk<TypeName>, vk_<function/var>, VK_<CONSTANT>
+Total: 1475 occurrences across 51 files
+
+Rank  Count  File
+   1    574  render_state/rhi_vulkan.cpp
+   2    127  render_state/deviceContext.cpp
+   3     83  render_state/frameBuffer.cpp
+   4     82  render_resources/gpuAccelerationStructure.cpp
+   5     65  render_state/deviceContext.h
+   6     64  render_state/cmdContext.cpp
+   7     51  render_core/gpuImage.cpp
+   8     41  render_resources/gpuBuffer.cpp
+   9     37  render_core/swapChain.cpp
+   9     37  render_binding/descriptorWrites.cpp
+  11     34  render_tasks/RenderTask.cpp
+  12     25  render_resources/aliasableImageHeap.cpp
+  13     19  render_core/GpuSync.cpp
+  14     18  render_state/rhi.h
+  15     16  render_core/allocator.cpp
+  16     15  render_binding/shaderBinding.cpp
+  16     15  render_resources/imageSampler.cpp
+  18     14  render_core/gpuTimerPool.cpp
+  19     11  render_core/swapChain.h
+  19     11  render_core/gpuImage.h
+  21      9  app/appScene.cpp
+  21      9  render_tasks/imguiTask.cpp
+  23      8  render_binding/pipeline.cpp
+  23      8  render_binding/pipeline.h
+  23      8  render_core/renderContext.cpp
+  26      7  render_core/GpuSync.h
+  26      7  render_binding/vertexInput.cpp
+  26      7  render_resources/gpuAccelerationStructure.h
+  26      7  render_core/renderUploader.cpp
+  30      6  render_binding/shaderBinding.h
+  30      6  render_core/debugMenu.cpp
+  32      5  render_core/renderInit.cpp
+  32      5  render_tasks/ImageReadbackTask.cpp
+  32      5  render_state/cmdContext.h
+  35      4  app/window.cpp
+  35      4  asset_types/gpuProgram.cpp
+  35      4  render_resources/aliasableImageHeap.h
+  35      4  render_resources/gpuBuffer.h
+  39      3  app/window.h
+  40      2  render_tasks/imageMipTask.cpp
+  40      2  render_tasks/imageShaderTask.cpp
+  40      2  render_core/renderer.cpp
+  40      2  render_core/gpuTimerPool.h
+  40      2  asset_types/gpuProgram.h
+  40      2  render_resources/imageView.h
+  40      2  render_resources/imageSampler.h
+  47      1  render_core/renderer.h
+  47      1  render_core/debugMenu.h
+  47      1  render_core/renderUploader.h
+  47      1  render_binding/vertexInput.h
+
+Notes:
+- rhi_vulkan.cpp and deviceContext.cpp together hold ~48% of the total Vulkan surface area (701/1475).
+- Next-largest concentrations outside those two: frameBuffer.cpp, gpuAccelerationStructure.cpp,
+  cmdContext.cpp, gpuImage.cpp -- candidates if extending the rhi_vulkan.cpp split further.
