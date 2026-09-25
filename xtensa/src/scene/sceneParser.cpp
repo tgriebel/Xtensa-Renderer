@@ -545,7 +545,7 @@ int ParseEntityObject( parseState_t& st, void* object, uint32_t offset )
 
 	scale.v = vec3f( 1.0f, 1.0f, 1.0f );
 
-	const uint32_t objectCount = 12;
+	const uint32_t objectCount = 8;
 	const objectTuple_t objectMap[ objectCount ] =
 	{
 		{ "name",		&name,			TOKEN_LEN,			1,	&ParseStringObject },

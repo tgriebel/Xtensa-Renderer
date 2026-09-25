@@ -260,13 +260,6 @@
 	],
 	"entities": [
 		{
-			"name": "_skybox",
-			"model": "_skybox",
-			"x": [ 0.0, 0.0, 0.0 ],
-			"rotation": [ 0.0, 0.0, 0.0 ],
-			"scale": [ 1.0, 1.0, 1.0 ]
-		},
-		{
 			"name": "grid",
 			"model": "grid"
 		},

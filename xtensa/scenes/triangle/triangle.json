@@ -1,6 +1,9 @@
 {
   "sceneClass": "default",
   "type": "scene",
+  "reflink": "shaders_common.json",
+  "reflink": "image_common.json",
+  "skyName": "ferndalestudio",
   "shaders": [
 	{
       "name": "Default",
@@ -14,6 +17,10 @@
 	  "type": "2D"
 	},
 	{
+	  "name": "textures/grid2.png",
+	  "type": "2D"
+	},
+	{
 	  "name": "chapel_low.jpg",
 	  "type": "CUBE"
 	}
@@ -22,10 +29,9 @@
     {
       "name": "Grid",
 	  "KdR": 1.0,
-      "tr": 0.0,
       "ns": 0.0,
       "ior": 0.0,
-      "d": 1.0,
+      "opacity": 1.0,
       "illum": 0.0,
       "shaders": {
           "DRAWPASS_SHADOW": { "shader": "Shadow", "perms": [""] },
@@ -42,13 +48,18 @@
   	{
       "name" : "cube",
       "model" : "models/cube/cube.obj"
+    },
+    {
+      "name": "grid",
+      "model": "_terrain",
+      "argStr0": "Grid",
+      "argInt0": 100,
+      "argInt1": 100,
+      "argFlt0": 1.0,
+      "argFlt1": 100.0
     }
   ],
   "entities": [
-    {
-      "name" : "_skybox",
-      "model" : "_skybox"
-    },
 	{
       "name" : "grid",
       "model" : "grid"

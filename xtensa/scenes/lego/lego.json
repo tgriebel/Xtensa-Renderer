@@ -24,34 +24,6 @@
 		{
 			"name": "textures/grid.png",
 			"type": "2D"
-		},
-		{
-			"name": "skymaps/chapel_right.jpg",
-			"type": "2D"
-		},
-		{
-			"name": "skymaps/chapel_left.jpg",
-			"type": "2D"
-		},
-		{
-			"name": "skymaps/chapel_top.jpg",
-			"type": "2D"
-		},
-		{
-			"name": "skymaps/chapel_bottom.jpg",
-			"type": "2D"
-		},
-		{
-			"name": "skymaps/chapel_front.jpg",
-			"type": "2D"
-		},
-		{
-			"name": "skymaps/chapel_back.jpg",
-			"type": "2D"
-		},
-		{
-			"name": "chapel_low.jpg",
-			"type": "CUBE"
 		}
 	],
 	"materials": [
@@ -85,23 +57,6 @@
 			"textures": {
 				"GGX_ALBEDO_MAP_SLOT": "textures/grid.png"
 			}
-		},
-		{
-			"name": "SKY",
-			"shaders": {
-				"DRAWPASS_SKYBOX": {
-					"shader": "Sky",
-					"perms": [ "" ]
-				}
-			},
-			"textures": {
-				"CUBE_RIGHT_MAP_SLOT": "textures/skybox80s.png",
-				"CUBE_LEFT_MAP_SLOT": "textures/skybox80s.png",
-				"CUBE_TOP_MAP_SLOT": "textures/skybox80s.png",
-				"CUBE_BOTTOM_MAP_SLOT": "textures/skybox80s.png",
-				"CUBE_FRONT_MAP_SLOT": "textures/skybox80s.png",
-				"CUBE_BACK_MAP_SLOT": "textures/skybox80s.png"
-			}
 		}
 	],
 	"models": [
@@ -128,10 +83,6 @@
 		}
 	],
 	"entities": [
-		{
-			"name": "_skybox",
-			"model": "_skybox"
-		},
 		{
 			"name": "grid",
 			"model": "grid"
