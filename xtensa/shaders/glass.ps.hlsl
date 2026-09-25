@@ -40,7 +40,17 @@ psOutput_t PSMain( vsToPsInterpolators input )
     outColor.a = material.opacity;
 
     psOutput_t output = (psOutput_t)0;
+
+#ifdef USE_MRT
+    float4 outColor1;
+    outColor1.rgb = 0.5f * ( surfaceInput.N + float3( 1.0f, 1.0f, 1.0f ) );
+    outColor1.a = 1.0f;
+
     output.outColor = ClampColorFp16( outColor );
+    output.outColor1 = ClampColorFp16( outColor1 );
+#else
+    output.outColor = ClampColorFp16( outColor );
+#endif
 
     return output;
 }

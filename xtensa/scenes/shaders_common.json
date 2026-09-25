@@ -93,7 +93,8 @@
     {
       "name": "Glass",
       "vs": "simple",
-      "ps": "glass"
+      "ps": "glass",
+      "perms": ["mrt"]
     },
     {
       "name": "PostProcess",
