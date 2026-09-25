@@ -18,6 +18,52 @@ void GpuAccelerationStructure::Create( const char* name, resourceLifeTime_t life
 	m_name = name;
 	m_lifetime = lifetime;
 	RenderResource::Create( resourceType_t::ACCELERATION_STRUCTURE, lifetime );
+
+	m_tlasInstanceBuf.Create( m_name, swapBuffering_t::SINGLE_FRAME, m_lifetime,
+		MaxSurfaces, sizeof( VkAccelerationStructureInstanceKHR ), bufferType_t::TLAS_INSTANCE_DATA );
+
+	m_rtSurfaceInfoBuf.Create( m_name, swapBuffering_t::SINGLE_FRAME, m_lifetime,
+		MaxSurfaces, sizeof( gpuRtSurface_t ), bufferType_t::STORAGE );
+
+	VkAccelerationStructureGeometryInstancesDataKHR instancesData{};
+	instancesData.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_INSTANCES_DATA_KHR;
+	instancesData.arrayOfPointers = VK_FALSE;
+
+	VkAccelerationStructureGeometryKHR tlasGeometry{};
+	tlasGeometry.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
+	tlasGeometry.geometryType = VK_GEOMETRY_TYPE_INSTANCES_KHR;
+	tlasGeometry.geometry.instances = instancesData;
+
+	VkAccelerationStructureBuildGeometryInfoKHR tlasBuildInfo{};
+	tlasBuildInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
+	tlasBuildInfo.type = VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR;
+	tlasBuildInfo.flags = VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR
+		| VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR;
+	tlasBuildInfo.geometryCount = 1;
+	tlasBuildInfo.pGeometries = &tlasGeometry;
+
+	const uint32_t maxInstances = MaxSurfaces;
+	VkAccelerationStructureBuildSizesInfoKHR tlasSizes{};
+	tlasSizes.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR;
+	context.vkGetAccelerationStructureBuildSizesKHR( context.device,
+		VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR,
+		&tlasBuildInfo, &maxInstances, &tlasSizes );
+
+	const uint64_t scratchSize = std::max( tlasSizes.buildScratchSize, tlasSizes.updateScratchSize );
+
+	m_tlasScratch.Create( m_name, swapBuffering_t::SINGLE_FRAME, m_lifetime,
+		static_cast<uint32_t>( scratchSize ), 1, bufferType_t::STORAGE, bufferFlags_t::RT_VISIBLE );
+
+	m_tlasStorage.Create( m_name, swapBuffering_t::SINGLE_FRAME, m_lifetime,
+		static_cast<uint32_t>( tlasSizes.accelerationStructureSize ), 1, bufferType_t::ACCELERATION_STRUCTURE );
+
+	VkAccelerationStructureCreateInfoKHR tlasCreateInfo{};
+	tlasCreateInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_KHR;
+	tlasCreateInfo.buffer = m_tlasStorage.GetVkObject();
+	tlasCreateInfo.offset = 0;
+	tlasCreateInfo.size = tlasSizes.accelerationStructureSize;
+	tlasCreateInfo.type = VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR;
+	VK_CHECK_RESULT( context.vkCreateAccelerationStructureKHR( context.device, &tlasCreateInfo, nullptr, &m_tlas ) );
 }
 
 
@@ -230,7 +276,9 @@ void GpuAccelerationStructure::Update( CommandList* cmdList )
 		return;
 	}
 
-	const bool fullRebuild = ( m_tlas == VK_NULL_HANDLE ) || ( count != m_tlasInstanceCount );
+	assert( count <= MaxSurfaces );
+
+	const bool fullRebuild = ( m_tlasInstanceCount == 0 ) || ( count != m_tlasInstanceCount );
 
 	std::vector<VkAccelerationStructureInstanceKHR> vkInstances( count );
 	std::vector<gpuRtSurface_t> surfaceInfos( count );
@@ -268,19 +316,9 @@ void GpuAccelerationStructure::Update( CommandList* cmdList )
 		surfaceInfos[ i ].pad0 = 0;
 	}
 
-	// Rebuilt every frame
-	if ( fullRebuild )
-	{
-		if ( m_rtSurfaceInfoBuf.GetMaxSize() > 0 ) {
-			m_rtSurfaceInfoBuf.Destroy();
-		}
-		m_rtSurfaceInfoBuf.Create( m_name, swapBuffering_t::SINGLE_FRAME, m_lifetime,
-			count, sizeof( gpuRtSurface_t ), bufferType_t::STORAGE );
-	}
 	m_rtSurfaceInfoBuf.SetPos( 0 );
 	m_rtSurfaceInfoBuf.CopyData( surfaceInfos.data(), count * sizeof( gpuRtSurface_t ) );
 
-	// Query sizes
 	VkAccelerationStructureGeometryInstancesDataKHR instancesData{};
 	instancesData.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_INSTANCES_DATA_KHR;
 	instancesData.arrayOfPointers = VK_FALSE;
@@ -298,48 +336,8 @@ void GpuAccelerationStructure::Update( CommandList* cmdList )
 	tlasBuildInfo.geometryCount = 1;
 	tlasBuildInfo.pGeometries = &tlasGeometry;
 
-	VkAccelerationStructureBuildSizesInfoKHR tlasSizes{};
-	tlasSizes.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR;
-	context.vkGetAccelerationStructureBuildSizesKHR( context.device,
-		VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR,
-		&tlasBuildInfo, &count, &tlasSizes );
-
 	if ( fullRebuild )
 	{
-		if ( m_tlas != VK_NULL_HANDLE ) {
-			context.vkDestroyAccelerationStructureKHR( context.device, m_tlas, nullptr );
-			m_tlas = VK_NULL_HANDLE;
-		}
-		if( m_tlasStorage.GetMaxSize() > 0 ) {
-			m_tlasStorage.Destroy();
-		}
-		if( m_tlasScratch.GetMaxSize() > 0 ) {
-			m_tlasScratch.Destroy();
-		}
-		if ( m_tlasInstanceBuf.GetMaxSize() > 0 ) {
-			m_tlasInstanceBuf.Destroy();
-		}
-
-		m_tlasInstanceBuf.Create( m_name, swapBuffering_t::SINGLE_FRAME, m_lifetime,
-			count, sizeof( VkAccelerationStructureInstanceKHR ), bufferType_t::TLAS_INSTANCE_DATA );
-
-		// Size scratch to cover both build and update so it can be reused every frame
-		const uint64_t scratchSize = std::max( tlasSizes.buildScratchSize, tlasSizes.updateScratchSize );
-
-		m_tlasScratch.Create( m_name, swapBuffering_t::SINGLE_FRAME, m_lifetime,
-			static_cast<uint32_t>( scratchSize ), 1, bufferType_t::STORAGE, bufferFlags_t::RT_VISIBLE );
-
-		m_tlasStorage.Create( m_name, swapBuffering_t::SINGLE_FRAME, m_lifetime,
-			static_cast<uint32_t>( tlasSizes.accelerationStructureSize ), 1, bufferType_t::ACCELERATION_STRUCTURE );
-
-		VkAccelerationStructureCreateInfoKHR tlasCreateInfo{};
-		tlasCreateInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_KHR;
-		tlasCreateInfo.buffer = m_tlasStorage.GetVkObject();
-		tlasCreateInfo.offset = 0;
-		tlasCreateInfo.size = tlasSizes.accelerationStructureSize;
-		tlasCreateInfo.type = VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR;
-		VK_CHECK_RESULT( context.vkCreateAccelerationStructureKHR( context.device, &tlasCreateInfo, nullptr, &m_tlas ) );
-
 		tlasBuildInfo.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR;
 		tlasBuildInfo.srcAccelerationStructure = VK_NULL_HANDLE;
 	}
