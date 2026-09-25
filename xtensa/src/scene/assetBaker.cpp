@@ -82,11 +82,12 @@ bool IsBakedAssetFresh( const sourceFile_t& source, const bakedAssetInfo_t& bake
 		return true;
 	}
 
-	// Check if the name mismtaches
+	// Check if the name mismatches
 	// If there is no source path, the baked asset is referenced and loaded directly
 	const std::string bakedStem = std::filesystem::path( bakedInfo.name ).stem().string();
+	const std::string sourceStem = std::filesystem::path( source.name ).stem().string();
 
-	if( ( source.name.empty() == false ) && ( bakedStem != source.name ) ) {
+	if( ( source.name.empty() == false ) && ( bakedStem != sourceStem ) ) {
 		return false;
 	}
 
@@ -163,9 +164,9 @@ void AssetBaker::AddBakeDirectory( const std::string path )
 
 void AssetBaker::Bake()
 {
-	assetInfo.reserve(	m_imageLib ? m_imageLib->Count() : 0 +
-						m_materialLib ? m_materialLib->Count() : 0 +
-						m_modelLib ? m_modelLib->Count() : 0 );
+	assetInfo.reserve(	( m_imageLib ? m_imageLib->Count() : 0 ) +
+						( m_materialLib ? m_materialLib->Count() : 0 ) +
+						( m_modelLib ? m_modelLib->Count() : 0 ) );
 
 	MakeDirectory( m_bakePath );	
 

@@ -7,6 +7,7 @@
 #include "../scene/assetBaker.h"
 #include "../io/serializeClasses.h"
 #include "../io/io.h"
+#include "../globals/common.h"
 #include "../asset_types/assetLib.h"
 #include "../render_resources/gpuImage.h"
 #include "../render_resources/aliasableImageHeap.h"
@@ -258,7 +259,7 @@ bool ImageLoader::Load( Asset<Image>& imageAsset )
 	imgSource.isBakedAsset = ( m_ext == "img" ) || ( m_ext == "img.bin" );
 
 	bakedAssetInfo_t info {};
-	const bool loadedBaked = LoadBaked( imageAsset, info, imgSource, ".\\baked\\" + m_basePath, "img.bin" );
+	const bool loadedBaked = LoadBaked( imageAsset, info, imgSource, BakePath + m_basePath, "img.bin" );
 	if ( loadedBaked ) {
 		return true;
 	}

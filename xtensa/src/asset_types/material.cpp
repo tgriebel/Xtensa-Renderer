@@ -6,6 +6,7 @@
 #include "../scene/assetBaker.h"
 #include "../io/serializeClasses.h"
 #include "../io/io.h"
+#include "../globals/common.h"
 #include "image.h"
 
 bool Material::AddTexture( const uint32_t slot, const hdl_t hdl )
@@ -181,7 +182,7 @@ bool BakedMaterialLoader::Load( Asset<Material>& materialAsset )
 	matSource.isBakedAsset = true;
 
 	bakedAssetInfo_t info = {};
-	const bool loadedBaked = LoadBaked( materialAsset, info, matSource, ".\\baked\\" + m_assetDir, "mtl.bin" );
+	const bool loadedBaked = LoadBaked( materialAsset, info, matSource, BakePath + m_assetDir, "mtl.bin" );
 	if ( loadedBaked )
 	{
 		assert( m_assets != nullptr );
@@ -193,7 +194,7 @@ bool BakedMaterialLoader::Load( Asset<Material>& materialAsset )
 			if( imgHandle == INVALID_HDL ) {
 				continue;
 			}
-			m_assets->GetLib<Image>()->AddDeferred( imgHandle, pImgLoader_t( new BakedImageLoader( ".\\baked\\textures\\", "img.bin" ) ) );
+			m_assets->GetLib<Image>()->AddDeferred( imgHandle, pImgLoader_t( new BakedImageLoader( BakePath + TexturePath, "img.bin" ) ) );
 		}
 		return true;
 	}

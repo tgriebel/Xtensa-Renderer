@@ -6,6 +6,7 @@
 #include "../scene/assetManager.h"
 #include "../scene/assetBaker.h"
 #include "../io/serializeClasses.h"
+#include "../globals/common.h"
 #include <SysCore/log.h>
 
 bool ModelLoader::Load( Asset<Model>& modelAsset )
@@ -19,12 +20,12 @@ bool ModelLoader::Load( Asset<Model>& modelAsset )
 	modelSource.name = m_modelName;
 
 	bakedAssetInfo_t modelInfo = {};
-	const bool loadedBakedModel = LoadBaked( modelAsset, modelInfo, modelSource, ".\\baked\\" + m_modelPath, "mdl.bin" );
+	const bool loadedBakedModel = LoadBaked( modelAsset, modelInfo, modelSource, BakePath + m_modelPath, "mdl.bin" );
 	if ( loadedBakedModel )
 	{
 		const uint32_t surfCount = static_cast<uint32_t>( model.surfs.size() );
 		for ( uint32_t surfIx = 0; surfIx < surfCount; ++surfIx ) {
-			assets->GetLib<Material>()->AddDeferred( model.surfs[ surfIx ].materialHdl, pMatLoader_t( new BakedMaterialLoader( assets, ".\\materials\\", "mtl.bin" ) ) );
+			assets->GetLib<Material>()->AddDeferred( model.surfs[ surfIx ].materialHdl, pMatLoader_t( new BakedMaterialLoader( assets, MaterialPath, "mtl.bin" ) ) );
 		}
 		return true;
 	}
