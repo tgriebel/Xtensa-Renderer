@@ -260,13 +260,22 @@ static Material TranslateObjMaterial( AssetManager& assets, const tinyobj::mater
 	outMaterial.AddShader( DRAWPASS_DEBUG_WIREFRAME, AssetLib<GpuProgram>::Handle( "Debug" ) );
 	outMaterial.AddShader( DRAWPASS_DEBUG_3D, AssetLib<GpuProgram>::Handle( "DebugSolid" ) );
 
+	const vec2f noOffset( 0.0f, 0.0f );
+	const vec2f diffuseScale( material.diffuse_texopt.scale[ 0 ], material.diffuse_texopt.scale[ 1 ] );
+	const vec2f bumpScale( material.bump_texopt.scale[ 0 ], material.bump_texopt.scale[ 1 ] );
+
 	if ( isPbr )
 	{
+		const vec2f roughnessScale( material.roughness_texopt.scale[ 0 ], material.roughness_texopt.scale[ 1 ] );
+
 		outMaterial.usage = materialUsage_t::MATERIAL_USAGE_GGX;
 		outMaterial.AddTexture( GGX_ALBEDO_MAP_SLOT, assets.GetLib<Image>()->RetrieveHdl( supportedTextures[ 0 ].name.c_str() ) );
 		outMaterial.AddTexture( GGX_NORMAL_MAP_SLOT, assets.GetLib<Image>()->RetrieveHdl( supportedTextures[ 1 ].name.c_str() ) );
 		outMaterial.AddTexture( GGX_ROUGHNESS_MAP_SLOT, assets.GetLib<Image>()->RetrieveHdl( supportedTextures[ 2 ].name.c_str() ) );
 		outMaterial.AddTexture( GGX_METALLIC_MAP_SLOT, assets.GetLib<Image>()->RetrieveHdl( supportedTextures[ 3 ].name.c_str() ) );
+		outMaterial.AssignUvTransform( GGX_ALBEDO_MAP_SLOT, 0, diffuseScale, noOffset, 0.0f );
+		outMaterial.AssignUvTransform( GGX_NORMAL_MAP_SLOT, 0, bumpScale, noOffset, 0.0f );
+		outMaterial.AssignUvTransform( GGX_ROUGHNESS_MAP_SLOT, 0, roughnessScale, noOffset, 0.0f );
 	}
 	else
 	{
@@ -274,6 +283,8 @@ static Material TranslateObjMaterial( AssetManager& assets, const tinyobj::mater
 		outMaterial.AddTexture( GGX_ALBEDO_MAP_SLOT, assets.GetLib<Image>()->RetrieveHdl( supportedTextures[ 0 ].name.c_str() ) );
 		outMaterial.AddTexture( GGX_NORMAL_MAP_SLOT, assets.GetLib<Image>()->RetrieveHdl( supportedTextures[ 1 ].name.c_str() ) );
 		outMaterial.AddTexture( GGX_ROUGHNESS_MAP_SLOT, assets.GetLib<Image>()->RetrieveHdl( supportedTextures[ 2 ].name.c_str() ) );
+		outMaterial.AssignUvTransform( GGX_ALBEDO_MAP_SLOT, 0, diffuseScale, noOffset, 0.0f );
+		outMaterial.AssignUvTransform( GGX_NORMAL_MAP_SLOT, 0, bumpScale, noOffset, 0.0f );
 	}
 
 	materialParms_t& parms = outMaterial.GetParms();

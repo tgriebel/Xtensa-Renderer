@@ -1,6 +1,6 @@
 # Blender v3.0.0 OBJ File: ''
 # www.blender.org
-mtllib models/spyrius_lego/lego_materials.mtl
+mtllib models/spyrius_lego/spyrius_plastic.mtl
 o spyrius_lego
 v -160.000000 180.000000 -15.999970
 v -160.000000 180.000000 -22.999971

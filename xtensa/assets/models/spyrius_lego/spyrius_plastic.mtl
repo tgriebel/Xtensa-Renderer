@@ -1,0 +1,92 @@
+# Scuffed-plastic PBR materials for spyrius_lego.
+# Shared neutral albedo/normal/roughness maps, tinted per color via Kd.
+
+newmtl Black
+Kd 0.11 0.16 0.20
+d 1.0
+illum 2
+Pr 0.6
+Pm 0.0
+map_Kd -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic5-alb.png
+map_Bump -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic-normal.png
+map_Pr -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic-rough.png
+
+newmtl Blue
+Kd 0.12 0.35 0.66
+d 1.0
+illum 2
+Pr 0.6
+Pm 0.0
+map_Kd -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic5-alb.png
+map_Bump -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic-normal.png
+map_Pr -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic-rough.png
+
+newmtl Green
+Kd 0.00 0.52 0.17
+d 1.0
+illum 2
+Pr 0.6
+Pm 0.0
+map_Kd -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic5-alb.png
+map_Bump -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic-normal.png
+map_Pr -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic-rough.png
+
+newmtl Light_Grey
+Kd 0.54 0.57 0.55
+d 1.0
+illum 2
+Pr 0.6
+Pm 0.0
+map_Kd -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic5-alb.png
+map_Bump -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic-normal.png
+map_Pr -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic-rough.png
+
+newmtl Metallic_Gold
+Kd 0.86 0.67 0.20
+d 1.0
+illum 2
+Pr 0.4
+Pm 1.0
+map_Kd -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic5-alb.png
+map_Bump -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic-normal.png
+map_Pr -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic-rough.png
+
+newmtl Metallic_Silver
+Kd 0.46 0.46 0.46
+d 1.0
+illum 2
+Pr 0.4
+Pm 1.0
+map_Kd -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic5-alb.png
+map_Bump -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic-normal.png
+map_Pr -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic-rough.png
+
+newmtl Red
+Kd 0.71 0.00 0.00
+d 1.0
+illum 2
+Pr 0.6
+Pm 0.0
+map_Kd -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic5-alb.png
+map_Bump -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic-normal.png
+map_Pr -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic-rough.png
+
+newmtl Trans_Neon_Green
+Kd 0.75 1.00 0.00
+d 0.50
+illum 2
+Pr 0.6
+Pm 0.0
+map_Kd -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic5-alb.png
+map_Bump -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic-normal.png
+map_Pr -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic-rough.png
+
+newmtl Trans_Red
+Kd 0.79 0.10 0.04
+d 0.50
+illum 2
+Pr 0.6
+Pm 0.0
+map_Kd -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic5-alb.png
+map_Bump -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic-normal.png
+map_Pr -s 6.0 6.0 1.0 models/scuffed_plastic/scuffed-plastic-rough.png
