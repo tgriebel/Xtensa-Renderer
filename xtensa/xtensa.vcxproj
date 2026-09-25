@@ -363,7 +363,6 @@
     <ClInclude Include="src\draw_passes\postPass.h" />
     <ClInclude Include="src\draw_passes\shadowPass.h" />
     <ClInclude Include="src\draw_passes\skyboxPass.h" />
-    <ClInclude Include="src\draw_passes\terrainPass.h" />
     <ClInclude Include="src\draw_passes\transPass.h" />
     <ClInclude Include="src\draw_passes\wireFramePass.h" />
     <ClInclude Include="src\globals\common.h" />
@@ -442,7 +441,6 @@
     <ClCompile Include="src\draw_passes\postPass.cpp" />
     <ClCompile Include="src\draw_passes\shadowPass.cpp" />
     <ClCompile Include="src\draw_passes\skyboxPass.cpp" />
-    <ClCompile Include="src\draw_passes\terrainPass.cpp" />
     <ClCompile Include="src\draw_passes\transPass.cpp" />
     <ClCompile Include="src\draw_passes\wireframePass.cpp" />
     <ClCompile Include="src\globals\drawGroup.cpp" />

@@ -125,9 +125,6 @@
     <ClCompile Include="src\draw_passes\postPass.cpp">
       <Filter>Draw Passes</Filter>
     </ClCompile>
-    <ClCompile Include="src\draw_passes\terrainPass.cpp">
-      <Filter>Draw Passes</Filter>
-    </ClCompile>
     <ClCompile Include="src\draw_passes\skyboxPass.cpp">
       <Filter>Draw Passes</Filter>
     </ClCompile>
@@ -353,9 +350,6 @@
       <Filter>Draw Passes</Filter>
     </ClInclude>
     <ClInclude Include="src\draw_passes\transPass.h">
-      <Filter>Draw Passes</Filter>
-    </ClInclude>
-    <ClInclude Include="src\draw_passes\terrainPass.h">
       <Filter>Draw Passes</Filter>
     </ClInclude>
     <ClInclude Include="src\draw_passes\skyboxPass.h">

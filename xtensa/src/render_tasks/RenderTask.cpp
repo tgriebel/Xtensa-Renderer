@@ -26,7 +26,6 @@ static inline bool SkipPass( const drawSurf_t& surf, const drawPass_t pass )
 	{
 		if ( ( pass == DRAWPASS_SHADOW ) ||
 			( pass == DRAWPASS_PREPASS ) ||
-			( pass == DRAWPASS_TERRAIN ) ||
 			( pass == DRAWPASS_OPAQUE ) ||
 			( pass == DRAWPASS_SKYBOX ) ||
 			( pass == DRAWPASS_DEBUG_3D )

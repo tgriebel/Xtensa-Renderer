@@ -314,7 +314,7 @@ int ParseMaterialShaderObject( parseState_t& st, void* object, uint32_t offset )
 
 	Material* material = reinterpret_cast<Material*>( object );
 
-	const uint32_t objectCount = 9;
+	const uint32_t objectCount = 8;
 	drawPassShader_t drawPassShader[ objectCount ] = {};
 
 	static const enumString_t enumMap[ objectCount ] =
@@ -323,7 +323,6 @@ int ParseMaterialShaderObject( parseState_t& st, void* object, uint32_t offset )
 		MAKE_ENUM_STRING( DRAWPASS_PREPASS ),
 		MAKE_ENUM_STRING( DRAWPASS_OPAQUE ),
 		MAKE_ENUM_STRING( DRAWPASS_TRANS ),
-		MAKE_ENUM_STRING( DRAWPASS_TERRAIN ),
 		MAKE_ENUM_STRING( DRAWPASS_DEBUG_WIREFRAME ),
 		MAKE_ENUM_STRING( DRAWPASS_SKYBOX ),
 		MAKE_ENUM_STRING( DRAWPASS_2D ),
@@ -340,7 +339,6 @@ int ParseMaterialShaderObject( parseState_t& st, void* object, uint32_t offset )
 		{ enumMap[ 5 ].name,	&drawPassShader[ 5 ],	sizeof( drawPassShader_t ),	1,	&ParseDrawPassShaderObject },
 		{ enumMap[ 6 ].name,	&drawPassShader[ 6 ],	sizeof( drawPassShader_t ),	1,	&ParseDrawPassShaderObject },
 		{ enumMap[ 7 ].name,	&drawPassShader[ 7 ],	sizeof( drawPassShader_t ),	1,	&ParseDrawPassShaderObject },
-		{ enumMap[ 8 ].name,	&drawPassShader[ 8 ],	sizeof( drawPassShader_t ),	1,	&ParseDrawPassShaderObject },
 	};
 
 	ParseObject( st, objectMap, objectCount );

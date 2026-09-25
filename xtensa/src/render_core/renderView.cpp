@@ -19,7 +19,6 @@
 #include "../draw_passes/transPass.h"
 #include "../draw_passes/shadowPass.h"
 #include "../draw_passes/skyboxPass.h"
-#include "../draw_passes/terrainPass.h"
 #include "../draw_passes/postPass.h"
 #include "../draw_passes/wireFramePass.h"
 
@@ -110,9 +109,6 @@ void RenderView::Init( const renderViewCreateInfo_t& info )
 					break;
 				case DRAWPASS_PREPASS:
 					passes[ multiViewIndex ][ passIx ] = new PrePass( m_context, fb );
-					break;
-				case DRAWPASS_TERRAIN:
-					passes[ multiViewIndex ][ passIx ] = new TerrainPass( m_context, fb );
 					break;
 				case DRAWPASS_OPAQUE:
 					passes[ multiViewIndex ][ passIx ] = new OpaquePass( m_context, fb );
@@ -474,7 +470,6 @@ const bool RenderView::CanRenderSurface( const Entity& ent, const Material& mate
 	else if( GetViewMode() == renderViewMode_t::FORWARD )
 	{
 		const drawPass_t mainPasses[] = { DRAWPASS_PREPASS,
-											DRAWPASS_TERRAIN,
 											DRAWPASS_OPAQUE,
 											DRAWPASS_SKYBOX,
 											DRAWPASS_TRANS,
