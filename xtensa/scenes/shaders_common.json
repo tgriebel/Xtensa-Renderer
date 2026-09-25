@@ -91,6 +91,11 @@
       "perms": ["mrt"]
     },
     {
+      "name": "Glass",
+      "vs": "simple",
+      "ps": "glass"
+    },
+    {
       "name": "PostProcess",
       "vs": "fullscreen",
       "ps": "postProcess",

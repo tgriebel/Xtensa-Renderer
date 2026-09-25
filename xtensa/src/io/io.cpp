@@ -249,6 +249,10 @@ static Material TranslateObjMaterial( AssetManager& assets, const tinyobj::mater
 		outMaterial.AddShader( DRAWPASS_PREPASS, AssetLib<GpuProgram>::Handle( "Prepass" ) );
 		outMaterial.AddShader( DRAWPASS_OPAQUE, AssetLib<GpuProgram>::Handle( "LitOpaque" ) );
 	}
+	else if ( material.illum == 7 )
+	{
+		outMaterial.AddShader( DRAWPASS_TRANS, AssetLib<GpuProgram>::Handle( "Glass" ) );
+	}
 	else
 	{
 		outMaterial.AddShader( DRAWPASS_TRANS, AssetLib<GpuProgram>::Handle( "LitTrans" ) );
@@ -285,13 +289,18 @@ static Material TranslateObjMaterial( AssetManager& assets, const tinyobj::mater
 
 	if ( isPbr )
 	{
-		parms.roughness				= material.roughness;
-		parms.metalness				= material.metallic;
-		parms.sheenRoughness					= material.sheen;
-		parms.clearcoatWeight		= material.clearcoat_thickness;
-		parms.clearcoatRoughness	= material.clearcoat_roughness;
-		parms.anisotropy			= material.anisotropy;
-		parms.anisotropyRotation	= material.anisotropy_rotation;
+		parms.roughness = material.roughness;
+		parms.metalness = material.metallic;
+		parms.sheenRoughness = material.sheen;
+		parms.clearcoatWeight = material.clearcoat_thickness;
+		parms.clearcoatRoughness = material.clearcoat_roughness;
+		parms.anisotropy = material.anisotropy;
+		parms.anisotropyRotation = material.anisotropy_rotation;
+	}
+	else if ( material.illum == 7 )
+	{
+		parms.roughness = 0.05f;
+		parms.transmissionFactor = 0.05f;
 	}
 	return outMaterial;
 }

@@ -19,7 +19,7 @@ void TransPass::Init( RenderContext* renderContext, FrameBuffer* frameBuffer )
 	codeImages.SetRenderContext( renderContext );
 	codeCubeImages.SetRenderContext( renderContext );
 
-	codeImages.Resize( 3 );
+	codeImages.Resize( 5 );
 
 	SetFrameBuffer( frameBuffer );
 }
@@ -29,6 +29,8 @@ void TransPass::FrameBegin( const ResourceContext* resources )
 	codeImages.BindIndex( 0, resources->shadowMapImage[ 0 ] );
 	codeImages.BindIndex( 1, resources->shadowMapImage[ 1 ] );
 	codeImages.BindIndex( 2, resources->shadowMapImage[ 2 ] );
+	codeImages.BindIndex( 3, resources->mainColorResolvedImage );	// Can be previous the frame depending on scheduling order and that's ok
+	codeImages.BindIndex( 4, resources->rtReflectionsOutputImage );
 
 	parms->Bind( BINDING_NAME( lightBuffer ),			&resources->lightParms );
 	parms->Bind( BINDING_NAME( imageCodeArray ),		&codeImages );

@@ -67,6 +67,23 @@
       }
     },
     {
+      "name": "Glass",
+      "opacity": 0.15,
+      "ior": 1.52,
+      "illum": 7.0,
+      "roughness": 0.05,
+      "transmissionFactor": 0.05,
+      "TfR": 0.9,
+      "TfG": 0.95,
+      "TfB": 1.0,
+      "shaders": {
+        "DRAWPASS_TRANS": {
+          "shader": "Glass",
+          "perms": [ "" ]
+        }
+      }
+    },
+    {
       "name": "EquirectangularSky",
       "shaders": {
         "DRAWPASS_SKYBOX": {

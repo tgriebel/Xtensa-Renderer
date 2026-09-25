@@ -735,6 +735,9 @@
     <FxCompile Include="shaders\rtSceneViewOpaque.rgen.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\glass.ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="..\submodules\GfxCore\GfxCore\math\vector.natvis" />
