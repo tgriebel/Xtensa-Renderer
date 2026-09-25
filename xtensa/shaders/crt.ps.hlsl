@@ -163,8 +163,21 @@ psOutput_t PSMain( vsToPsInterpolators input )
 {
 	psOutput_t output = (psOutput_t)0;
     float2 pos = Warp( input.uv0.xy );
-    output.outColor.rgb = Tri( pos, input ) * Mask( input.uv0.xy / res );
-    output.outColor.a = 1.0;
-    output.outColor.rgb = output.outColor.rgb;
+
+    float4 outColor;
+    outColor.rgb = Tri( pos, input ) * Mask( input.uv0.xy / res );
+    outColor.a = 1.0;
+
+#ifdef USE_MRT
+    float4 outColor1;
+    outColor1.rgb = 0.5f * ( normalize( input.normal ) + float3( 1.0f, 1.0f, 1.0f ) );
+    outColor1.a = 1.0f;
+
+    output.outColor = outColor;
+    output.outColor1 = outColor1;
+#else
+    output.outColor = outColor;
+#endif
+
 	return output;
 }

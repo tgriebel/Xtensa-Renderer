@@ -8,7 +8,8 @@
 		{
 			"name": "LitCRT",
 			"vs": "simple",
-			"ps": "crt"
+			"ps": "crt",
+			"perms": ["mrt"]
 		}
 	],
 	"images": [
@@ -78,7 +79,7 @@
 					"shader": "Prepass",
 					"perms": [ "" ]
 				},
-				"DRAWPASS_EMISSIVE": {
+				"DRAWPASS_OPAQUE": {
 					"shader": "LitCRT",
 					"perms": [ "" ]
 				},
@@ -102,7 +103,7 @@
 					"shader": "Prepass",
 					"perms": [ "" ]
 				},
-				"DRAWPASS_EMISSIVE": {
+				"DRAWPASS_OPAQUE": {
 					"shader": "LitCRT",
 					"perms": [ "" ]
 				},
@@ -126,7 +127,7 @@
 					"shader": "Prepass",
 					"perms": [ "" ]
 				},
-				"DRAWPASS_EMISSIVE": {
+				"DRAWPASS_OPAQUE": {
 					"shader": "LitCRT",
 					"perms": [ "" ]
 				},
@@ -150,7 +151,7 @@
 					"shader": "Prepass",
 					"perms": [ "" ]
 				},
-				"DRAWPASS_EMISSIVE": {
+				"DRAWPASS_OPAQUE": {
 					"shader": "LitCRT",
 					"perms": [ "" ]
 				},
