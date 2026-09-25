@@ -6,6 +6,7 @@
 #include "../draw_passes/drawpass.h"
 
 #include <SysCore/common.h>
+#include <SysCore/log.h>
 
 #ifdef USE_VULKAN
 
@@ -346,6 +347,9 @@ bool vk_CreateGraphicsPipeline( const pipelineState_t& state, pipelineObject_t& 
 
 	auto shaderMapItVs = prog.shaderBins[ 0 ].find( permIndex );
 	if( shaderMapItVs == prog.shaderBins[ 0 ].end() ) {
+		LogMsg( "Vulkan", logSeverity_t::Error,
+			"Missing vertex shader binary for program '%s' permutation %u.",
+			state.dbgProgName, permIndex );
 		return false;
 	}
 
@@ -360,6 +364,9 @@ bool vk_CreateGraphicsPipeline( const pipelineState_t& state, pipelineObject_t& 
 
 	auto shaderMapItPs = prog.shaderBins[ 1 ].find( permIndex );
 	if( shaderMapItPs == prog.shaderBins[ 1 ].end() ) {
+		LogMsg( "Vulkan", logSeverity_t::Error,
+			"Missing pixel shader binary for program '%s' permutation %u.",
+			state.dbgProgName, permIndex );
 		return false;
 	}
 
