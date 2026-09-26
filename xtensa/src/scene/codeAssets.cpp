@@ -21,7 +21,7 @@ void CreateCodeAssets()
 	{
 		for( uint32_t t = 0; t < 4; ++t )
 		{
-			const rgba8_t rgba = Color( Color::Gold ).AsRgba8();
+			const rgba8_t rgba = Swizzle( Color( Color::Gold ).AsRgba8(), RGBA_A, RGBA_B, RGBA_G, RGBA_R );
 
 			std::stringstream ss;
 			ss << "CODE_COLOR_" << t;
