@@ -11,6 +11,7 @@ DeviceContext context;
 
 #ifdef NDEBUG
 static bool s_enableValidationLayers = false;
+static bool s_enableSyncValidationLayers = false;
 #else
 static bool s_enableValidationLayers = true;
 static bool s_enableSyncValidationLayers = true;
