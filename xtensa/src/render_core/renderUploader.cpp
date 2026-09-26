@@ -126,13 +126,6 @@ void RenderUploader::OnFrameBegin( GpuTimelineSemaphore* frameCompleteTimeline, 
 
 	UploadModelsToGPU( &commands );
 
-	const uint32_t textureCount = ImageLib().Count();
-	for( uint32_t i = 0; i < textureCount; ++i )
-	{
-		Asset<Image>* imageAsset = ImageLib().Find( i );
-		QueueImageUpload( *imageAsset );
-	}
-
 	UploadTextures( &commands );
 	UpdateTextureData( &commands );
 
@@ -275,26 +268,20 @@ void RenderUploader::QueueImageUpload( Asset<Image>& imageAsset )
 	if( ( image->gpuImage == nullptr ) || ( image->gpuImage->GetId() < 0 ) )
 	{
 		uploadImages.insert( imageAsset.Handle() );
+		imageAsset.QueueUpload();
 	}
 	else if( imageAsset.IsQueuedForUpload() )
 	{
-		refreshImages.insert( imageAsset.Handle() );
+		imageAsset.RefreshUpload();
 	}
-	imageAsset.QueueUpload();
 }
 
 
 void RenderUploader::UpdateTextureData( CommandList* cmdList )
 {
-	const uint32_t imageCount = static_cast<uint32_t>( refreshImages.size() );
-	if( imageCount == 0 )
+	Asset<Image>* imageAsset = nullptr;
+	while( ImageLib().PopPendingRefresh( imageAsset ) )
 	{
-		return;
-	}
-
-	for( auto it = refreshImages.begin(); it != refreshImages.end(); ++it )
-	{
-		Asset<Image>* imageAsset = ImageLib().Find( *it );
 		Image& image = imageAsset->Get();
 
 		Transition( cmdList, image, GPU_IMAGE_NONE, GPU_IMAGE_TRANSFER_DST );
@@ -311,8 +298,6 @@ void RenderUploader::UpdateTextureData( CommandList* cmdList )
 
 		imageAsset->CompleteUpload();
 	}
-
-	refreshImages.clear();
 }
 
 

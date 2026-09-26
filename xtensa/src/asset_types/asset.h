@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <iterator>
 #include <string>
+#include <functional>
 #include <SysCore/common.h>
 #include <SysCore/handle.h>
 #include <GfxCore/core/util.h>
@@ -74,14 +75,30 @@ private:
 class AssetInterface
 {
 protected:
-	std::string					m_name;
-	hdl_t						m_handle;
+	std::string						m_name;
+	hdl_t							m_handle;
 
-	gpuUploadState_t			m_uploadState;
+	gpuUploadState_t				m_uploadState;
 
-	bool						m_loaded;
-	bool						m_isDefault;
-	bool						m_canBake;
+	bool							m_loaded;
+	bool							m_isDefault;
+	bool							m_canBake;
+
+	std::function<void( hdl_t )>	m_uploadCallback;
+	std::function<void( hdl_t )>	m_refreshCallback;
+
+	template< class AssetType >
+	friend class AssetLib;
+
+	inline void SetUploadCallback( std::function<void( hdl_t )> callback )
+	{
+		m_uploadCallback = std::move( callback );
+	}
+
+	inline void SetRefreshCallback( std::function<void( hdl_t )> callback )
+	{
+		m_refreshCallback = std::move( callback );
+	}
 
 public:
 	AssetInterface() : m_loaded( false ), m_isDefault( false ), m_uploadState( gpuUploadState_t::NOT_UPLOADED ), m_canBake( true ), m_handle( INVALID_HDL ) {}
@@ -128,13 +145,21 @@ public:
 	}
 
 	inline void QueueUpload()
-	{
-		m_uploadState = gpuUploadState_t::UPLOAD_QUEUED;
+	{	
+		if( m_uploadCallback )
+		{
+			m_uploadState = gpuUploadState_t::UPLOAD_QUEUED;
+			m_uploadCallback( m_handle );
+		}
 	}
 
 	inline void RefreshUpload()
 	{
-		m_uploadState = gpuUploadState_t::REFRESH_QUEUED;
+		if( m_refreshCallback )
+		{
+			m_uploadState = gpuUploadState_t::REFRESH_QUEUED;	
+			m_refreshCallback( m_handle );
+		}
 	}
 
 	inline void CompleteUpload()
@@ -144,7 +169,12 @@ public:
 
 	inline bool IsQueuedForUpload() const
 	{
-		return ( m_uploadState == gpuUploadState_t::UPLOAD_QUEUED ) || ( m_uploadState == gpuUploadState_t::REFRESH_QUEUED );
+		return ( m_uploadState == gpuUploadState_t::UPLOAD_QUEUED );
+	}
+
+	inline bool IsQueuedForRefresh() const
+	{
+		return ( m_uploadState == gpuUploadState_t::REFRESH_QUEUED );
 	}
 
 	inline bool IsUploaded() const

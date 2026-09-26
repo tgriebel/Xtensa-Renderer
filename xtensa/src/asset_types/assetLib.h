@@ -37,6 +37,8 @@ public:
 	virtual void						LoadAll( const bool rebake = false ) = 0;
 	virtual void						UnloadAll() = 0;
 	virtual bool						HasPendingLoads() const = 0;
+	virtual bool						HasPendingUpload() const = 0;
+	virtual bool						HasPendingRefresh() const = 0;
 	virtual uint32_t					Count() const = 0;
 	virtual bool						Exists( const char* name ) const = 0;
 	virtual bool						Exists( const hdl_t& hdl ) const = 0;
@@ -58,12 +60,21 @@ class AssetLib : public Library
 {
 private:
 	using loadList_t = std::list<uint64_t>;
+	using pendingList_t = std::vector<hdl_t>;
 	using assetMap_t = std::unordered_map< uint64_t, Asset<AssetType> >;
 
-	std::string	typeName;
-	loadList_t	pendingLoad;
-	assetMap_t	assets;
-	hdl_t		defaultHdl;
+	std::string		typeName;
+	loadList_t		pendingLoad;
+	pendingList_t	pendingUpload;
+	pendingList_t	pendingRefresh;
+	assetMap_t		assets;
+	hdl_t			defaultHdl;
+
+	void						MarkPendingUpload( const hdl_t& hdl );
+	void						MarkPendingRefresh( const hdl_t& hdl );
+
+	bool						PopPending( pendingList_t& list, Asset<AssetType>*& outAsset );
+
 public:
 	AssetLib()
 	{}
@@ -108,6 +119,12 @@ public:
 	const char*					FindName( const uint32_t id ) const;
 	hdl_t						RetrieveHdl( const char* name ) const;
 	void						GetAssetList( std::vector<AssetListEntry>& outList ) const;
+
+	bool						HasPendingUpload() const { return ( pendingUpload.size() > 0 ); }
+	bool						PopPendingUpload( Asset<AssetType>*& outAsset );
+
+	bool						HasPendingRefresh() const { return ( pendingRefresh.size() > 0 ); }
+	bool						PopPendingRefresh( Asset<AssetType>*& outAsset );
 };
 
 
@@ -117,6 +134,54 @@ void AssetLib< AssetType >::Clear()
 	UnloadAll();
 	assets.clear();
 	pendingLoad.clear();
+	pendingUpload.clear();
+	pendingRefresh.clear();
+}
+
+
+template< class AssetType >
+void AssetLib< AssetType >::MarkPendingUpload( const hdl_t& hdl )
+{
+	pendingUpload.push_back( hdl );
+}
+
+
+template< class AssetType >
+void AssetLib< AssetType >::MarkPendingRefresh( const hdl_t& hdl )
+{
+	pendingRefresh.push_back( hdl );
+}
+
+
+template< class AssetType >
+bool AssetLib< AssetType >::PopPending( pendingList_t& list, Asset<AssetType>*& outAsset )
+{
+	while( list.empty() == false )
+	{
+		const hdl_t handle = list.back();
+		list.pop_back();
+
+		outAsset = Find( handle );
+		if( outAsset != nullptr ) {
+			return true;
+		}
+	}
+	outAsset = nullptr;
+	return false;
+}
+
+
+template< class AssetType >
+bool AssetLib< AssetType >::PopPendingUpload( Asset<AssetType>*& outAsset )
+{
+	return PopPending( pendingUpload, outAsset );
+}
+
+
+template< class AssetType >
+bool AssetLib< AssetType >::PopPendingRefresh( Asset<AssetType>*& outAsset )
+{
+	return PopPending( pendingRefresh, outAsset );
 }
 
 
@@ -204,6 +269,8 @@ hdl_t AssetLib< AssetType >::Add( const char* name, const AssetType& asset, cons
 		}
 	}
 	assets[ hash ] = Asset<AssetType>( asset, assetName );
+	assets[ hash ].SetUploadCallback( [ this ]( hdl_t h ) { MarkPendingUpload( h ); } );
+	assets[ hash ].SetRefreshCallback( [ this ]( hdl_t h ) { MarkPendingRefresh( h ); } );
 
 	lock.unlock();
 
@@ -225,6 +292,8 @@ hdl_t AssetLib< AssetType >::AddDeferred( const char* name, std::unique_ptr< Loa
 	auto it = assets.find( hash );
 	if ( it == assets.end() ) {
 		assets[ hash ] = Asset<AssetType>( assetName );
+		assets[ hash ].SetUploadCallback( [ this ]( hdl_t h ) { MarkPendingUpload( h ); } );
+		assets[ hash ].SetRefreshCallback( [ this ]( hdl_t h ) { MarkPendingRefresh( h ); } );
 		pendingLoad.push_back( hash );
 	}
 
@@ -252,6 +321,8 @@ bool AssetLib<AssetType>::AddDeferred( const hdl_t hdl, std::unique_ptr< LoadHan
 	auto it = assets.find( hash );
 	if ( it == assets.end() ) {
 		assets[ hash ] = Asset<AssetType>( hdl );
+		assets[ hash ].SetUploadCallback( [ this ]( hdl_t h ) { MarkPendingUpload( h ); } );
+		assets[ hash ].SetRefreshCallback( [ this ]( hdl_t h ) { MarkPendingRefresh( h ); } );
 		pendingLoad.push_back( hash );
 	}
 

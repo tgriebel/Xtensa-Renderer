@@ -63,7 +63,6 @@ private:
 	ResourceContext*			resourceContext;
 
 	std::set<hdl_t>				uploadImages;
-	std::set<hdl_t>				refreshImages;
 	std::set<hdl_t>				uploadMaterials;
 
 	using materialBufferArray_t = Array<gpuMaterial_t, MaxMaterials>;
