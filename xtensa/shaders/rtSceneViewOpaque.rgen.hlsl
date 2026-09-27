@@ -36,6 +36,7 @@ void RayGen()
     hitPayload_t payload;
     payload.color = float4( 0.0f, 0.0f, 0.0f, 1.0f );
     payload.cone  = InitRayCone( verticalFovRadians, launchSize.y );
+    payload.depth = 0;
 
     TraceRay(
         tlas,

@@ -822,7 +822,7 @@ void vk_CreateRtPipeline( const pipelineState_t& state, pipelineObject_t& obj )
 		pipelineInfo.pStages = stages.data();
 		pipelineInfo.groupCount = static_cast<uint32_t>( groups.size() );
 		pipelineInfo.pGroups = groups.data();
-		pipelineInfo.maxPipelineRayRecursionDepth = 2;
+		pipelineInfo.maxPipelineRayRecursionDepth = Min<uint32_t>( 4, context.rayTracingPipelineProperties.maxRayRecursionDepth );
 		pipelineInfo.layout = obj.pipelineLayout;
 
 		VK_CHECK_RESULT( context.vkCreateRayTracingPipelinesKHR(

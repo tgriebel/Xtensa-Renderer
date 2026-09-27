@@ -160,6 +160,11 @@
       "rmiss": "rtMiss"
     },
 	{
+      "name": "RtRefractionHitGroup",
+      "rchit": "rtRefraction",
+      "rahit": "rtAnyHit"
+    },
+	{
       "name": "RtDefaultHitGroup",
       "rchit": "rtLitNonRecursive",
       "rahit": "rtAnyHit"

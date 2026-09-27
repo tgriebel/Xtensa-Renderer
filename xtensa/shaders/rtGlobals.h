@@ -8,7 +8,10 @@ struct hitPayload_t
 {
 	float4		color;
 	rayCone_t	cone;
+	uint		depth;	// Current depth-level (0 = primary ray, 1 = first bounce, etc)
 };
+
+static const uint MaxRtRecursionDepth = 3;
 
 
 // Push-constant (see RayTracingTask::baseConstants_t)
