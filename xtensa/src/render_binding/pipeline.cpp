@@ -13,7 +13,7 @@
 
 #include <SysCore/common.h>
 
-static std::unordered_map< uint64_t, pipelineObject_t > s_pipelineLib;
+static std::unordered_map< uint64_t, pipelineObject_t > s_runtimePipelineCache;
 static std::unordered_map< uint64_t, std::set<pipelineState_t> > s_progToPipelines;
 
 
@@ -22,7 +22,6 @@ void CreatePipelineCache( const BinaryFile& cacheFile )
 	if ( context.pipelineCache != VK_NULL_HANDLE ) {
 		return;
 	}
-
 	context.pipelineCache = vk_CreatePipelineCache( cacheFile, "PipelineCache" );
 }
 
@@ -41,15 +40,15 @@ void DumpPipelineCacheToDisk( const Asset<BinaryFile>& binaryFileAsset )
 }
 
 
-void ClearPipelineCache()
+void ClearRuntimePipelineCache()
 {
-	s_pipelineLib.clear();
+	s_runtimePipelineCache.clear();
 }
 
 
-void DestroyPipelineCache()
+void DestroyRuntimePipelineCache()
 {
-	for ( auto it = s_pipelineLib.begin(); it != s_pipelineLib.end(); ++it )
+	for ( auto it = s_runtimePipelineCache.begin(); it != s_runtimePipelineCache.end(); ++it )
 	{
 		pipelineObject_t& obj = it->second;
 		vkDestroyPipeline( context.device, obj.pipeline, nullptr );
@@ -66,7 +65,7 @@ void DestroyPipelineCache()
 		}
 #endif
 	}
-	s_pipelineLib.clear();
+	s_runtimePipelineCache.clear();
 }
 
 
@@ -122,8 +121,8 @@ pipelineState_t CreateComputeState( const Asset<GpuProgram>& progAsset )
 
 bool GetPipelineObject( hdl_t hdl, pipelineObject_t** pipelineObject )
 {
-	auto it = s_pipelineLib.find( hdl.Get() );
-	if ( it != s_pipelineLib.end() ) {
+	auto it = s_runtimePipelineCache.find( hdl.Get() );
+	if ( it != s_runtimePipelineCache.end() ) {
 		*pipelineObject = &it->second;
 		return true;
 	}
@@ -138,8 +137,8 @@ hdl_t FindPipelineObject( const DrawPass* pass, const Asset<GpuProgram>& progAss
 
 	const hdl_t pipelineHdl = GetPipelineStateHash( state );
 
-	auto it = s_pipelineLib.find( pipelineHdl.Get() );
-	if ( it != s_pipelineLib.end() ) {
+	auto it = s_runtimePipelineCache.find( pipelineHdl.Get() );
+	if ( it != s_runtimePipelineCache.end() ) {
 		return pipelineHdl;
 	}
 	return INVALID_HDL;
@@ -160,8 +159,8 @@ void DestoryAllPipelines( const Asset<GpuProgram>& progAsset )
 	{
 		const hdl_t pipelineHdl = GetPipelineStateHash( pipelineState );
 
-		auto pipelineIt = s_pipelineLib.find( pipelineHdl.Get() );
-		if( pipelineIt == s_pipelineLib.end() ){
+		auto pipelineIt = s_runtimePipelineCache.find( pipelineHdl.Get() );
+		if( pipelineIt == s_runtimePipelineCache.end() ){
 			continue;
 		}
 		vkDestroyPipeline( context.device, pipelineIt->second.pipeline, nullptr );
@@ -184,8 +183,8 @@ hdl_t CreateGraphicsPipeline( const DrawPass* pass, const Asset<GpuProgram>& pro
 
 hdl_t CreateGraphicsPipeline( const hdl_t pipelineHdl, const pipelineState_t& state )
 {
-	auto it = s_pipelineLib.find( pipelineHdl.Get() );
-	const bool found = ( it != s_pipelineLib.end() );
+	auto it = s_runtimePipelineCache.find( pipelineHdl.Get() );
+	const bool found = ( it != s_runtimePipelineCache.end() );
 
 	pipelineObject_t pipelineObject{};
 
@@ -210,7 +209,7 @@ hdl_t CreateGraphicsPipeline( const hdl_t pipelineHdl, const pipelineState_t& st
 		return INVALID_HDL;
 	}
 
-	s_pipelineLib[ pipelineHdl.Get() ] = pipelineObject;
+	s_runtimePipelineCache[ pipelineHdl.Get() ] = pipelineObject;
 
 	s_progToPipelines[ state.progHdl.Get()].insert(state);
 
@@ -228,8 +227,8 @@ hdl_t CreateComputePipeline( const Asset<GpuProgram>& progAsset )
 
 hdl_t CreateComputePipeline( const hdl_t pipelineHdl, const pipelineState_t& state )
 {
-	auto it = s_pipelineLib.find( pipelineHdl.Get() );
-	const bool found = ( it != s_pipelineLib.end() );
+	auto it = s_runtimePipelineCache.find( pipelineHdl.Get() );
+	const bool found = ( it != s_runtimePipelineCache.end() );
 
 	pipelineObject_t pipelineObject{};
 
@@ -252,7 +251,7 @@ hdl_t CreateComputePipeline( const hdl_t pipelineHdl, const pipelineState_t& sta
 	vk_CreateComputePipeline( state, pipelineObject );
 #endif
 
-	s_pipelineLib[ pipelineHdl.Get() ] = pipelineObject;
+	s_runtimePipelineCache[ pipelineHdl.Get() ] = pipelineObject;
 
 	s_progToPipelines[ state.progHdl.Get() ].insert( state );
 
@@ -291,8 +290,8 @@ hdl_t CreateRtPipeline( const Asset<GpuProgram>& rgenProg, const Asset<GpuProgra
 
 hdl_t CreateRtPipeline( const hdl_t pipelineHdl, const pipelineState_t& state )
 {
-	auto it = s_pipelineLib.find( pipelineHdl.Get() );
-	if( it != s_pipelineLib.end() && it->second.pipeline != VK_NULL_HANDLE )
+	auto it = s_runtimePipelineCache.find( pipelineHdl.Get() );
+	if( it != s_runtimePipelineCache.end() && it->second.pipeline != VK_NULL_HANDLE )
 	{
 		return pipelineHdl;
 	}
@@ -304,7 +303,7 @@ hdl_t CreateRtPipeline( const hdl_t pipelineHdl, const pipelineState_t& state )
 
 	vk_CreateRtPipeline( state, obj );
 
-	s_pipelineLib[ pipelineHdl.Get() ] = std::move( obj );
+	s_runtimePipelineCache[ pipelineHdl.Get() ] = std::move( obj );
 
 	return pipelineHdl;
 }

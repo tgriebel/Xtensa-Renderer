@@ -243,7 +243,7 @@ void Renderer::Init( const renderConfig_t& initConfig )
 	resources.tlas = uploader.GetAccelerationStructure();
 #endif
 
-	ClearPipelineCache();
+	ClearRuntimePipelineCache();
 	BuildPipelines();
 
 	// Upload queue commands
@@ -576,7 +576,7 @@ void Renderer::ShutdownShaderResources()
 	if ( pipelineCacheAsset != nullptr ) {
 		DumpPipelineCacheToDisk( *pipelineCacheAsset );
 	}
-	DestroyPipelineCache();
+	DestroyRuntimePipelineCache();
 
 	const uint32_t shaderCount = GpuProgramLib().Count();
 	for( uint32_t i = 0; i < shaderCount; ++i )

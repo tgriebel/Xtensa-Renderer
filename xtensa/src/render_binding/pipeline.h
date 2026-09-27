@@ -214,8 +214,8 @@ class ShaderBindSet;
 
 void	CreatePipelineCache( const BinaryFile& cacheFile );
 void	DumpPipelineCacheToDisk( const Asset<BinaryFile>& binaryFileAsset );
-void	ClearPipelineCache();
-void	DestroyPipelineCache();
+void	ClearRuntimePipelineCache();
+void	DestroyRuntimePipelineCache();
 bool	GetPipelineObject( hdl_t hdl, pipelineObject_t** pipelineObject );
 hdl_t	FindPipelineObject( const DrawPass* pass, const Asset<GpuProgram>& progAsset, const shaderPermId_t permSet );
 hdl_t	CreateGraphicsPipeline( const DrawPass* pass, const Asset<GpuProgram>& prog, const shaderPermId_t permSet = shaderPermId_t::NONE );
