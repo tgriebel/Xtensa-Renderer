@@ -29,6 +29,7 @@ xtensa/baked/
 xtensa/_unused_assets/
 xtensa/imgui.ini
 xtensa/LocalConfig.ini
+xtensa/pipelineCache.bin
 xtensa/x64/Debug/
 xtensa/x64/Release/
 

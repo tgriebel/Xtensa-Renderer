@@ -323,6 +323,7 @@
     <ClInclude Include="src\asset_types\asset.h" />
     <ClInclude Include="src\asset_types\assetHandle.h" />
     <ClInclude Include="src\asset_types\assetLib.h" />
+    <ClInclude Include="src\asset_types\binaryFile.h" />
     <ClInclude Include="src\asset_types\gpuProgram.h" />
     <ClInclude Include="src\asset_types\material.h" />
     <ClInclude Include="src\asset_types\model.h" />
@@ -406,6 +407,7 @@
     <ClCompile Include="scenes\emu\nesScene.cpp" />
     <ClCompile Include="src\scene\sceneParser.cpp" />
     <ClCompile Include="src\app\appScene.cpp" />
+    <ClCompile Include="src\asset_types\binaryFile.cpp" />
     <ClCompile Include="src\asset_types\gpuProgram.cpp" />
     <ClCompile Include="src\asset_types\material.cpp" />
     <ClCompile Include="src\asset_types\model.cpp" />

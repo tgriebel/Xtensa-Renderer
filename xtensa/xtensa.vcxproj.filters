@@ -164,6 +164,9 @@
     <ClCompile Include="src\asset_types\gpuProgram.cpp">
       <Filter>Asset Classes</Filter>
     </ClCompile>
+    <ClCompile Include="src\asset_types\binaryFile.cpp">
+      <Filter>Asset Classes</Filter>
+    </ClCompile>
     <ClCompile Include="src\asset_types\material.cpp">
       <Filter>Asset Classes</Filter>
     </ClCompile>
@@ -410,6 +413,9 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\asset_types\gpuProgram.h">
+      <Filter>Asset Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\asset_types\binaryFile.h">
       <Filter>Asset Classes</Filter>
     </ClInclude>
     <ClInclude Include="src\asset_types\material.h">

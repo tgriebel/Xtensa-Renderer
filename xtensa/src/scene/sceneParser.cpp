@@ -11,6 +11,7 @@
 #include "../asset_types/gpuProgram.h"
 #include "../asset_types/model.h"
 #include "../asset_types/material.h"
+#include "../asset_types/binaryFile.h"
 
 #include "../io/io.h"
 #include <SysCore/log.h>
@@ -735,6 +736,32 @@ int ParseShaderObject( parseState_t& st, void* object, uint32_t offset )
 }
 
 
+int ParseBinaryFileObject( parseState_t& st, void* object, uint32_t offset )
+{
+	if ( st.tokens[ st.tx ].type != JSMN_OBJECT ) {
+		return -1;
+	}
+
+	char name[ TOKEN_LEN ] = "";
+	char path[ TOKEN_LEN ] = "";
+	AssetLib<BinaryFile>* binaryFiles = reinterpret_cast<AssetLib<BinaryFile>*>( object );
+
+	const uint32_t objectCount = 2;
+	const objectTuple_t objectMap[ objectCount ] =
+	{
+		{ "name",	&name,	TOKEN_LEN,	1,	&ParseStringObject },
+		{ "path",	&path,	TOKEN_LEN,	1,	&ParseStringObject },
+	};
+
+	ParseObject( st, objectMap, objectCount );
+
+	BinaryFileLoader* loader = new BinaryFileLoader( path );
+	binaryFiles->AddDeferred( name, pBinaryFileLoader_t( loader ) );
+
+	return st.tx;
+}
+
+
 void ParseObject( parseState_t& st, const objectTuple_t* objectMap, const uint32_t objectCount )
 {
 	if ( st.tokens[ st.tx ].type != JSMN_OBJECT ) {
@@ -907,7 +934,7 @@ void ParseJson( const std::string& fileName, Scene** scene, AssetManager* assets
 
 	assert( trashBufferSize >= file.size() );
 
-	const uint32_t objectCount = 10;
+	const uint32_t objectCount = 11;
 	const objectTuple_t objectMap[ objectCount ] =
 	{
 		{ "sceneClass",		&trashBuffer,						trashBufferSize,					1,										&ParseStringObject },
@@ -918,6 +945,7 @@ void ParseJson( const std::string& fileName, Scene** scene, AssetManager* assets
 		{ "shaders",		st.assets->GetLib<GpuProgram>(),	sizeof( AssetLib<GpuProgram>* ),	1,										&ParseShaderObject },
 		{ "images",			st.assets->GetLib<Image>(),			sizeof( AssetLib<Image>* ),			1,										&ParseImageObject },
 		{ "materials",		st.assets->GetLib<Material>(),		sizeof( AssetLib<Material>* ),		1,										&ParseMaterialObject },
+		{ "binaryFiles",	st.assets->GetLib<BinaryFile>(),	sizeof( AssetLib<BinaryFile>* ),	1,										&ParseBinaryFileObject },
 		{ "models",			st.assets->GetLib<Model>(),			sizeof( AssetLib<Model>* ),			1,										&ParseModelObject },
 		{ "entities",		&st.scene->entities,				sizeof( Entity ),					(uint32_t)st.scene->entities.size(),	&ParseEntityObject },
 	};

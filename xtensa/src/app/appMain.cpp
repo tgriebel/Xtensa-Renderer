@@ -203,6 +203,7 @@ int main( int argc, char* argv[] )
 	g_assets.RegisterLib<Image>( "Image" );
 	g_assets.RegisterLib<Material>( "Material" );
 	g_assets.RegisterLib<GpuProgram>( "Gpu Program" );
+	g_assets.RegisterLib<BinaryFile>( "Binary File" );
 
 	CreateCodeAssets(); // TODO: Check render dependencies, may need to move into render init?
 
