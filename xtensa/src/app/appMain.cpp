@@ -372,6 +372,10 @@ int main( int argc, char* argv[] )
 				break;
 			}
 		}
+		ShutdownScene( g_scene );
+		delete g_scene;
+		g_scene = nullptr;
+
 		g_renderer.Shutdown();
 		delete schedule;
 	}
