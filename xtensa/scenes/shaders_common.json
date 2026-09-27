@@ -165,6 +165,11 @@
       "rahit": "rtAnyHit"
     },
 	{
+      "name": "RtCrtHitGroup",
+      "rchit": "rtCRT",
+      "rahit": "rtAnyHit"
+    },
+	{
       "name": "RtDefaultHitGroup",
       "rchit": "rtLitNonRecursive",
       "rahit": "rtAnyHit"

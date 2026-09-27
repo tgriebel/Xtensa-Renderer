@@ -200,7 +200,6 @@
     <ClCompile Include="src\render_core\renderContext.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\codeAssets.cpp" />
     <ClCompile Include="src\render_core\renderUploader.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -230,6 +229,9 @@
     </ClCompile>
     <ClCompile Include="src\render_resources\aliasableImageHeap.cpp">
       <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\codeAssets.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -463,7 +465,6 @@
     <ClInclude Include="src\render_core\renderContext.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\codeAssets.h" />
     <ClInclude Include="src\render_core\renderUploader.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -502,6 +503,9 @@
     </ClInclude>
     <ClInclude Include="src\globals\renderConfig.h">
       <Filter>Globals</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\codeAssets.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -739,6 +743,12 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\glass.ps.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\crtCore.h">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\rtCRT.rchit.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
