@@ -70,6 +70,7 @@ public:
 	VkPhysicalDeviceFeatures2							deviceFeatures;
 	VkDebugUtilsMessengerEXT							debugMessenger;
 	VkDescriptorPool									descriptorPool;
+	VkPipelineCache										pipelineCache;
 	VkQueryPool											statQueryPool;
 	VkQueryPool											timestampQueryPool;
 	VkQueryPool											occlusionQueryPool;

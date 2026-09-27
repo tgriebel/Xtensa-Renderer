@@ -619,7 +619,7 @@ bool vk_CreateGraphicsPipeline( const pipelineState_t& state, pipelineObject_t& 
 	pipelineInfo.basePipelineIndex = -1; // Optional
 	pipelineInfo.pDepthStencilState = &depthStencil;
 
-	VK_CHECK_RESULT( vkCreateGraphicsPipelines( context.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &pipelineObject.pipeline ) );
+	VK_CHECK_RESULT( vkCreateGraphicsPipelines( context.device, context.pipelineCache, 1, &pipelineInfo, nullptr, &pipelineObject.pipeline ) );
 
 	vk_SetObjectName( (uint64_t)pipelineObject.pipeline, VK_OBJECT_TYPE_PIPELINE,  ( "Pipeline (GFX): < " + vsBin.binName + " | " + psBin.binName + " >" ).c_str() );
 
@@ -669,7 +669,7 @@ void vk_CreateComputePipeline( const pipelineState_t& state, pipelineObject_t& p
 	pipelineInfo.stage = computeShaderStageInfo;
 	pipelineInfo.pNext = nullptr;
 
-	VK_CHECK_RESULT( vkCreateComputePipelines( context.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &pipelineObject.pipeline ) );
+	VK_CHECK_RESULT( vkCreateComputePipelines( context.device, context.pipelineCache, 1, &pipelineInfo, nullptr, &pipelineObject.pipeline ) );
 
 	vk_SetObjectName( (uint64_t)pipelineObject.pipeline, VK_OBJECT_TYPE_PIPELINE, ( "Pipeline (Compute): < " + csBin.binName + " >" ).c_str() );
 }
@@ -825,7 +825,7 @@ void vk_CreateRtPipeline( const pipelineState_t& state, pipelineObject_t& obj )
 		pipelineInfo.layout = obj.pipelineLayout;
 
 		VK_CHECK_RESULT( context.vkCreateRayTracingPipelinesKHR(
-			context.device, VK_NULL_HANDLE, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &obj.pipeline ) );
+			context.device, VK_NULL_HANDLE, context.pipelineCache, 1, &pipelineInfo, nullptr, &obj.pipeline ) );
 
 		vk_SetObjectName( (uint64_t)obj.pipeline, VK_OBJECT_TYPE_PIPELINE, "Pipeline (RT)" );
 		vk_SetObjectName( (uint64_t)obj.pipelineLayout, VK_OBJECT_TYPE_PIPELINE_LAYOUT, "PipelineLayout (RT)" );
