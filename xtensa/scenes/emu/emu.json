@@ -275,26 +275,26 @@
 			"name": "plane0",
 			"model": "plane0",
 			"xyz": [ 2.0, 1.5, 2.0 ],
-			"rotation": [ 0.0, 90.0, -90.0 ],
+			"rotation": [ 90.0, 0.0, -90.0 ],
 			"scale": [ 1.0, 1.0, 1.0 ]
 		},
 		{
 			"name": "plane1",
 			"model": "plane1",
 			"xyz": [ 2.0, 0.0, 2.0 ],
-			"rotation": [ 0.0, 90.0, -90.0 ]
+			"rotation": [ 90.0, 0.0, -90.0 ]
 		},
 		{
 			"name": "plane2",
 			"model": "plane2",
 			"xyz": [ 2.0, -1.5, 2.0 ],
-			"rotation": [ 0.0, 90.0, -90.0 ]
+			"rotation": [ 90.0, 0.0, -90.0 ]
 		},
 		{
 			"name": "plane3",
 			"model": "plane3",
 			"xyz": [ 2.0, -3.0, 2.0 ],
-			"rotation": [ 0.0, 90.0, -90.0 ]
+			"rotation": [ 90.0, 0.0, -90.0 ]
 		},
 		{
 			"name": "sphere",
