@@ -1,6 +1,5 @@
 #include "binaryFile.h"
 
-#include <fstream>
 #include <SysCore/systemUtils.h>
 #include <SysCore/serializer.h>
 
@@ -20,22 +19,36 @@ void BinaryFile::Serialize( Serializer* s )
 }
 
 
-bool BinaryFileLoader::Load( Asset<BinaryFile>& asset )
+bool LoadBinaryFileFromDisk( const std::string& path, BinaryFile& outFile )
 {
-	BinaryFile& file = asset.Get();
-	file.data.clear();
-
-	if ( SysCore::FileExists( m_path ) == false ) {
+	// Missing is ok to accomodate cache files
+	if ( SysCore::FileExists( path ) == false ) {
+		outFile = BinaryFile( nullptr, 0, path );
 		return true;
 	}
 
-	std::ifstream stream( m_path, std::ios::binary | std::ios::ate );
-	const std::streamsize size = stream.tellg();
-	if ( size > 0 )
-	{
-		file.data.resize( static_cast<size_t>( size ) );
-		stream.seekg( 0 );
-		stream.read( reinterpret_cast<char*>( file.data.data() ), size );
-	}
+	const std::vector<char> bytes = SysCore::ReadBinaryFile( path );
+	outFile = BinaryFile( reinterpret_cast<const uint8_t*>( bytes.data() ), bytes.size(), path );
 	return true;
+}
+
+
+bool BinaryFileLoader::Load( Asset<BinaryFile>& asset )
+{
+	return LoadBinaryFileFromDisk( m_path, asset.Get() );
+}
+
+
+bool WriteBinaryFileToDisk( const std::string& path, const BinaryFile& file )
+{
+	std::string directory, fileName;
+	SysCore::SplitPath( path, directory, fileName );
+
+	if ( ( directory.empty() == false ) && ( SysCore::FileExists( directory ) == false ) ) {
+		SysCore::MakeDirectory( directory );
+	}
+
+	const uint8_t* raw = file.GetRaw();
+	const std::vector<char> bytes( raw, raw + file.GetByteCount() );
+	return SysCore::WriteBinaryFile( path, bytes );
 }

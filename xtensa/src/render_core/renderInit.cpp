@@ -572,6 +572,10 @@ void Renderer::ShutdownShaderResources()
 	}
 
 	// PSO
+	Asset<BinaryFile>* pipelineCacheAsset = BinaryFileLib().Find( "PipelineCache" );
+	if ( pipelineCacheAsset != nullptr ) {
+		DumpPipelineCacheToDisk( *pipelineCacheAsset );
+	}
 	DestroyPipelineCache();
 
 	const uint32_t shaderCount = GpuProgramLib().Count();
@@ -658,6 +662,11 @@ void Renderer::ShutdownImGui()
 
 void Renderer::BuildPipelines()
 {
+	Asset<BinaryFile>* pipelineCacheAsset = BinaryFileLib().Find( "PipelineCache" );
+	if ( pipelineCacheAsset != nullptr ) {
+		CreatePipelineCache( pipelineCacheAsset->Get() );
+	}
+
 	const uint32_t programCount = GpuProgramLib().Count();
 
 	std::vector< Asset<GpuProgram>* > invalidAssets;

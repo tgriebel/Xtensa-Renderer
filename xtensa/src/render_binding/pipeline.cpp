@@ -8,12 +8,37 @@
 #include "shaderBinding.h"
 #include "../scene/sceneBase.h"
 #include "../asset_types/assetLib.h"
+#include "../asset_types/binaryFile.h"
 #include "vertexInput.h"
 
 #include <SysCore/common.h>
 
 static std::unordered_map< uint64_t, pipelineObject_t > s_pipelineLib;
 static std::unordered_map< uint64_t, std::set<pipelineState_t> > s_progToPipelines;
+
+
+void CreatePipelineCache( const BinaryFile& cacheFile )
+{
+	if ( context.pipelineCache != VK_NULL_HANDLE ) {
+		return;
+	}
+
+	context.pipelineCache = vk_CreatePipelineCache( cacheFile, "PipelineCache" );
+}
+
+
+void DumpPipelineCacheToDisk( const Asset<BinaryFile>& binaryFileAsset )
+{
+	if ( context.pipelineCache == VK_NULL_HANDLE ) {
+		return;
+	}
+
+	const BinaryFile cacheData = vk_GetPipelineCacheData( context.pipelineCache );
+	WriteBinaryFileToDisk( binaryFileAsset.Get().GetPath(), cacheData );
+
+	vkDestroyPipelineCache( context.device, context.pipelineCache, nullptr );
+	context.pipelineCache = VK_NULL_HANDLE;
+}
 
 
 void ClearPipelineCache()

@@ -4,6 +4,7 @@
 #include "../render_binding/shaderBinding.h"
 #include "../render_binding/vertexInput.h"
 #include "../draw_passes/drawpass.h"
+#include "../asset_types/binaryFile.h"
 
 #include <SysCore/common.h>
 #include <SysCore/log.h>
@@ -1795,6 +1796,37 @@ VkShaderModule vk_CreateShaderModule( const std::vector<char>& code, const char*
 	vk_SetObjectName( (uint64_t)shaderModule, VK_OBJECT_TYPE_SHADER_MODULE, vk_BuildObjectName( "Shader", debugName ).c_str() );
 
 	return shaderModule;
+}
+
+
+VkPipelineCache vk_CreatePipelineCache( const BinaryFile& cacheData, const char* debugName )
+{
+	VkPipelineCacheCreateInfo createInfo{};
+	createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+	createInfo.initialDataSize = cacheData.GetByteCount();
+	createInfo.pInitialData = ( cacheData.GetByteCount() > 0 ) ? cacheData.GetRaw() : nullptr;
+
+	VkPipelineCache pipelineCache;
+	VK_CHECK_RESULT( vkCreatePipelineCache( context.device, &createInfo, nullptr, &pipelineCache ) );
+
+	vk_SetObjectName( (uint64_t)pipelineCache, VK_OBJECT_TYPE_PIPELINE_CACHE, debugName );
+
+	return pipelineCache;
+}
+
+
+BinaryFile vk_GetPipelineCacheData( VkPipelineCache cache )
+{
+	size_t dataSize = 0;
+	vkGetPipelineCacheData( context.device, cache, &dataSize, nullptr );
+	if ( dataSize == 0 ) {
+		return BinaryFile();
+	}
+
+	std::vector<uint8_t> bytes( dataSize );
+	vkGetPipelineCacheData( context.device, cache, &dataSize, bytes.data() );
+
+	return BinaryFile( bytes.data(), bytes.size() );
 }
 
 

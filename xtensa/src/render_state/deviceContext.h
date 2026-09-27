@@ -63,40 +63,40 @@ private:
 
 public:
 #ifdef USE_VULKAN
-	VkDevice											device;
-	VkPhysicalDevice									physicalDevice;
-	VkInstance											instance;
-	VkPhysicalDeviceProperties							deviceProperties;
-	VkPhysicalDeviceFeatures2							deviceFeatures;
-	VkDebugUtilsMessengerEXT							debugMessenger;
-	VkDescriptorPool									descriptorPool;
-	VkPipelineCache										pipelineCache;
-	VkQueryPool											statQueryPool;
-	VkQueryPool											timestampQueryPool;
-	VkQueryPool											occlusionQueryPool;
-	VkQueue												gfxContext;
-	VkQueue												presentQueue;
-	VkQueue												computeContext;
+	VkDevice											device				= VK_NULL_HANDLE;
+	VkPhysicalDevice									physicalDevice		= VK_NULL_HANDLE;
+	VkInstance											instance			= VK_NULL_HANDLE;
+	VkPhysicalDeviceProperties							deviceProperties{};
+	VkPhysicalDeviceFeatures2							deviceFeatures{};
+	VkDebugUtilsMessengerEXT							debugMessenger		= VK_NULL_HANDLE;
+	VkDescriptorPool									descriptorPool		= VK_NULL_HANDLE;
+	VkPipelineCache										pipelineCache		= VK_NULL_HANDLE;
+	VkQueryPool											statQueryPool		= VK_NULL_HANDLE;
+	VkQueryPool											timestampQueryPool	= VK_NULL_HANDLE;
+	VkQueryPool											occlusionQueryPool	= VK_NULL_HANDLE;
+	VkQueue												gfxContext			= VK_NULL_HANDLE;
+	VkQueue												presentQueue		= VK_NULL_HANDLE;
+	VkQueue												computeContext		= VK_NULL_HANDLE;
 	uint32_t											queueFamilyIndices[ QUEUE_COUNT ];
 
-	bool												debugMarkersEnabled = false;
-	PFN_vkDebugMarkerSetObjectTagEXT					fnDebugMarkerSetObjectTag = VK_NULL_HANDLE;
-	PFN_vkDebugMarkerSetObjectNameEXT					fnDebugMarkerSetObjectName = VK_NULL_HANDLE;
-	PFN_vkCmdDebugMarkerBeginEXT						fnCmdDebugMarkerBegin = VK_NULL_HANDLE;
-	PFN_vkCmdDebugMarkerEndEXT							fnCmdDebugMarkerEnd = VK_NULL_HANDLE;
-	PFN_vkCmdDebugMarkerInsertEXT						fnCmdDebugMarkerInsert = VK_NULL_HANDLE;
+	bool												debugMarkersEnabled			= false;
+	PFN_vkDebugMarkerSetObjectTagEXT					fnDebugMarkerSetObjectTag	= VK_NULL_HANDLE;
+	PFN_vkDebugMarkerSetObjectNameEXT					fnDebugMarkerSetObjectName	= VK_NULL_HANDLE;
+	PFN_vkCmdDebugMarkerBeginEXT						fnCmdDebugMarkerBegin		= VK_NULL_HANDLE;
+	PFN_vkCmdDebugMarkerEndEXT							fnCmdDebugMarkerEnd			= VK_NULL_HANDLE;
+	PFN_vkCmdDebugMarkerInsertEXT						fnCmdDebugMarkerInsert		= VK_NULL_HANDLE;
 	PFN_vkSetDebugUtilsObjectNameEXT					fnCmdSetDebugUtilsObjectName = VK_NULL_HANDLE;
 #ifdef USE_VULKAN_RTX
-	PFN_vkGetBufferDeviceAddressKHR						vkGetBufferDeviceAddressKHR = VK_NULL_HANDLE;
-	PFN_vkCreateAccelerationStructureKHR				vkCreateAccelerationStructureKHR = VK_NULL_HANDLE;
-	PFN_vkDestroyAccelerationStructureKHR				vkDestroyAccelerationStructureKHR = VK_NULL_HANDLE;
-	PFN_vkGetAccelerationStructureBuildSizesKHR			vkGetAccelerationStructureBuildSizesKHR = VK_NULL_HANDLE;
-	PFN_vkGetAccelerationStructureDeviceAddressKHR		vkGetAccelerationStructureDeviceAddressKHR = VK_NULL_HANDLE;
-	PFN_vkCmdBuildAccelerationStructuresKHR				vkCmdBuildAccelerationStructuresKHR = VK_NULL_HANDLE;
-	PFN_vkBuildAccelerationStructuresKHR				vkBuildAccelerationStructuresKHR = VK_NULL_HANDLE;
-	PFN_vkCmdTraceRaysKHR								vkCmdTraceRaysKHR = VK_NULL_HANDLE;
-	PFN_vkGetRayTracingShaderGroupHandlesKHR			vkGetRayTracingShaderGroupHandlesKHR = VK_NULL_HANDLE;
-	PFN_vkCreateRayTracingPipelinesKHR					vkCreateRayTracingPipelinesKHR = VK_NULL_HANDLE;
+	PFN_vkGetBufferDeviceAddressKHR						vkGetBufferDeviceAddressKHR					= VK_NULL_HANDLE;
+	PFN_vkCreateAccelerationStructureKHR				vkCreateAccelerationStructureKHR			= VK_NULL_HANDLE;
+	PFN_vkDestroyAccelerationStructureKHR				vkDestroyAccelerationStructureKHR			= VK_NULL_HANDLE;
+	PFN_vkGetAccelerationStructureBuildSizesKHR			vkGetAccelerationStructureBuildSizesKHR		= VK_NULL_HANDLE;
+	PFN_vkGetAccelerationStructureDeviceAddressKHR		vkGetAccelerationStructureDeviceAddressKHR	= VK_NULL_HANDLE;
+	PFN_vkCmdBuildAccelerationStructuresKHR				vkCmdBuildAccelerationStructuresKHR			= VK_NULL_HANDLE;
+	PFN_vkBuildAccelerationStructuresKHR				vkBuildAccelerationStructuresKHR			= VK_NULL_HANDLE;
+	PFN_vkCmdTraceRaysKHR								vkCmdTraceRaysKHR							= VK_NULL_HANDLE;
+	PFN_vkGetRayTracingShaderGroupHandlesKHR			vkGetRayTracingShaderGroupHandlesKHR		= VK_NULL_HANDLE;
+	PFN_vkCreateRayTracingPipelinesKHR					vkCreateRayTracingPipelinesKHR				= VK_NULL_HANDLE;
 
 	VkPhysicalDeviceRayTracingPipelinePropertiesKHR		rayTracingPipelineProperties{};
 	VkPhysicalDeviceAccelerationStructureFeaturesKHR	accelerationStructureFeatures{};

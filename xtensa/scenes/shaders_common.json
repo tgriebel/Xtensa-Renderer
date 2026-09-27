@@ -252,5 +252,11 @@
 	  "vs": "simple",
 	  "ps": "crt"
 	}
+  ],
+  "binaryFiles": [
+    {
+      "name": "PipelineCache",
+      "path": "assets\\binary_files\\pipelineCache.bin"
+    }
   ]
 }

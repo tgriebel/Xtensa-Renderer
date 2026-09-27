@@ -5,6 +5,7 @@
 #include "../render_state/rhi.h"
 #include "../render_state/frameBuffer.h"
 #include "../asset_types/gpuProgram.h"
+#include "../asset_types/binaryFile.h"
 #include "../render_resources/gpuBuffer.h"
 
 class RenderContext;
@@ -211,6 +212,8 @@ struct pipelineObject_t
 
 class ShaderBindSet;
 
+void	CreatePipelineCache( const BinaryFile& cacheFile );
+void	DumpPipelineCacheToDisk( const Asset<BinaryFile>& binaryFileAsset );
 void	ClearPipelineCache();
 void	DestroyPipelineCache();
 bool	GetPipelineObject( hdl_t hdl, pipelineObject_t** pipelineObject );

@@ -26,5 +26,7 @@ bool				HasPrefix( const std::string& str0, const std::string& str1 );
 bool				HasSuffix( const std::string& str0, const std::string& str1 );
 std::vector<char>	ReadTextFile( const std::string& filename );
 std::vector<char>	ReadBinaryFile( const std::string& filename );
+bool				WriteTextFile( const std::string& filename, const std::string& text );
+bool				WriteBinaryFile( const std::string& filename, const std::vector<char>& data );
 
 }

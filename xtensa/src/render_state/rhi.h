@@ -35,9 +35,12 @@ VkShaderStageFlagBits	vk_GetStageFlags( const bindStateFlag_t flags );
 
 struct pipelineState_t;
 struct pipelineObject_t;
+class BinaryFile;
 
 bool	vk_CreateGraphicsPipeline( const pipelineState_t& state, pipelineObject_t& pipelineObject );
 void	vk_CreateComputePipeline( const pipelineState_t& state, pipelineObject_t& pipelineObject );
+VkPipelineCache	vk_CreatePipelineCache( const BinaryFile& cacheData, const char* debugName );
+BinaryFile		vk_GetPipelineCacheData( VkPipelineCache cache );
 
 #ifdef USE_VULKAN_RTX
 void	vk_CreateRtPipeline( const pipelineState_t& state, pipelineObject_t& pipelineObject );

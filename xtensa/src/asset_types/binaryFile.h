@@ -11,11 +11,30 @@ class Serializer;
 // Generic binary file. Enforces a standard path for file loading and serialization
 class BinaryFile
 {
-public:
+private:
 	std::vector<uint8_t>	data;
+	std::string				path;
+
+public:
+	BinaryFile() {}
+
+	BinaryFile( const uint8_t* bytes, const size_t byteCount, const std::string& sourcePath = "" ) : path( sourcePath )
+	{
+		if ( byteCount > 0 ) {
+			data.assign( bytes, bytes + byteCount );
+		}
+	}
+
+	uint32_t			GetByteCount() const { return static_cast<uint32_t>( data.size() ); }
+	const uint8_t*		GetRaw() const { return data.data(); }
+	const std::string&	GetPath() const { return path; }
 
 	void Serialize( Serializer* s );
 };
+
+
+bool LoadBinaryFileFromDisk( const std::string& path, BinaryFile& outFile );
+bool WriteBinaryFileToDisk( const std::string& path, const BinaryFile& file );
 
 
 class BinaryFileLoader : public LoadHandler<BinaryFile>

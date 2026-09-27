@@ -197,4 +197,36 @@ std::vector<char> ReadTextFile( const std::string& filename )
 	return buffer;
 }
 
+
+bool WriteBinaryFile( const std::string& filename, const std::vector<char>& data )
+{
+	std::ofstream file( filename, std::ios::binary | std::ios::trunc );
+
+	if( !file.is_open() ) {
+		return false;
+	}
+
+	if( data.empty() == false ) {
+		file.write( data.data(), data.size() );
+	}
+	file.close();
+
+	return true;
+}
+
+
+bool WriteTextFile( const std::string& filename, const std::string& text )
+{
+	std::ofstream file( filename, std::ios::trunc );
+
+	if( !file.is_open() ) {
+		return false;
+	}
+
+	file.write( text.data(), text.size() );
+	file.close();
+
+	return true;
+}
+
 }
