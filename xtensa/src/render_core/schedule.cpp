@@ -1187,7 +1187,7 @@ void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderCont
 		info.bindSetId = bindset_computeGBuffer;
 		info.constants = &visParms;
 		info.constantsByteSize = sizeof( visParms );
-		info.bind = [ resources ]( ComputeTask* task, ShaderBindParms* p )
+		info.bind = [ resources, view = viewContext->renderViews[ 0 ] ]( ComputeTask* task, ShaderBindParms* p )
 			{
 				p->Bind( BINDING_NAME( globalsBuffer ), &resources->globalConstants );
 				p->Bind( BINDING_NAME( viewBuffer ), &resources->viewParms );
@@ -1197,6 +1197,7 @@ void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderCont
 				p->Bind( BINDING_NAME( image2DArray ), &resources->gpuImages2D );
 				p->Bind( BINDING_NAME( bilinearSamplerWrap ), &resources->bilinearSamplers[ samplerAddress_t::SAMPLER_ADDRESS_WRAP ] );
 				p->Bind( BINDING_NAME( bilinearSamplerClampEdge ), &resources->bilinearSamplers[ samplerAddress_t::SAMPLER_ADDRESS_CLAMP_EDGE ] );
+				p->Bind( BINDING_NAME( modelBuffer ), view->GetSurfaceBuffer() );
 			};
 
 		schedule->Link( new TransitionImageTask( resources->gBufferLayerImage0, gpuImageStateFlags_t::GPU_IMAGE_READ, gpuImageStateFlags_t::GPU_IMAGE_STORAGE ) );

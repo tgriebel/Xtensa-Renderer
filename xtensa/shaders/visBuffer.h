@@ -8,27 +8,27 @@
 
 struct visibilitySample_t
 {
-	uint instanceId;
+	uint objectId;
 	uint triangleId;
 };
 
 
-uint2 EncodeVisibility( const uint instanceId, const uint triangleId )
+uint2 EncodeVisibility( const uint objectId, const uint triangleId )
 {
-	return uint2( instanceId, triangleId );
+	return uint2( objectId, triangleId );
 }
 
 
 uint2 EncodeVisibility( const visibilitySample_t vis )
 {
-	return EncodeVisibility( vis.instanceId, vis.triangleId );
+	return EncodeVisibility( vis.objectId, vis.triangleId );
 }
 
 
 visibilitySample_t DecodeVisibility( const uint2 packed )
 {
 	visibilitySample_t vis;
-	vis.instanceId = packed.x;
+	vis.objectId = packed.x;
 	vis.triangleId = packed.y;
 	return vis;
 }

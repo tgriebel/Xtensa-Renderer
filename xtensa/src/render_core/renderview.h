@@ -154,6 +154,7 @@ public:
 	const mat4x4f&			GetPreviousViewProjMatrix( const uint32_t multiViewIndex = 0 ) const;
 	int32_t					GetViewBufferUploadId( const int multiViewIndex = 0 ) const;
 	int32_t					GetSurfaceBufferId() const; // TODO: Have view own it's surface buffer. Eliminates indexing
+	inline const GpuBufferView* GetSurfaceBuffer() const { return &m_surfParmeters; }
 
 	uint32_t				GetMultiViewCount() const;
 

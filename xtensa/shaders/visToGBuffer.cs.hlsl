@@ -1,5 +1,6 @@
 #include "globals.h"
 #include "util.h"
+#include "visBuffer.h"
 
 // Creates a GBuffer from a visibility buffer
 
@@ -18,13 +19,9 @@ WRITE_IMAGE_LAYOUT( 0, 4, RWTexture2D<float4>, outWorldPosition )
 SAMPLER_2D_LAYOUT( 0, 5 )
 SAMPLER( 0, 6, bilinearSamplerWrap )
 SAMPLER( 0, 7, bilinearSamplerClampEdge )
+MODEL_LAYOUT( 0, 8 )
 
 BIND_INLINE visToGBufferParms_t visToGBufferParms;
-
-// Must come after the binding declarations above -- lighting.h's functions reference
-// globals/globalTextures/bilinearSamplerWrap/etc. at file scope, so those need to already
-// be declared at the point this header's contents get pasted in.
-#include "visBuffer.h"
 
 [numthreads( 8, 8, 1 )]
 void CSMain( uint3 dtid : SV_DispatchThreadID )
@@ -43,8 +40,7 @@ void CSMain( uint3 dtid : SV_DispatchThreadID )
 
     const visibilitySample_t packedIds = DecodeVisibility( visBufferImage.Load( int3( x, y, 0 ) ) );
     
-    //const uint surfIdx = InstanceID();
-    //const gpuRtSurface_t surf = surfaceInfos[ surfIdx ];
+    gpuSurface_t surf = surfaces[ packedIds.objectId ];
 
     //// Locate the hit triangle
     //const uint triBase = surf.firstIndex + PrimitiveIndex() * 3;

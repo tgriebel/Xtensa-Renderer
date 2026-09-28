@@ -206,9 +206,15 @@ void RenderView::FrameBegin( const drawPass_t begin, const drawPass_t end )
 			{
 				const uint32_t instanceId = drawGroupOffset[ passIx ] + drawGroup[ passIx ].InstanceId( surfIx );
 				m_surfBuffer[ instanceId ].prevModel = ( currentFrame > 0 ) ? m_surfBuffer[ instanceId ].model : instances[ surfIx ].modelMatrix.Transpose();
-				m_surfBuffer[ instanceId ].model = instances[ surfIx ].modelMatrix.Transpose();				
+				m_surfBuffer[ instanceId ].model = instances[ surfIx ].modelMatrix.Transpose();
 				m_surfBuffer[ instanceId ].diffuseIblCubeId = instances[ surfIx ].diffuseIblId;
 				m_surfBuffer[ instanceId ].envCubeId = instances[ surfIx ].envMapId;
+
+				const surfaceUpload_t& upload = drawGroup[ passIx ].SurfUpload( instances[ surfIx ].surfId );
+				const drawSurf_t& surf = drawGroup[ passIx ].DrawSurf( instances[ surfIx ].surfId );
+				m_surfBuffer[ instanceId ].vertexOffset = upload.vertexOffset;
+				m_surfBuffer[ instanceId ].firstIndex = upload.firstIndex;
+				m_surfBuffer[ instanceId ].materialId = static_cast<uint32_t>( surf.sortKey.materialId );
 			}
 		}
 

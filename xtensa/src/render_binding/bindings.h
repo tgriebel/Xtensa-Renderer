@@ -114,6 +114,7 @@ static const ShaderBinding g_computeGBufferBindings[] =
 	BINDING_NAME( image2DArray ),
 	BINDING_NAME( bilinearSamplerWrap ),
 	BINDING_NAME( bilinearSamplerClampEdge ),
+	BINDING_NAME( modelBuffer ),
 };
 const uint64_t bindset_computeGBuffer = Hash( "bindset_computeGBuffer" );
 

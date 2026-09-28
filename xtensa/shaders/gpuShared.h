@@ -226,7 +226,10 @@ struct gpuSurface_t
 	float4x4	prevModel;
 	uint		diffuseIblCubeId;
 	uint		envCubeId;
-	uint		pad[ 14 ];
+	uint		vertexOffset;
+	uint		firstIndex;
+	uint		materialId;
+	uint		pad[ 11 ];
 };
 
 
