@@ -21,23 +21,14 @@ void closesthit_main( inout hitPayload_t payload, in BuiltInTriangleIntersection
     const uint surfIdx = InstanceID();
     const gpuRtSurface_t surf = surfaceInfos[ surfIdx ];
 
-    // Locate the hit triangle in the index buffer
+    // Locate the hit triangle
     const uint triBase = surf.firstIndex + PrimitiveIndex() * 3;
-    const uint i0 = idxBuffer[ triBase + 0 ];
-    const uint i1 = idxBuffer[ triBase + 1 ];
-    const uint i2 = idxBuffer[ triBase + 2 ];
+    const rtTriangle_t tri = LoadRtTriangle( vtxBuffer, idxBuffer, triBase, surf.vertexOffset, hitAttribs );
+    const rtVertex_t v0 = tri.v0;
+    const rtVertex_t v1 = tri.v1;
+    const rtVertex_t v2 = tri.v2;
 
-    // Fetch the three vertices (raw index + vertexOffset = absolute VB position)
-    const rtVertex_t v0 = LoadRtVertex( vtxBuffer, surf.vertexOffset + i0 );
-    const rtVertex_t v1 = LoadRtVertex( vtxBuffer, surf.vertexOffset + i1 );
-    const rtVertex_t v2 = LoadRtVertex( vtxBuffer, surf.vertexOffset + i2 );
-
-    // Barycentric weights (b0 + b1 + b2 = 1.0)
-    const float b1 = hitAttribs.barycentrics.x;
-    const float b2 = hitAttribs.barycentrics.y;
-    const float b0 = 1.0f - b1 - b2;
-
-    const sampleAttributes_t surfaceSample = BuildSampleAttributes( v0, v1, v2, b0, b1, b2 );
+    const sampleAttributes_t surfaceSample = BuildSampleAttributes( tri );
 
     // Build ray-cone for texture LOD calculation
     {
