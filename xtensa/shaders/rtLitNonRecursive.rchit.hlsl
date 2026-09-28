@@ -28,7 +28,7 @@ void closesthit_main( inout hitPayload_t payload, in BuiltInTriangleIntersection
     const rtVertex_t v1 = tri.v1;
     const rtVertex_t v2 = tri.v2;
 
-    const sampleAttributes_t surfaceSample = BuildSampleAttributes( tri );
+    const geometryAttributes_t surfaceSample = BuildSampleAttributes( tri );
 
     // Build ray-cone for texture LOD calculation
     {

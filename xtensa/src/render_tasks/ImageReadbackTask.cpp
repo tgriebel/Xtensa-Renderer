@@ -98,14 +98,14 @@ void ImageReadbackTask::Init( const imageReadBackCreateInfo_t& info )
 	m_resourceBuffer.SetPos( 0 );
 	m_resourceBuffer.CopyData( &writeBackParms, sizeof( writeBackParms ) );
 
-	m_parms = m_context->RegisterBindParm( m_name, m_context->LookupBindSet( bindset_compute ) );
+	m_parms = m_context->RegisterBindParm( m_name, m_context->LookupBindSet( bindset_computeImageReadback ) );
 }
 
 
 void ImageReadbackTask::FrameBegin()
 {
 	m_parms->Bind( BINDING_NAME( globalsBuffer ),		&m_resources->globalConstants );
-	m_parms->Bind( BINDING_NAME( computeImage ),		&m_imageArray );
+	m_parms->Bind( BINDING_NAME( computeImageArray ),		&m_imageArray );
 	m_parms->Bind( BINDING_NAME( computeParms ),		&m_resourceBuffer );
 	m_parms->Bind( BINDING_NAME( computeWrite ),		&m_readbackBuffer );
 

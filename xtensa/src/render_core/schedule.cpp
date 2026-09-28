@@ -197,7 +197,7 @@ SubScheduleTask* BuildDofSchedule( const renderConfig_t& config, RenderContext* 
 			BINDING_NAME( globalsBuffer ),
 			BINDING_NAME( viewBuffer ),
 			BINDING_NAME( dofSourceImage ),
-			BINDING_NAME( computeWriteImage ),
+			BINDING_NAME( computeWriteImage0 ),
 			} );
 
 		Asset<GpuProgram>* progAsset = GpuProgramLib().Find( "DofTileMinMax" );
@@ -221,7 +221,7 @@ SubScheduleTask* BuildDofSchedule( const renderConfig_t& config, RenderContext* 
 				p->Bind( BINDING_NAME( globalsBuffer ), &resources->globalConstants );
 				p->Bind( BINDING_NAME( viewBuffer ), &resources->viewParms );
 				p->Bind( BINDING_NAME( dofSourceImage ), resources->depthStencilResolvedImage );
-				p->Bind( BINDING_NAME( computeWriteImage ), resources->dofTileCocImage );
+				p->Bind( BINDING_NAME( computeWriteImage0 ), resources->dofTileCocImage );
 			};
 
 		TransitionImageTask* transitionWriteDofTileTask = new TransitionImageTask( resources->dofTileCocImage, gpuImageStateFlags_t::GPU_IMAGE_READ, gpuImageStateFlags_t::GPU_IMAGE_STORAGE );
@@ -1162,6 +1162,52 @@ void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderCont
 
 		schedule->Link( new RenderTask( viewContext->renderViews[ 0 ], DRAWPASS_PREPASS, DRAWPASS_PREPASS, prePassFbInfo ) );
 	}
+
+	// Visibility buffer to GBuffer conversion
+	{
+		struct visToGBufferParms_t
+		{
+			vec2u		dimensions;
+			uint32_t	viewId;
+			uint32_t	pad;
+		};
+
+		visToGBufferParms_t visParms{};
+		visParms.dimensions = vec2u( resources->visBufferImage->info.width, resources->visBufferImage->info.height );
+		visParms.viewId = viewContext->renderViews[ 0 ]->GetViewBufferUploadId();
+
+		computeTaskCreateInfo_t info{};
+		info.name = "VisToGBuffer";
+		info.context = renderContext;
+		info.resources = resources;
+		info.progName = "VisToGBuffer";
+		info.imageTileSizeX = 8;
+		info.imageTileSizeY = 8;
+		info.image = resources->visBufferImage;
+		info.bindSetId = bindset_computeGBuffer;
+		info.constants = &visParms;
+		info.constantsByteSize = sizeof( visParms );
+		info.bind = [ resources ]( ComputeTask* task, ShaderBindParms* p )
+			{
+				p->Bind( BINDING_NAME( globalsBuffer ), &resources->globalConstants );
+				p->Bind( BINDING_NAME( viewBuffer ), &resources->viewParms );
+				p->Bind( BINDING_NAME( computeReadImage ), resources->visBufferImage );
+				p->Bind( BINDING_NAME( computeWriteImage0 ), resources->gBufferLayerImage0 );
+				p->Bind( BINDING_NAME( computeWriteImage1 ), resources->gBufferLayerImage1 );
+				p->Bind( BINDING_NAME( image2DArray ), &resources->gpuImages2D );
+				p->Bind( BINDING_NAME( bilinearSamplerWrap ), &resources->bilinearSamplers[ samplerAddress_t::SAMPLER_ADDRESS_WRAP ] );
+				p->Bind( BINDING_NAME( bilinearSamplerClampEdge ), &resources->bilinearSamplers[ samplerAddress_t::SAMPLER_ADDRESS_CLAMP_EDGE ] );
+			};
+
+		schedule->Link( new TransitionImageTask( resources->gBufferLayerImage0, gpuImageStateFlags_t::GPU_IMAGE_READ, gpuImageStateFlags_t::GPU_IMAGE_STORAGE ) );
+		schedule->Link( new TransitionImageTask( resources->gBufferLayerImage1, gpuImageStateFlags_t::GPU_IMAGE_READ, gpuImageStateFlags_t::GPU_IMAGE_STORAGE ) );
+
+		schedule->Link( new ComputeTask( info ) );
+
+		schedule->Link( new TransitionImageTask( resources->gBufferLayerImage0, gpuImageStateFlags_t::GPU_IMAGE_STORAGE, gpuImageStateFlags_t::GPU_IMAGE_READ ) );
+		schedule->Link( new TransitionImageTask( resources->gBufferLayerImage1, gpuImageStateFlags_t::GPU_IMAGE_STORAGE, gpuImageStateFlags_t::GPU_IMAGE_READ ) );
+	}
+
 	if( tasks.resolvePostDepth )
 	{
 		schedule->Link( tasks.resolvePostDepth );

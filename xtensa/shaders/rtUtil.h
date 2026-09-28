@@ -1,6 +1,8 @@
 #ifndef RTUTIL_HLSL_H
 #define RTUTIL_HLSL_H
 
+#include "surfaceTypes.h"
+
 // Interpolate a float3 attribute across a triangle using barycentric weights.
 float3 BaryLerp3( float3 a, float3 b, float3 c, float b0, float b1, float b2 )
 {
@@ -46,13 +48,13 @@ rtTriangle_t LoadRtTriangle( ByteAddressBuffer vtxBuf, StructuredBuffer<uint> id
 
 
 // Reconstructs surface sample at the intersection location.
-sampleAttributes_t BuildSampleAttributes( const rtTriangle_t tri )
+geometryAttributes_t BuildSampleAttributes( const rtTriangle_t tri )
 {
     const float3 localNormal = normalize( BaryLerp3( tri.v0.normal,    tri.v1.normal,    tri.v2.normal,    tri.b0, tri.b1, tri.b2 ) );
     const float3 localTangent = normalize( BaryLerp3( tri.v0.tangent,   tri.v1.tangent,   tri.v2.tangent,   tri.b0, tri.b1, tri.b2 ) );
     const float3 localBitangent = normalize( BaryLerp3( tri.v0.bitangent, tri.v1.bitangent, tri.v2.bitangent, tri.b0, tri.b1, tri.b2 ) );
 
-    sampleAttributes_t surfaceSample;
+    geometryAttributes_t surfaceSample;
 
     surfaceSample.N = normalize( mul( localNormal, (float3x3)WorldToObject3x4() ) );
     surfaceSample.T = normalize( mul( localTangent, (float3x3)ObjectToWorld3x4() ) );

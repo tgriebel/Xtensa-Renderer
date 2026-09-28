@@ -184,7 +184,7 @@ void ImguiTask::Init( RenderContext* renderContext, ResourceContext* resourceCon
 	m_imageStatImages.Resize( 1 );
 	m_imageStatImages.BindIndex( 0, rc.defaultImage );
 
-	m_imageStatParms = m_context->RegisterBindParm( "ImageStatsBindParms", m_context->LookupBindSet( bindset_compute ) );
+	m_imageStatParms = m_context->RegisterBindParm( "ImageStatsBindParms", m_context->LookupBindSet( bindset_computeImageReadback ) );
 	m_imageStatImage = nullptr;
 	m_imageStatDispatched = false;
 	memset( m_imageStatHistogram, 0, sizeof( m_imageStatHistogram ) );
@@ -333,7 +333,7 @@ void ImguiTask::FrameBegin()
 	}
 
 	m_imageStatParms->Bind( BINDING_NAME( globalsBuffer ), &m_resources->globalConstants );
-	m_imageStatParms->Bind( BINDING_NAME( computeImage ),  &m_imageStatImages );
+	m_imageStatParms->Bind( BINDING_NAME( computeImageArray ),  &m_imageStatImages );
 	m_imageStatParms->Bind( BINDING_NAME( computeParms ),  &m_imageStatParmsBuffer );
 	m_imageStatParms->Bind( BINDING_NAME( computeWrite ),  &m_imageStatBuffer );
 

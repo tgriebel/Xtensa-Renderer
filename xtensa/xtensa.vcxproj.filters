@@ -604,6 +604,9 @@
     <FxCompile Include="shaders\imageReadback.cs.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\visToGBuffer.cs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
     <FxCompile Include="shaders\lit.ps.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
@@ -749,6 +752,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\rtCRT.rchit.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\surfaceTypes.h">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

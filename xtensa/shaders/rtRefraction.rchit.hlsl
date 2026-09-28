@@ -22,7 +22,7 @@ void closesthit_main( inout hitPayload_t payload, in BuiltInTriangleIntersection
 
     const uint triBase = surf.firstIndex + PrimitiveIndex() * 3;
     const rtTriangle_t tri = LoadRtTriangle( vtxBuffer, idxBuffer, triBase, surf.vertexOffset, hitAttribs );
-    const sampleAttributes_t surfaceSample = BuildSampleAttributes( tri );
+    const geometryAttributes_t surfaceSample = BuildSampleAttributes( tri );
 
     const gpuView_t view = views[ rtConstants.viewId ];
     const gpuMaterial_t material = materials[ surf.materialId ];

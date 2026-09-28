@@ -17,8 +17,10 @@ BINDING( globalsBuffer, CONSTANT_BUFFER, 1, BIND_STATE_ALL );
 BINDING( particleWriteBuffer,	WRITE_BUFFER,		1,	BIND_STATE_CS );
 BINDING( computeParms,			CONSTANT_BUFFER,	1,	BIND_STATE_CS );
 BINDING( computeWrite,			WRITE_BUFFER,		1,	BIND_STATE_CS );
-BINDING( computeImage,			IMAGE_2D_ARRAY,		8,	BIND_STATE_CS );
-BINDING( computeWriteImage,		WRITE_IMAGE_BUFFER,	1,	BIND_STATE_CS );
+BINDING( computeImageArray,		IMAGE_2D_ARRAY,		8,	BIND_STATE_CS );
+BINDING( computeReadImage,		IMAGE_2D,			1,	BIND_STATE_CS );
+BINDING( computeWriteImage0,	WRITE_IMAGE_BUFFER,	1,	BIND_STATE_CS );
+BINDING( computeWriteImage1,	WRITE_IMAGE_BUFFER,	1,	BIND_STATE_CS );
 
 // Post Effect Resources
 BINDING( imageProcess,			CONSTANT_BUFFER,	1,						BIND_STATE_PS );
@@ -91,14 +93,29 @@ static const ShaderBinding g_particleBindings[] =
 const uint64_t bindset_particle = Hash( "bindset_particle" );
 
 
-static const ShaderBinding g_computeBindings[] =
+// Samples an image and writes results into a CPU-readback buffer (ImageStat, ImageReadback)
+static const ShaderBinding g_computeImageReadbackBindings[] =
 {
 	BINDING_NAME( globalsBuffer ),
-	BINDING_NAME( computeImage ),
+	BINDING_NAME( computeImageArray ),
 	BINDING_NAME( computeParms ),
 	BINDING_NAME( computeWrite ),
 };
-const uint64_t bindset_compute = Hash( "bindset_compute" );
+const uint64_t bindset_computeImageReadback = Hash( "bindset_computeImageReadback" );
+
+
+static const ShaderBinding g_computeGBufferBindings[] =
+{
+	BINDING_NAME( globalsBuffer ),
+	BINDING_NAME( viewBuffer ),
+	BINDING_NAME( computeReadImage ),
+	BINDING_NAME( computeWriteImage0 ),
+	BINDING_NAME( computeWriteImage1 ),
+	BINDING_NAME( image2DArray ),
+	BINDING_NAME( bilinearSamplerWrap ),
+	BINDING_NAME( bilinearSamplerClampEdge ),
+};
+const uint64_t bindset_computeGBuffer = Hash( "bindset_computeGBuffer" );
 
 
 static const ShaderBinding g_imageProcessBindings[] =

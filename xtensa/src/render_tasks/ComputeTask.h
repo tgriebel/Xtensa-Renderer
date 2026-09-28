@@ -17,7 +17,7 @@ struct computeTaskCreateInfo_t
 	ResourceContext*	resources;
 	const Image*		image;				// Optional. Used when `imageTileSize` is not 0
 
-	uint64_t			bindSetId;			// Hash id of the target bindset (e.g. bindset_compute)
+	uint64_t			bindSetId;			// Hash id of the target bindset (e.g. bindset_computeImageReadback)
 
 	const void*			constants;			// Optional: custom shader constants
 	uint32_t			constantsByteSize;	// Size in bytes

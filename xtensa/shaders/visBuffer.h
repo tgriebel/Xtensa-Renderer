@@ -1,7 +1,7 @@
 #ifndef VISBUFFER_HLSL_H
 #define VISBUFFER_HLSL_H
 
-#include "lighting.h"
+#include "surfaceTypes.h"
 
 // See John Hable's blog post for all the core implementation details on visibility buffers
 // https://filmicworlds.com/blog/visibility-buffer-rendering-with-material-graphs/
@@ -34,9 +34,9 @@ visibilitySample_t DecodeVisibility( const uint2 packed )
 }
 
 
-sampleAttributes_t ResolveVisibility( const visibilitySample_t vis, const float2 pixelNdc, const gpuView_t view )
+geometryAttributes_t ResolveVisibility( const visibilitySample_t vis, const float2 pixelNdc, const gpuView_t view )
 {
-	sampleAttributes_t result = (sampleAttributes_t)0;
+	geometryAttributes_t result = (geometryAttributes_t)0;
 	// TODO: implement
 	return result;
 }

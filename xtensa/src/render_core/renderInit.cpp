@@ -358,8 +358,11 @@ void Renderer::InitApi( const renderConfig_t& cfg )
 		bindset = &renderContext.bindSets[ bindset_particle ];
 		bindset->Create( "ParticleBindings", g_particleBindings, COUNTARRAY( g_particleBindings ) );
 
-		bindset = &renderContext.bindSets[ bindset_compute ];
-		bindset->Create( "ComputeBindings", g_computeBindings, COUNTARRAY( g_computeBindings ) );
+		bindset = &renderContext.bindSets[ bindset_computeImageReadback ];
+		bindset->Create( "ComputeImageReadbackBindings", g_computeImageReadbackBindings, COUNTARRAY( g_computeImageReadbackBindings ) );
+
+		bindset = &renderContext.bindSets[ bindset_computeGBuffer ];
+		bindset->Create( "ComputeGBufferBindings", g_computeGBufferBindings, COUNTARRAY( g_computeGBufferBindings ) );
 
 		bindset = &renderContext.bindSets[ bindset_imageShader ];
 		bindset->Create( "ImageProcessBindings", g_imageProcessBindings, COUNTARRAY( g_imageProcessBindings ) );
@@ -775,12 +778,12 @@ void Renderer::CreateFramebuffers()
 		
 		resources.gBufferLayerImage0->Create(
 			info,
-			"FB_gBufferLayer", GPU_IMAGE_RW | GPU_IMAGE_TRANSFER_SRC, lifeTime
+			"FB_gBufferLayer", GPU_IMAGE_RW | GPU_IMAGE_STORAGE | GPU_IMAGE_TRANSFER_SRC, lifeTime
 		);
 
 		resources.gBufferLayerImage1->Create(
 			info,
-			"FB_gBufferLayer", GPU_IMAGE_RW | GPU_IMAGE_TRANSFER_SRC, lifeTime
+			"FB_gBufferLayer", GPU_IMAGE_RW | GPU_IMAGE_STORAGE | GPU_IMAGE_TRANSFER_SRC, lifeTime
 		);
 
 		info.fmt = IMAGE_FMT_RG_32_UINT;

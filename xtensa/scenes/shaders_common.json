@@ -118,12 +118,17 @@
 	{
       "name": "ImageStat",
       "cs": "imageStat",
-	  "bindset": "bindset_compute"
+	  "bindset": "bindset_computeImageReadback"
     },
 	{
       "name": "ImageReadback",
       "cs": "imageReadback",
-	  "bindset": "bindset_compute"
+	  "bindset": "bindset_computeImageReadback"
+    },
+	{
+      "name": "VisToGBuffer",
+      "cs": "visToGBuffer",
+	  "bindset": "bindset_computeGBuffer"
     },
 	{
       "name": "DownSample",
