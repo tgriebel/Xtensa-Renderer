@@ -274,7 +274,9 @@ struct vsInput_t
 };
 
 
-struct rtVertex_t
+// Used to reconstruct vertex data from a buffer
+// TODO: Consider merging with `vsInput_t` using macros
+struct gpuVertex_t
 {
 	float4	position;	// offset  0, 16 bytes
 	float4	color;		// offset 16, 16 bytes

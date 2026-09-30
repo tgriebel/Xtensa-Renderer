@@ -40,6 +40,10 @@
 
 #define WRITE_BUFFER_LAYOUT( S, N, TYPE, NAME )         BIND_SET( S, N ) RWStructuredBuffer<TYPE> NAME;
 
+#define VERTEX_BUFFER_LAYOUT( S, N, NAME )              BIND_SET( S, N ) ByteAddressBuffer NAME;
+
+#define INDEX_BUFFER_LAYOUT( S, N, NAME )               BIND_SET( S, N ) StructuredBuffer<uint> NAME;
+
 #define WRITE_IMAGE_LAYOUT( S, N, TEXTYPE, NAME )       BIND_SET( S, N ) TEXTYPE NAME;
 
 #define SAMPLER( S, N, NAME )							BIND_SET( S, N ) SamplerState NAME;

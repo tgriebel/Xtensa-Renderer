@@ -3,8 +3,8 @@
 GLOBAL_BINDS( 0 )
 RT_ACCELERATION_STRUCTURE( 1, 0, tlas )
 RT_OUTPUT( 1, 1, rtOutput )
-RT_VERTEX_BUFFER( 1, 2, vtxBuffer )
-RT_INDEX_BUFFER( 1, 3, idxBuffer )
+VERTEX_BUFFER_LAYOUT( 1, 2, vtxBuffer )
+INDEX_BUFFER_LAYOUT( 1, 3, idxBuffer )
 RT_SURFACE_INFO( 1, 4, surfaceInfos )
 LIGHT_LAYOUT( 1, 5 )
 RT_PUSH_CONSTANTS
@@ -21,7 +21,7 @@ void closesthit_main( inout hitPayload_t payload, in BuiltInTriangleIntersection
     const gpuRtSurface_t surf = surfaceInfos[ surfIdx ];
 
     const uint triBase = surf.firstIndex + PrimitiveIndex() * 3;
-    const rtTriangle_t tri = LoadRtTriangle( vtxBuffer, idxBuffer, triBase, surf.vertexOffset, hitAttribs );
+    const triangle_t tri = LoadTriangle( vtxBuffer, idxBuffer, triBase, surf.vertexOffset, hitAttribs.barycentrics );
     const geometryAttributes_t surfaceSample = BuildSampleAttributes( tri );
 
     const gpuMaterial_t material = materials[ surf.materialId ];

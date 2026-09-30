@@ -21,6 +21,8 @@ BINDING( computeImageArray,		IMAGE_2D_ARRAY,		8,	BIND_STATE_CS );
 BINDING( computeReadImage,		IMAGE_2D,			1,	BIND_STATE_CS );
 BINDING( computeWriteImage0,	WRITE_IMAGE_BUFFER,	1,	BIND_STATE_CS );
 BINDING( computeWriteImage1,	WRITE_IMAGE_BUFFER,	1,	BIND_STATE_CS );
+BINDING( indexBuffer,			READ_BUFFER,		1,	BIND_STATE_CS );
+BINDING( vertexBuffer,			READ_BUFFER,		1,	BIND_STATE_CS );
 
 // Post Effect Resources
 BINDING( imageProcess,			CONSTANT_BUFFER,	1,						BIND_STATE_PS );
@@ -115,6 +117,8 @@ static const ShaderBinding g_computeGBufferBindings[] =
 	BINDING_NAME( bilinearSamplerWrap ),
 	BINDING_NAME( bilinearSamplerClampEdge ),
 	BINDING_NAME( modelBuffer ),
+	BINDING_NAME( vertexBuffer ),
+	BINDING_NAME( indexBuffer ),
 };
 const uint64_t bindset_computeGBuffer = Hash( "bindset_computeGBuffer" );
 

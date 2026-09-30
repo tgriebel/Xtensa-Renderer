@@ -12,6 +12,18 @@
 #define INV_PI          ( 1.0f / PI )
 #endif
 
+
+struct triangle_t
+{
+	gpuVertex_t	v0;
+	gpuVertex_t	v1;
+	gpuVertex_t	v2;
+	float		b0;
+	float		b1;
+	float		b2;
+};
+
+
 int2 GetTextureSize( Texture2D tex, int mipLevel )
 {
 	uint w, h, levels;
@@ -375,6 +387,44 @@ float CircleOfConfusion( const float aperture, const float focallength, const fl
 
 	const float coc = aperture * ( numerator / denom );
 	return coc;
+}
+
+
+// ByteAddressBuffer allows for better control over padding and alignment so the vertices can be shared between RT and rasterization pipelines
+gpuVertex_t LoadVertex( ByteAddressBuffer buf, uint index )
+{
+	static const uint VertexStride = 84;
+	const uint base = index * VertexStride;
+
+	gpuVertex_t v;
+	v.position = asfloat( buf.Load4( base + 0 ) );
+	v.color = asfloat( buf.Load4( base + 16 ) );
+	v.normal = asfloat( buf.Load3( base + 32 ) );
+	v.tangent = asfloat( buf.Load3( base + 44 ) );
+	v.bitangent = asfloat( buf.Load3( base + 56 ) );
+	v.uv = asfloat( buf.Load4( base + 68 ) );
+	return v;
+}
+
+
+// Looks up a triangle's three indices, vertices, and barycentric weights
+triangle_t LoadTriangle( ByteAddressBuffer vtxBuf, StructuredBuffer<uint> idxBuf,
+	uint triBase, uint vertexOffset, float2 barycentrics )
+{
+	const uint i0 = idxBuf[ triBase + 0 ];
+	const uint i1 = idxBuf[ triBase + 1 ];
+	const uint i2 = idxBuf[ triBase + 2 ];
+
+	triangle_t tri;
+	tri.v0 = LoadVertex( vtxBuf, vertexOffset + i0 );
+	tri.v1 = LoadVertex( vtxBuf, vertexOffset + i1 );
+	tri.v2 = LoadVertex( vtxBuf, vertexOffset + i2 );
+
+	tri.b1 = barycentrics.x;
+	tri.b2 = barycentrics.y;
+	tri.b0 = 1.0f - tri.b1 - tri.b2;
+
+	return tri;
 }
 
 

@@ -20,6 +20,8 @@ SAMPLER_2D_LAYOUT( 0, 5 )
 SAMPLER( 0, 6, bilinearSamplerWrap )
 SAMPLER( 0, 7, bilinearSamplerClampEdge )
 MODEL_LAYOUT( 0, 8 )
+VERTEX_BUFFER_LAYOUT( 0, 9, vtxBuf )
+INDEX_BUFFER_LAYOUT( 0, 10, idxBuf )
 
 BIND_INLINE visToGBufferParms_t visToGBufferParms;
 
@@ -42,17 +44,16 @@ void CSMain( uint3 dtid : SV_DispatchThreadID )
     
     gpuSurface_t surf = surfaces[ packedIds.objectId ];
 
-    //// Locate the hit triangle
-    //const uint triBase = surf.firstIndex + PrimitiveIndex() * 3;
+    const uint triBase = ( surf.firstIndex + surf.firstIndex );
     
-    //const uint i0 = idxBuf[ triBase + 0 ];
-    //const uint i1 = idxBuf[ triBase + 1 ];
-    //const uint i2 = idxBuf[ triBase + 2 ];
+    const uint i0 = idxBuf[ triBase + 0 ];
+    const uint i1 = idxBuf[ triBase + 1 ];
+    const uint i2 = idxBuf[ triBase + 2 ];
 
-    //rtTriangle_t tri;
-    //tri.v0 = LoadRtVertex( vtxBuf, vertexOffset + i0 );
-    //tri.v1 = LoadRtVertex( vtxBuf, vertexOffset + i1 );
-    //tri.v2 = LoadRtVertex( vtxBuf, vertexOffset + i2 );
+    triangle_t tri;
+    tri.v0 = LoadVertex( vtxBuf, surf.vertexOffset + i0 );
+    tri.v1 = LoadVertex( vtxBuf, surf.vertexOffset + i1 );
+    tri.v2 = LoadVertex( vtxBuf, surf.vertexOffset + i2 );
 
     //tri.b1 = hitAttribs.barycentrics.x;
     //tri.b2 = hitAttribs.barycentrics.y;
