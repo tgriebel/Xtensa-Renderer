@@ -60,5 +60,8 @@
     <ClCompile Include="..\src\asset_types\image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\asset_types\binaryFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

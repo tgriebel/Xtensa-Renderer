@@ -155,6 +155,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\asset_types\image.cpp" />
+    <ClCompile Include="..\src\asset_types\binaryFile.cpp" />
     <ClCompile Include="..\src\render_resources\gpuImage.cpp" />
     <ClCompile Include="..\src\render_core\renderResource.cpp" />
     <ClCompile Include="AssetBakerMain.cpp" />
