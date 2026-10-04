@@ -108,10 +108,10 @@ bool SwapChain::Present( GfxCmdList& gfxContext )
 
 	VkResult result = vkQueuePresentKHR( context.presentQueue, &presentInfo );
 
-	ret = !( ( result == VK_ERROR_OUT_OF_DATE_KHR ) && ( result == VK_SUBOPTIMAL_KHR ) );
+	ret = !( ( result == VK_ERROR_OUT_OF_DATE_KHR ) || ( result == VK_SUBOPTIMAL_KHR ) );
 #endif
 	return ret;
-}
+}	
 
 
 void SwapChain::Create( const Window* _window, const int displayWidth, const int displayHeight )
