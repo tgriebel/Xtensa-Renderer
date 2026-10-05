@@ -56,6 +56,11 @@ public:
 	}
 #endif
 
+	inline uint32_t GetBackbufferIndex() const
+	{
+		return m_imageIndex;
+	}
+
 	inline uint32_t GetBufferCount() const
 	{
 		return m_imageCount;

@@ -33,34 +33,34 @@ protected:
 	VkImageView				vk_view[ MaxFrameStates ];
 	Allocation				m_allocation[ MaxFrameStates ];
 #endif
-	gpuImageStateFlags_t	m_flags;
-	swapBuffering_t			m_swapBuffering;
-	imageInfo_t				m_info;
-	imageTiling_t			m_tiling;
-	const char*				m_dbgName;
-	int32_t					m_id;
-	bool					m_isViewOwned;
-	bool					m_ownsAllocation = true; // An aliased image does not own the backing allocation
+	const SwapChain*		m_swapChain = nullptr;		// Only set if the image can be a backbuffer
+	gpuImageStateFlags_t	m_flags;					// Sync and usage flags
+	swapBuffering_t			m_swapBuffering;			// Single or multi-frame buffering
+	imageInfo_t				m_info;						// Image properties
+	imageTiling_t			m_tiling;					// Memory layout of the image
+	const char*				m_dbgName;					// Debug Name
+	int32_t					m_id;						// Bindless resource id
+	bool					m_isViewOwned;				// An ImageView owns the memory
+	bool					m_ownsAllocation = true;	// An aliased image does not own the backing allocation
 
-	inline uint32_t GetBufferId( const uint32_t bufferId = 0 ) const
-	{
-		const uint32_t bufferCount = GetBufferCount();
-		return Min( bufferId, bufferCount - 1 );
-	}
+	uint32_t GetBufferId( const uint32_t requestedBufferId = 0 ) const;
 
 public:
 	GpuImage() = default;
 
+	// Standard images. Both resources and framebuffers
 	GpuImage( const char* name, const imageInfo_t& info, const gpuImageStateFlags_t flags, const resourceLifeTime_t lifetime )
 	{
 		Create( name, info, flags, lifetime );
 	}
 
+	// Aliased memory images
 	GpuImage( const char* name, const imageInfo_t& info, const gpuImageStateFlags_t flags, const resourceLifeTime_t lifetime, AliasableImageHeap& heap )
 	{
 		CreateAliased( name, info, flags, lifetime, heap );
 	}
 
+	// Interface for swapchain images. These images require special management
 	GpuImage( const char* name, const imageInfo_t& info, const gpuImageStateFlags_t flags, const SwapChain* swapChain );
 
 	virtual GpuImage::~GpuImage()
@@ -98,7 +98,7 @@ public:
 		const uint32_t bufferCount = gpuImage->GetBufferCount();
 		for ( uint32_t i = 0; i < bufferCount; ++i )
 		{
-			vk_image[ i ] = gpuImage->GetVkImage( i );
+			vk_image[ i ] = gpuImage->vk_image[ i ];
 			vk_view[ i ] = views[ i ];
 		}
 		m_dbgName = gpuImage->GetDebugName();

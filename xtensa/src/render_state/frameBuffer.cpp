@@ -384,32 +384,6 @@ void FrameBuffer::Create( const frameBufferCreateInfo_t& createInfo )
 		passBits.semantic.transitionBits.stencilTrans = state;
 		passBits.semantic.attachmentMask = m_attachmentMask;
 
-		for ( uint32_t frameIx = 0; frameIx < m_bufferCount; ++frameIx )
-		{
-			VkImageView attachments[ MaxAttachmentCount ] = {};
-			
-			uint32_t currentAttachment = 0;
-			if ( createInfo.color0 != nullptr ) {
-				attachments[ currentAttachment++ ] = createInfo.color0->gpuImage->GetVkImageView( frameIx );
-			}
-			if ( createInfo.color1 != nullptr ) {
-				attachments[ currentAttachment++ ] = createInfo.color1->gpuImage->GetVkImageView( frameIx );
-			}
-			if ( createInfo.color2 != nullptr ) {
-				attachments[ currentAttachment++ ] = createInfo.color2->gpuImage->GetVkImageView( frameIx );
-			}
-			if ( createInfo.depthStencil != nullptr ) {
-				attachments[ currentAttachment++ ] = createInfo.depthStencil->gpuImage->GetVkImageView( frameIx );
-			}
-			if ( createInfo.stencil != nullptr ) {
-				attachments[ currentAttachment++ ] = createInfo.stencil->gpuImage->GetVkImageView( frameIx );
-			}
-			assert( currentAttachment == m_attachmentCount );
-
-			// Dynamic rendering: no VkFramebuffer needed — image views are bound
-			// directly via VkRenderingAttachmentInfo at vkCmdBeginRendering time.
-			(void)attachments;
-		}
 		m_color0 = createInfo.color0;
 		m_color1 = createInfo.color1;
 		m_color2 = createInfo.color2;

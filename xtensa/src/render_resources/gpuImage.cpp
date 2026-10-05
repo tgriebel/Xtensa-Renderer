@@ -50,6 +50,21 @@ static VkImageCreateInfo vk_GetImageCreateInfo( const imageInfo_t& info, const g
 #endif
 
 
+uint32_t GpuImage::GetBufferId( const uint32_t requestedBufferId ) const
+{
+	if( m_swapChain != nullptr )
+	{
+		assert( HasFlags( m_flags, GPU_IMAGE_PRESENT ) );
+		assert( GetType() == resourceType_t::SWAPCHAIN );
+
+	//	return m_swapChain->GetBackbufferIndex();
+	}
+
+	const uint32_t bufferCount = GetBufferCount();
+	return Min( requestedBufferId, bufferCount - 1 );
+}
+
+
 GpuImage::GpuImage( const char* name, const imageInfo_t& info, const gpuImageStateFlags_t flags, const SwapChain* swapChain )
 {
 	RenderResource::Create( resourceType_t::SWAPCHAIN, resourceLifeTime_t::UNMANAGED );
@@ -69,7 +84,9 @@ GpuImage::GpuImage( const char* name, const imageInfo_t& info, const gpuImageSta
 	m_id = -1;
 	m_flags = flags;
 	m_info = info;
+	
 	m_isViewOwned = true;
+	m_swapChain = swapChain;
 }
 
 
