@@ -6,50 +6,6 @@
 #include "../render_core/swapChain.h"
 #include "aliasableImageHeap.h"
 
-// TODO: move
-#ifdef USE_VULKAN	
-static VkImageCreateInfo vk_GetImageCreateInfo( const imageInfo_t& info, const gpuImageStateFlags_t flags )
-{
-	VkImageCreateInfo imageInfo{ };
-	imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-	imageInfo.imageType = VK_IMAGE_TYPE_2D;
-	imageInfo.extent.width = static_cast<uint32_t>( info.width );
-	imageInfo.extent.height = static_cast<uint32_t>( info.height );
-	imageInfo.extent.depth = 1;
-	imageInfo.mipLevels = info.mipLevels;
-	imageInfo.arrayLayers = ( info.type == IMAGE_TYPE_CUBE ) ? 6 : info.layers;
-	imageInfo.format = vk_GetTextureFormat( info.fmt );
-	imageInfo.tiling = ( info.tiling == IMAGE_TILING_LINEAR ) ? VK_IMAGE_TILING_LINEAR : VK_IMAGE_TILING_OPTIMAL;
-	imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-	imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-	imageInfo.samples = vk_GetSampleCount( info.subsamples );
-
-	// Aspect inferred from format, masked by info.aspect for image views
-	const VkImageAspectFlags aspect = vk_GetColorAspectFlags( info.fmt );
-	
-	imageInfo.usage = 0;
-	if( ( flags & GPU_IMAGE_WRITE ) != 0 )
-	{
-		imageInfo.usage |= ( aspect & VK_IMAGE_ASPECT_COLOR_BIT ) != 0 ? VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT : 0;
-		imageInfo.usage |= ( aspect & VK_IMAGE_ASPECT_DEPTH_BIT ) != 0 ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT : 0;
-		imageInfo.usage |= ( aspect & VK_IMAGE_ASPECT_STENCIL_BIT ) != 0 ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT : 0;
-	}
-	if( ( flags & GPU_IMAGE_STORAGE ) != 0 )
-	{
-		imageInfo.usage |= VK_IMAGE_USAGE_STORAGE_BIT;
-	}
-	imageInfo.usage |= ( flags & GPU_IMAGE_READ ) != 0 ? VK_IMAGE_USAGE_SAMPLED_BIT : 0;
-	imageInfo.usage |= ( flags & GPU_IMAGE_TRANSFER_SRC ) != 0 ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0;
-	imageInfo.usage |= ( flags & GPU_IMAGE_TRANSFER_DST ) != 0 ? VK_IMAGE_USAGE_TRANSFER_DST_BIT : 0;
-
-	imageInfo.flags = 0;
-	imageInfo.flags |= ( info.type == IMAGE_TYPE_CUBE ) ? VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT : 0;
-
-	return imageInfo;
-}
-#endif
-
-
 uint32_t GpuImage::GetBufferId( const uint32_t requestedBufferId ) const
 {
 	if( m_swapChain != nullptr )

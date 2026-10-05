@@ -30,6 +30,7 @@ VkImageAspectFlagBits	vk_GetAspectFlags( const imageAspectFlags_t flags );
 VkImageAspectFlagBits	vk_GetColorAspectFlags( const imageFmt_t fmt );
 VkImageViewType			vk_GetImageViewType( const imageType_t type );
 VkSampleCountFlagBits	vk_GetSampleCount( const imageSamples_t sampleCount );
+VkImageCreateInfo		vk_GetImageCreateInfo( const imageInfo_t& info, const gpuImageStateFlags_t flags );
 VkDescriptorType		vk_GetDescriptorType( const bindType_t type );
 VkShaderStageFlagBits	vk_GetStageFlags( const bindStateFlag_t flags );
 
