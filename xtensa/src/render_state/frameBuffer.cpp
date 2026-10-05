@@ -249,13 +249,7 @@ void FrameBuffer::Create( const frameBufferCreateInfo_t& createInfo )
 		THROW_ERROR( "Framebuffer already initialized." );
 	}
 
-	renderPassTransition_t perms[ PassPermCount ];
-	for ( uint32_t i = 0; i < PassPermCount; ++i ) {
-		perms[ i ].bits = i;
-	}
-
 	m_bufferCount = ( createInfo.swapBuffering == swapBuffering_t::MULTI_FRAME ) ? MaxFrameStates : 1;
-	const bool canPresent = ( createInfo.color0 != nullptr ) && ( createInfo.color0->info.fmt == g_swapChain.GetBackBufferFormat() );
 
 	m_colorCount += ( createInfo.color0 != nullptr ) ? 1 : 0;
 	m_colorCount += ( createInfo.color1 != nullptr ) ? 1 : 0;
@@ -364,32 +358,12 @@ void FrameBuffer::Create( const frameBufferCreateInfo_t& createInfo )
 		}
 	}
 
-	// Initialization
-	for( uint32_t permIx = 0; permIx < PassPermCount; ++permIx )
-	{
-		const renderPassTransition_t& state = perms[ permIx ];
+	m_color0 = createInfo.color0;
+	m_color1 = createInfo.color1;
+	m_color2 = createInfo.color2;
+	m_depthStencil = createInfo.depthStencil;
+	m_stencil = createInfo.stencil;
 
-		if( ( canPresent == false ) && state.flags.presentAfter ) {
-			continue;
-		}
-
-		// Can specify clear options, etc. Assigned to cached render pass that matches
-		vk_RenderPassBits_t passBits = {};
-		passBits.semantic.attachmentBits = m_attachmentBits;
-
-		passBits.semantic.transitionBits.colorTrans0 = state;
-		passBits.semantic.transitionBits.colorTrans1 = state;
-		passBits.semantic.transitionBits.colorTrans2 = state;
-		passBits.semantic.transitionBits.depthTrans = state;
-		passBits.semantic.transitionBits.stencilTrans = state;
-		passBits.semantic.attachmentMask = m_attachmentMask;
-
-		m_color0 = createInfo.color0;
-		m_color1 = createInfo.color1;
-		m_color2 = createInfo.color2;
-		m_depthStencil = createInfo.depthStencil;
-		m_stencil = createInfo.stencil;
-	}
 	m_width = images[ firstValidIx ]->info.width;
 	m_height = images[ firstValidIx ]->info.height;
 	m_swapBuffering = createInfo.swapBuffering;
