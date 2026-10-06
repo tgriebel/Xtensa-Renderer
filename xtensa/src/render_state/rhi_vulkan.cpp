@@ -1164,7 +1164,7 @@ void vk_TransitionImageLayout( VkCommandBuffer cmdBuffer, const GpuImage* gpuIma
 		const uint32_t bufferCount = gpuImage->GetBufferCount();
 		for ( uint32_t i = 0; i < bufferCount; ++i )
 		{
-			barrier.image = gpuImage->GetVkImage( i );
+			barrier.image = gpuImage->GetVkImageAtIndex( i );
 			vkCmdPipelineBarrier(
 				cmdBuffer,
 				sourceStage, destinationStage,

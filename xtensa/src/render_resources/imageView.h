@@ -87,7 +87,7 @@ public:
 		const uint32_t bufferCount = m_sourceImage->gpuImage->GetBufferCount();
 		for ( uint32_t i = 0; i < bufferCount; ++i )
 		{
-			views[ i ] = vk_CreateImageView( m_sourceImage->gpuImage->GetVkImage( i ), info, subResourceView, image->gpuImage->GetDebugName(), i );
+			views[ i ] = vk_CreateImageView( m_sourceImage->gpuImage->GetVkImageAtIndex( i ), info, subResourceView, image->gpuImage->GetDebugName(), i );
 		}
 
 		gpuImage = new GpuImage( m_sourceImage->gpuImage, views );

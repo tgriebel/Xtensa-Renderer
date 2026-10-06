@@ -107,14 +107,30 @@ public:
 		m_id = gpuImage->m_id;
 		m_info = gpuImage->m_info;
 		m_isViewOwned = true;
+		m_swapChain = gpuImage->m_swapChain;
 	}
 
+	// Returns Vulkan resource at a given index. Used for itteration
+	inline const VkImage GetVkImageAtIndex( const uint32_t index ) const
+	{
+		assert( index < MaxFrameStates );
+		return vk_image[ index ];
+	}
+
+	// Returns Vulkan resource at given index. Used for itteration
+	inline const VkImageView GetVkImageViewAtIndex( const uint32_t index ) const
+	{
+		assert( index < MaxFrameStates );
+		return vk_view[ index ];
+	}
+
+	// Returns the appropriate buffer for the current frame
 	inline VkImage GetVkImage( const uint32_t bufferId ) const
 	{
 		return vk_image[ GetBufferId( bufferId ) ];
 	}
 
-
+	// Returns the appropriate buffer for the current  frame
 	inline VkImageView GetVkImageView( const uint32_t bufferId ) const
 	{
 		return vk_view[ GetBufferId( bufferId ) ];

@@ -11,9 +11,8 @@ uint32_t GpuImage::GetBufferId( const uint32_t requestedBufferId ) const
 	if( m_swapChain != nullptr )
 	{
 		assert( HasFlags( m_flags, GPU_IMAGE_PRESENT ) );
-		assert( GetType() == resourceType_t::SWAPCHAIN );
 
-	//	return m_swapChain->GetBackbufferIndex();
+		return m_swapChain->GetBackbufferIndex();
 	}
 
 	const uint32_t bufferCount = GetBufferCount();
