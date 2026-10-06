@@ -229,7 +229,7 @@ void UpdateScene( Scene* scene )
 		scene->mainCamera->Pan( yawDelta );
 		scene->mainCamera->Tilt( pitchDelta );
 	}
-	else if ( mouse.IsLeftDown() )
+	else if ( mouse.LeftClicked() )
 	{
 		Ray ray = scene->mainCamera->GetViewRay( vec2f( 0.5f * mouse.XNormalized() + 0.5f, 0.5f * mouse.YNormalized() + 0.5f ) );
 		scene->selectedEntity = scene->GetTracedEntity( ray );

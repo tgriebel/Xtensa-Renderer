@@ -144,53 +144,53 @@ void ChessScene::Update()
 	lights[ 0 ].pos = vec4f( 5.0f * cos( periodsPerSecond * time ), 5.0f * sin( periodsPerSecond * time ), 8.0f, 0.0f );
 
 	const Mouse& mouse = g_window.input.GetMouse();
-	if ( ( mouse.IsCentered() == false ) && mouse.IsLeftDown() )
+	if ( ( mouse.IsCentered() == false ) && mouse.LeftClicked() )
 	{
 		Ray ray = mainCamera->GetViewRay( vec2f( 0.5f * mouse.XNormalized() + 0.5f, 0.5f * mouse.YNormalized() + 0.5f ) );
 		selectedEntity = GetTracedEntity( ray );
-	}
 
-	if ( selectedEntity != nullptr )
-	{
-		PieceEntity* selectedPiece = reinterpret_cast<PieceEntity*>( selectedEntity );
-
-		int selectedActionIx = -1;
-		for ( int actionIx = 0; actionIx < actions.size(); ++actionIx )
+		if ( selectedEntity != nullptr )
 		{
-			const moveAction_t& action = actions[ actionIx ];
-			if ( ( action.y == GetRankNum( selectedPiece->rank ) ) && ( action.x == GetFileNum( selectedPiece->file ) ) ) {
-				selectedActionIx = actionIx;
-				break;
+			PieceEntity* selectedPiece = reinterpret_cast<PieceEntity*>( selectedEntity );
+
+			int selectedActionIx = -1;
+			for ( int actionIx = 0; actionIx < actions.size(); ++actionIx )
+			{
+				const moveAction_t& action = actions[ actionIx ];
+				if ( ( action.y == GetRankNum( selectedPiece->rank ) ) && ( action.x == GetFileNum( selectedPiece->file ) ) ) {
+					selectedActionIx = actionIx;
+					break;
+				}
 			}
-		}
 
-		if ( ( selectedActionIx > 0 ) && ( movePieceId != nullptr ) )
-		{
-			PieceEntity* movedPiece = reinterpret_cast<PieceEntity*>( movePieceId );
-			const pieceInfo_t movedPieceInfo = chessEngine.GetInfo( GetFileNum( movedPiece->file ), GetRankNum( movedPiece->rank ) );
-			const moveAction_t& action = actions[ selectedActionIx ];
+			if ( ( selectedActionIx >= 0 ) && ( movePieceId != nullptr ) )
+			{
+				PieceEntity* movedPiece = reinterpret_cast<PieceEntity*>( movePieceId );
+				const pieceInfo_t movedPieceInfo = chessEngine.GetInfo( GetFileNum( movedPiece->file ), GetRankNum( movedPiece->rank ) );
+				const moveAction_t& action = actions[ selectedActionIx ];
 
-			command_t cmd;
-			cmd.instance = movedPieceInfo.instance;
-			cmd.team = movedPieceInfo.team;
-			cmd.pieceType = movedPieceInfo.pieceType;
-			cmd.x = action.x;
-			cmd.y = action.y;
+				command_t cmd;
+				cmd.instance = movedPieceInfo.instance;
+				cmd.team = movedPieceInfo.team;
+				cmd.pieceType = movedPieceInfo.pieceType;
+				cmd.x = action.x;
+				cmd.y = action.y;
 
-			const resultCode_t result = chessEngine.Execute( cmd );
-			actions.resize( 0 );
-		}
-		else if ( selectedPiece->handle >= 0 )
-		{
-			actions.resize( 0 );
-			chessEngine.EnumerateActions( selectedPiece->handle, actions );
-			movePieceId = selectedEntity;
-		}
-		else
-		{
-			selectedActionIx = -1;
-			selectedEntity = nullptr;
-			movePieceId = nullptr;
+				const resultCode_t result = chessEngine.Execute( cmd );
+				actions.resize( 0 );
+			}
+			else if ( ( selectedPiece->handle >= 0 ) && ( chessEngine.GetInfo( selectedPiece->handle ).team == chessEngine.GetCurrentPlayer() ) )
+			{
+				actions.resize( 0 );
+				chessEngine.EnumerateActions( selectedPiece->handle, actions );
+				movePieceId = selectedEntity;
+			}
+			else
+			{
+				actions.resize( 0 );
+				selectedEntity = nullptr;
+				movePieceId = nullptr;
+			}
 		}
 	}
 
