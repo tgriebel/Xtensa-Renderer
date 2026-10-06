@@ -89,27 +89,102 @@ enum key_t
 
 #undef KEY
 
-struct mouse_t
+class Mouse
 {
-	mouse_t() : speed( 2.0f ),
+private:
+
+	float	x;				// Raw X coordinate in pixels
+	float	y;				// Raw Y coordinate in pixels
+	float	xNormalized;	// Normalized to [0,1] range
+	float	yNormalized;	// Normalized to [0,1] range
+	float	dx;				// Change in X from last frame
+	float	dy;				// Change in Y from last frame
+	float	speed;			// Speed multiplier for mouse movement
+	bool	leftDown;		// Left is currently down this frame
+	bool	leftDownPrev;	// Left was down on the previous frame
+	bool	rightDown;		// Right is currently down this frame
+	bool	rightDownPrev;	// Right was down on the previous frame
+	bool	centered;
+
+public:
+
+	Mouse() : speed( 1.0f ),
 		x( 0.0f ),
 		y( 0.0f ),
+		xNormalized( 0.0f ),
+		yNormalized( 0.0f ),
 		dx( 0.0f ),
 		dy( 0.0f ),
 		leftDown( false ),
+		leftDownPrev( false ),
 		rightDown( false ),
+		rightDownPrev( false ),
 		centered( false ) {}
 
-	float	x;
-	float	y;
-	float	xNormalized;
-	float	yNormalized;
-	float	dx; // dx accumlation per frame
-	float	dy; // dy accumlation per frame
-	float	speed;
-	bool	leftDown;
-	bool	rightDown;
-	bool	centered;
+	// Raw mouse position in pixels
+	inline float X() const				{ return x; }
+	inline float Y() const				{ return y; }
+
+	// Mouse position normalized to [0,1] range
+	inline float XNormalized() const	{ return xNormalized; }
+	inline float YNormalized() const	{ return yNormalized; }
+
+	// Movement delta from this frame from last
+	inline float DX() const				{ return dx; }
+	inline float DY() const				{ return dy; }
+
+	// Mouse movement speed multiplier
+	inline float Speed() const			{ return speed; }
+
+	// Mouse button is currently down
+	inline bool IsLeftDown() const		{ return leftDown; }
+	inline bool IsRightDown() const		{ return rightDown; }
+
+	// Is the cursor locked in the center of the window and hidden
+	inline bool IsCentered() const		{ return centered; }
+
+	// Triggers on release frame
+	inline bool LeftClicked() const		{ return ( leftDown && ( leftDownPrev == false ) ); }
+	inline bool RightClicked() const	{ return ( rightDown && ( rightDownPrev == false ) ); }
+
+private:
+
+	void NewFrame()
+	{
+		leftDownPrev = leftDown;
+		rightDownPrev = rightDown;
+		dx = 0.0f;
+		dy = 0.0f;
+	}
+
+	inline void SetPosition( const float newX, const float newY )
+	{
+		x = newX;
+		y = newY;
+	}
+
+	inline void SetNormalizedPosition( const float newX, const float newY )
+	{
+		xNormalized = newX;
+		yNormalized = newY;
+	}
+
+	inline void AccumulateDelta( const float ddx, const float ddy )
+	{
+		dx += ddx;
+		dy += ddy;
+	}
+
+	inline void SetSpeed( const float newSpeed )		{ speed = newSpeed;}
+	inline void SetLeftDown( const bool down )			{ leftDown = down; }
+	inline void SetRightDown( const bool down )			{ rightDown = down; }
+	inline void SetCentered( const bool isCentered )	{ centered = isCentered; }
+
+	friend class Input;	// NewFrame()
+#ifdef USE_GLFW
+	friend void MousePressCallback( GLFWwindow* window, int button, int action, int mods );
+	friend void MouseMoveCallback( GLFWwindow* window, double xpos, double ypos );
+#endif
 };
 
 
@@ -125,27 +200,25 @@ public:
 		return keys[ key ];
 	}
 
-	const mouse_t& GetMouse() const {
+	const Mouse& GetMouse() const {
 		return mouse;
 	}
 
 	void NewFrame()
 	{
-		mouse = mouse;
-		mouse.dx = 0.0f;
-		mouse.dy = 0.0f;
+		mouse.NewFrame();
 		memcpy( keys, keys, 255 );
 	}
 
 private:
-	mouse_t	mouse;
+	Mouse	mouse;
 	bool	keys[ 256 ];
 
 	void SetKey( const char key, const bool value ) {
 		keys[ key ] = value;
 	}
 
-	mouse_t& GetMouseRef() {
+	Mouse& GetMouseRef() {
 		return mouse;
 	}
 

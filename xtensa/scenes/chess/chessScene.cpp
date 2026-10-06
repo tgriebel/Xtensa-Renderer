@@ -143,10 +143,10 @@ void ChessScene::Update()
 
 	lights[ 0 ].pos = vec4f( 5.0f * cos( periodsPerSecond * time ), 5.0f * sin( periodsPerSecond * time ), 8.0f, 0.0f );
 
-	const mouse_t& mouse = g_window.input.GetMouse();
-	if ( ( mouse.centered == false ) && mouse.leftDown )
+	const Mouse& mouse = g_window.input.GetMouse();
+	if ( ( mouse.IsCentered() == false ) && mouse.IsLeftDown() )
 	{
-		Ray ray = mainCamera->GetViewRay( vec2f( 0.5f * mouse.xNormalized + 0.5f, 0.5f * mouse.yNormalized + 0.5f ) );
+		Ray ray = mainCamera->GetViewRay( vec2f( 0.5f * mouse.XNormalized() + 0.5f, 0.5f * mouse.YNormalized() + 0.5f ) );
 		selectedEntity = GetTracedEntity( ray );
 	}
 

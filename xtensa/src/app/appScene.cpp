@@ -220,18 +220,18 @@ void UpdateScene( Scene* scene )
 	}
 	scene->mainCamera->SetFov( scene->mainCamera->GetFov(), g_window.QueryWindowFrameBufferAspect() );
 
-	const mouse_t& mouse = g_window.input.GetMouse();
-	if ( mouse.centered )
+	const Mouse& mouse = g_window.input.GetMouse();
+	if ( mouse.IsCentered() )
 	{
-		const float maxSpeed = mouse.speed * smoothDeltaTime;
-		const float yawDelta = -maxSpeed * mouse.dx;
-		const float pitchDelta = maxSpeed * mouse.dy;
+		const float maxSpeed = mouse.Speed() * smoothDeltaTime;
+		const float yawDelta = -maxSpeed * mouse.DX();
+		const float pitchDelta = maxSpeed * mouse.DY();
 		scene->mainCamera->Pan( yawDelta );
 		scene->mainCamera->Tilt( pitchDelta );
 	}
-	else if ( mouse.leftDown )
+	else if ( mouse.IsLeftDown() )
 	{
-		Ray ray = scene->mainCamera->GetViewRay( vec2f( 0.5f * mouse.x + 0.5f, 0.5f * mouse.y + 0.5f ) );
+		Ray ray = scene->mainCamera->GetViewRay( vec2f( 0.5f * mouse.XNormalized() + 0.5f, 0.5f * mouse.YNormalized() + 0.5f ) );
 		scene->selectedEntity = scene->GetTracedEntity( ray );
 	}
 
@@ -307,12 +307,12 @@ void UpdateScene( Scene* scene )
 		memset( &entityName[ 0 ], 0, 256 );
 	}
 
-	ImGui::Text( "Mouse: (%f, %f)", (float)g_window.input.GetMouse().x, (float)g_window.input.GetMouse().y );
-	ImGui::Text( "Mouse Dt: (%f, %f)", (float)g_window.input.GetMouse().dx, (float)g_window.input.GetMouse().dy );
+	ImGui::Text( "Mouse: (%f, %f)", (float)g_window.input.GetMouse().X(), (float)g_window.input.GetMouse().Y() );
+	ImGui::Text( "Mouse Dt: (%f, %f)", (float)g_window.input.GetMouse().DX(), (float)g_window.input.GetMouse().DY() );
 	const vec4f cameraOrigin = g_scene->mainCamera->GetOrigin();
 	ImGui::Text( "Camera: (%f, %f, %f)", cameraOrigin[ 0 ], cameraOrigin[ 1 ], cameraOrigin[ 2 ] );
 
-	const vec2f ndc = g_window.GetNdc( g_window.input.GetMouse().x, g_window.input.GetMouse().y );
+	const vec2f ndc = g_window.GetNdc( g_window.input.GetMouse().X(), g_window.input.GetMouse().Y() );
 
 	ImGui::Text( "NDC: (%f, %f )", (float)ndc[ 0 ], (float)ndc[ 1 ] );
 	ImGui::Text( "Frame Number: %d", g_renderDebugData.frameNumber );

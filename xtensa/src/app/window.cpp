@@ -121,14 +121,14 @@ void KeyCallback( GLFWwindow* window, int key, int scancode, int action, int mod
 void MousePressCallback( GLFWwindow* window, int button, int action, int mods )
 {
 	Window* app = reinterpret_cast< Window* >( glfwGetWindowUserPointer( window ) );
-	mouse_t& mouse = app->input.GetMouseRef();
+	Mouse& mouse = app->input.GetMouseRef();
 
 	if ( button == GLFW_MOUSE_BUTTON_LEFT ) {
-		mouse.leftDown = ( action == GLFW_RELEASE ) ? false : true;
+		mouse.SetLeftDown( action != GLFW_RELEASE );
 	}
 
 	if ( button == GLFW_MOUSE_BUTTON_RIGHT ) {
-		mouse.rightDown = ( action == GLFW_RELEASE ) ? false : true;;
+		mouse.SetRightDown( action != GLFW_RELEASE );
 	}
 }
 
@@ -136,19 +136,16 @@ void MousePressCallback( GLFWwindow* window, int button, int action, int mods )
 void MouseMoveCallback( GLFWwindow* window, double xpos, double ypos )
 {
 	Window* appWindow = reinterpret_cast< Window* >( glfwGetWindowUserPointer( window ) );
-	mouse_t& mouse = appWindow->input.GetMouseRef();
+	Mouse& mouse = appWindow->input.GetMouseRef();
 
 	static double lastX = 0.0;
 	static double lastY = 0.0;
 	static bool firstMove = true;
 
-	mouse.x = static_cast<float>( xpos );
-	mouse.y = static_cast<float>( ypos );
+	mouse.SetPosition( static_cast<float>( xpos ), static_cast<float>( ypos ) );
 
-	const vec2f ndc = appWindow->GetNdc( mouse.x, mouse.y );
-
-	mouse.xNormalized = ndc.x;
-	mouse.yNormalized = ndc.y;
+	const vec2f ndc = appWindow->GetNdc( mouse.X(), mouse.Y() );
+	mouse.SetNormalizedPosition( ndc.x, ndc.y );
 
 	if ( firstMove )
 	{
@@ -158,8 +155,7 @@ void MouseMoveCallback( GLFWwindow* window, double xpos, double ypos )
 		return;
 	}
 
-	mouse.dx += static_cast<float>( xpos - lastX );
-	mouse.dy += static_cast<float>( ypos - lastY );
+	mouse.AccumulateDelta( static_cast<float>( xpos - lastX ), static_cast<float>( ypos - lastY ) );
 
 	lastX = xpos;
 	lastY = ypos;
@@ -167,13 +163,13 @@ void MouseMoveCallback( GLFWwindow* window, double xpos, double ypos )
 	if ( appWindow->IsMouseLocked() == false )
 	{
 		firstMove = true;
-		mouse.centered = false;
+		mouse.SetCentered( false );
 		glfwSetInputMode( window, GLFW_CURSOR, GLFW_CURSOR_NORMAL );
 		return;
 	}
 
 	glfwSetInputMode( window, GLFW_CURSOR, GLFW_CURSOR_DISABLED );
-	mouse.centered = true;
+	mouse.SetCentered( true );
 }
 #endif
 
