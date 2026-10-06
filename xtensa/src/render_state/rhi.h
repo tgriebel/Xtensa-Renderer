@@ -12,7 +12,7 @@ static const uint32_t VkPassBitsSize = 16;
 
 #ifdef USE_VULKAN
 struct vk_RenderPassBits_t;
-VkRenderPass vk_CreateRenderPass( const vk_RenderPassBits_t& passState );
+VkRenderPass			vk_CreateRenderPass( const vk_RenderPassBits_t& passState );
 #endif
 
 #ifdef USE_VULKAN
@@ -38,13 +38,13 @@ struct pipelineState_t;
 struct pipelineObject_t;
 class BinaryFile;
 
-bool	vk_CreateGraphicsPipeline( const pipelineState_t& state, pipelineObject_t& pipelineObject );
-void	vk_CreateComputePipeline( const pipelineState_t& state, pipelineObject_t& pipelineObject );
-VkPipelineCache	vk_CreatePipelineCache( const BinaryFile& cacheData, const char* debugName );
-BinaryFile		vk_GetPipelineCacheData( VkPipelineCache cache );
+bool					vk_CreateGraphicsPipeline( const pipelineState_t& state, pipelineObject_t& pipelineObject );
+void					vk_CreateComputePipeline( const pipelineState_t& state, pipelineObject_t& pipelineObject );
+VkPipelineCache			vk_CreatePipelineCache( const BinaryFile& cacheData, const char* debugName );
+BinaryFile				vk_GetPipelineCacheData( VkPipelineCache cache );
 
 #ifdef USE_VULKAN_RTX
-void	vk_CreateRtPipeline( const pipelineState_t& state, pipelineObject_t& pipelineObject );
+void					vk_CreateRtPipeline( const pipelineState_t& state, pipelineObject_t& pipelineObject );
 #endif
 
 #endif // USE_VULKAN
