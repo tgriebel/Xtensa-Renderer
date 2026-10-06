@@ -166,7 +166,7 @@ void ChessScene::Update()
 			if ( ( selectedActionIx >= 0 ) && ( movePieceId != nullptr ) )
 			{
 				PieceEntity* movedPiece = reinterpret_cast<PieceEntity*>( movePieceId );
-				const pieceInfo_t movedPieceInfo = chessEngine.GetInfo( GetFileNum( movedPiece->file ), GetRankNum( movedPiece->rank ) );
+				const pieceInfo_t movedPieceInfo = chessEngine.GetInfo( movedPiece->handle );
 				const moveAction_t& action = actions[ selectedActionIx ];
 
 				command_t cmd;
@@ -207,7 +207,9 @@ void ChessScene::Update()
 		const pieceInfo_t info = chessEngine.GetInfo( ent->handle );
 		num_t x, y;
 		if ( chessEngine.GetLocation( ent->handle, x, y ) ) {
-			ent->SetOrigin( GetSquareCenterForLocation( GetFile( x ), GetRank( y ) ) );
+			ent->file = GetFile( x );
+			ent->rank = GetRank( y );
+			ent->SetOrigin( GetSquareCenterForLocation( ent->file, ent->rank ) );
 		}
 	}
 
