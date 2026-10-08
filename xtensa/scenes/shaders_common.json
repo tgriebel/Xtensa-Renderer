@@ -97,6 +97,12 @@
       "perms": ["mrt"]
     },
     {
+      "name": "SdfImage",
+      "vs": "simple",
+      "ps": "sdfImage",
+      "perms": ["mrt"]
+    },
+    {
       "name": "PostProcess",
       "vs": "fullscreen",
       "ps": "postProcess",
