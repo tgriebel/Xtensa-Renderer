@@ -164,6 +164,42 @@ float4 ClampColorFp16( const float4 color )
 }
 
 
+psOutput_t OutputColor( const float4 color0 )
+{
+	psOutput_t output = (psOutput_t)0;
+	output.outColor = ClampColorFp16( color0 );
+#ifdef USE_MRT
+	output.outColor1 = ClampColorFp16( float4( 0.0f, 0.0f, 0.0f, 0.0f ) );
+	output.outColor2 = ClampColorFp16( float4( 0.0f, 0.0f, 0.0f, 0.0f ) );
+#endif
+	return output;
+}
+
+
+psOutput_t OutputColor( const float4 color0, const float4 color1 )
+{
+	psOutput_t output = (psOutput_t)0;
+	output.outColor = ClampColorFp16( color0 );
+#ifdef USE_MRT
+	output.outColor1 = ClampColorFp16( color1 );
+	output.outColor2 = ClampColorFp16( float4( 0.0f, 0.0f, 0.0f, 0.0f ) );
+#endif
+	return output;
+}
+
+
+psOutput_t OutputColor( const float4 color0, const float4 color1, const float4 color2 )
+{
+	psOutput_t output = (psOutput_t)0;
+	output.outColor = ClampColorFp16( color0 );
+#ifdef USE_MRT
+	output.outColor1 = ClampColorFp16( color1 );
+	output.outColor2 = ClampColorFp16( color2 );
+#endif
+	return output;
+}
+
+
 float3 ViewForward( const float4x4 view )
 {
 	return float3( view[ 2 ][ 0 ], view[ 2 ][ 1 ], view[ 2 ][ 2 ] );
