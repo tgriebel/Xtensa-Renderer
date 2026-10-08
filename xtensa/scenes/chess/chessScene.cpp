@@ -62,7 +62,7 @@ static std::string GetName( pieceInfo_t& pieceInfo )
 }
 
 
-static vec3f GetSquareCenterForLocation( const char file, const char rank )
+static vec3f TransformBoardPositionToWorldSpace( const char file, const char rank )
 {
 	const vec3f whiteCorner = vec3f( -7.0f, -7.0f, 0.0f );
 	const int x = GetFileNum( file );
@@ -88,7 +88,7 @@ void ChessScene::Init()
 		{
 			PieceEntity* squareEnt = new PieceEntity( GetFile( j ), GetRank( i ) );
 			CreateEntityBounds( ModelLib().RetrieveHdl( "plane" ), *squareEnt );
-			squareEnt->SetOrigin( GetSquareCenterForLocation( squareEnt->file, squareEnt->rank ) + vec3f( 0.0f, 0.0f, 0.01f ) );
+			squareEnt->SetOrigin( TransformBoardPositionToWorldSpace( squareEnt->file, squareEnt->rank ) + vec3f( 0.0f, 0.0f, 0.1f ) );
 			squareEnt->SetFlag( ENT_FLAG_SELECTABLE );
 			squareEnt->handle = -1;
 			std::string name = "plane_";
@@ -204,12 +204,14 @@ void ChessScene::Update()
 		else {
 			ent->outline = false;
 		}
+
 		const pieceInfo_t info = chessEngine.GetInfo( ent->handle );
 		num_t x, y;
-		if ( chessEngine.GetLocation( ent->handle, x, y ) ) {
+		if ( chessEngine.GetLocation( ent->handle, x, y ) )
+		{
 			ent->file = GetFile( x );
 			ent->rank = GetRank( y );
-			ent->SetOrigin( GetSquareCenterForLocation( ent->file, ent->rank ) );
+			ent->SetOrigin( TransformBoardPositionToWorldSpace( ent->file, ent->rank ) );
 		}
 	}
 
