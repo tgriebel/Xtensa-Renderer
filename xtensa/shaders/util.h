@@ -285,6 +285,35 @@ float InterleavedGradientNoise( float2 screenPos )
 }
 
 
+// Evenly-distributed point on the unit hemisphere using the Fibonacci lattice.
+// Index i in [0, n) — adjacent indices have low correlation, giving a good
+// spatial distribution for any sample count without needing a noise texture.
+float3 FibonacciHemisphere( uint i, uint n )
+{
+	// Golden angle in radians: 2*PI * (1 - 1/phi)
+	const float goldenAngle = 2.399963229f;
+
+	const float theta = goldenAngle * float( i );
+	const float t = ( float( i ) + 0.5f ) / float( n );
+	const float r = sqrt( t ); // sqrt maps uniform area to hemisphere projection
+
+	float sinT, cosT;
+	sincos( theta, sinT, cosT );
+
+	// xy = disk footprint,  z = hemisphere lift
+	return float3( r * cosT, r * sinT, sqrt( max( 0.0f, 1.0f - t ) ) );
+}
+
+
+// Rotate a 2D vector by angle (radians).
+float2 Rotate2D( float2 v, float angle )
+{
+	float s, c;
+	sincos( angle, s, c );
+	return float2( c * v.x - s * v.y, s * v.x + c * v.y );
+}
+
+
 float SrgbToLinear( float value )
 {
 	return ( value <= 0.04045f ) ? value / 12.92f : pow( ( value + 0.055f ) / 1.055f, 2.4f );

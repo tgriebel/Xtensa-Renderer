@@ -584,15 +584,30 @@ void BuildSceneSchedule( const renderConfig_t& config, RenderContext* renderCont
 
 		// Image Process
 		{
+			const uint32_t maxSampleCount = 64;
+			const uint32_t noiseSampleCount = 16;
+
 			struct ssaoConstants_t
 			{
-				float    radius;      // World-space sampling radius (meters)
-				uint32_t numSamples;  // Sample count — 8 (fast) to 32 (quality)
-				float    bias;        // Depth bias to prevent self-occlusion (meters)
-				float    strength;    // AO multiplier: 1 = standard, higher = darker
+				float		radius;      // World-space sampling radius (meters)
+				uint32_t	numSamples;  // Sample count — 8 (fast) to 32 (quality)
+				float		bias;        // Depth bias to prevent self-occlusion (meters)
+				float		strength;    // AO multiplier: 1 = standard, higher = darker
+				vec4f		sampleKernel[ maxSampleCount ];
+				vec2f		sampleNoise[ noiseSampleCount ];
 			};
 
-			const ssaoConstants_t ssaoDefaults = { 0.5f, 16, 0.025f, 1.5f };
+			ssaoConstants_t ssaoDefaults{};
+			ssaoDefaults.radius = 0.5f;
+			ssaoDefaults.numSamples = maxSampleCount;
+			ssaoDefaults.bias = 0.025f;
+			ssaoDefaults.strength = 1.5f;
+
+			UniformSamplerGen sampler;
+			sampler.AddRange( vec3f( -1.0f, -1.0f, 0.0f ), vec3f( 1.0f, 1.0f, 1.0f ) );
+			for( uint32_t i = 0; i < maxSampleCount; ++i ) {
+				ssaoDefaults.sampleKernel[ i ] = vec4f( sampler.Sample3D(), 0.0f );
+			}
 
 			imageMipTaskCreateInfo_t info{};
 			info.name = "SSAO";

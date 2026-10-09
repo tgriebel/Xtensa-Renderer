@@ -22,7 +22,7 @@ class GpuTask
 protected:
 
 	static const uint32_t MaxCustomPushConstantBytes = 128;
-	static const uint32_t MaxCustomConstantBytes = 512;
+	static const uint32_t MaxCustomConstantBytes = 2048;
 
 	GpuTask*		m_child			= nullptr;
 	bool			m_enabled		= true;

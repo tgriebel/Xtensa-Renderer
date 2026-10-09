@@ -4,46 +4,22 @@
 #include "globals.h"
 #include "util.h"
 
+#define MaxSamples 16
+#define NoiseSamples 64
+
 struct SSAOConstants
 {
-    float   radius;      // World-space sampling radius (meters)
-    uint    numSamples;  // Sample count — 8 (fast) to 32 (quality)
-    float   bias;        // Depth bias to prevent self-occlusion on flat surfaces (meters)
-    float   strength;    // AO multiplier: 1 = standard, higher = darker
+    float   radius;                         // World-space sampling radius (meters)
+    uint    numSamples;                     // Sample count — 8 (fast) to 32 (quality)
+    float   bias;                           // Depth bias to prevent self-occlusion on flat surfaces (meters)
+    float   strength;                       // AO multiplier: 1 = standard, higher = darker
+    float4  sampleKernel[ MaxSamples ];     // Sample offsets in tangent space (x,y,z) and padding (w)
+    float2  sampleNoise[ NoiseSamples ];    // Noise samples for dithering
 };
 
 PS_LAYOUT_IMAGE_SHADER( Texture2D, SSAOConstants )
 
 // localTextures[0] = resolved depth buffer
-
-
-// Evenly-distributed point on the unit hemisphere using the Fibonacci lattice.
-// Index i in [0, n) — adjacent indices have low correlation, giving a good
-// spatial distribution for any sample count without needing a noise texture.
-float3 FibonacciHemisphere( uint i, uint n )
-{
-    // Golden angle in radians: 2*PI * (1 - 1/phi)
-    const float goldenAngle = 2.399963229f;
-
-    const float theta = goldenAngle * float( i );
-    const float t     = ( float( i ) + 0.5f ) / float( n );
-    const float r     = sqrt( t );  // sqrt maps uniform area to hemisphere projection
-
-    float sinT, cosT;
-    sincos( theta, sinT, cosT );
-
-    // xy = disk footprint,  z = hemisphere lift
-    return float3( r * cosT, r * sinT, sqrt( max( 0.0f, 1.0f - t ) ) );
-}
-
-
-// Rotate a 2D vector by angle (radians).
-float2 Rotate2D( float2 v, float angle )
-{
-    float s, c;
-    sincos( angle, s, c );
-    return float2( c * v.x - s * v.y, s * v.x + c * v.y );
-}
 
 
 psOutput_t PSMain( vsToPsInterpolators input )
@@ -92,11 +68,12 @@ psOutput_t PSMain( vsToPsInterpolators input )
 
     for ( uint i = 0; i < imageProcess.numSamples; ++i )
     {
-        // Unit hemisphere sample in tangent space (z points along N).
-        float3 s = FibonacciHemisphere( i, imageProcess.numSamples );
+        // Near-to-far radial scale, relative to the *live* sample count so it
+        // always spans the full [0.1, 1.0] range regardless of numSamples.
+        const float t = float( i ) / float( imageProcess.numSamples );
+        const float scale = lerp( 0.1f, 1.0f, t * t );
 
-        // Rotate the disk component by per-pixel noise.
-        s.xy = Rotate2D( s.xy, randomNoise );
+        const float3 s = scale * imageProcess.sampleKernel[ i ].xyz;
 
         // Transform into view space: s.x along T, s.y along B, s.z along N.
         // Every sample is guaranteed to lie in the visible hemisphere of the surface.
